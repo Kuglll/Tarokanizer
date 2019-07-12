@@ -11,4 +11,8 @@ public class CardView {
     public String getmText1() {
         return mText1;
     }
+
+    public void OpenCardBoard(String text){
+        mText1 = text;
+    }
 }

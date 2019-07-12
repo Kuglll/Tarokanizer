@@ -13,12 +13,33 @@ import java.util.ArrayList;
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     private ArrayList<CardView> mCardViewList;
+    public OnCardBoardClickListener mListener;
+
+    public interface OnCardBoardClickListener{
+        void onCardBoardClick(int position);
+    }
+
+    public void setOnCardBoardClickListener(OnCardBoardClickListener listener){
+        mListener = listener;
+    }
 
     public  static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView mTextView1;
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, final OnCardBoardClickListener listener) {
             super(itemView);
             mTextView1 = itemView.findViewById(R.id.textView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(listener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            listener.onCardBoardClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -30,7 +51,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view, parent, false);
-        ViewHolder evh = new ViewHolder(v);
+        ViewHolder evh = new ViewHolder(v, mListener);
         return evh;
     }
 
