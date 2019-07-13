@@ -1,8 +1,11 @@
 package com.example.tarokanizer;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,52 +16,53 @@ import java.util.ArrayList;
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     private ArrayList<CardView> mCardViewList;
-    public OnCardBoardClickListener mListener;
+    private Context mContext;
 
-    public interface OnCardBoardClickListener{
-        void onCardBoardClick(int position);
+    public Adapter(Context context, ArrayList<CardView> cardViewList) {
+        mCardViewList = cardViewList;
+        mContext = context;
     }
 
-    public void setOnCardBoardClickListener(OnCardBoardClickListener listener){
-        mListener = listener;
-    }
+    public static class ViewHolder extends RecyclerView.ViewHolder{
+        TextView title;
+        RelativeLayout relativeLayout;
 
-    public  static class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView mTextView1;
-        public ViewHolder(@NonNull View itemView, final OnCardBoardClickListener listener) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            mTextView1 = itemView.findViewById(R.id.textView);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(listener != null){
-                        int position = getAdapterPosition();
-                        if(position != RecyclerView.NO_POSITION){
-                            listener.onCardBoardClick(position);
-                        }
-                    }
-                }
-            });
+            title = itemView.findViewById(R.id.title);
+            relativeLayout = itemView.findViewById(R.id.parent_layout);
         }
     }
 
-    public Adapter(ArrayList<CardView> cardViewList){
-        mCardViewList = cardViewList;
-    }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view, parent, false);
-        ViewHolder evh = new ViewHolder(v, mListener);
+        ViewHolder evh = new ViewHolder(v);
         return evh;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CardView currentItem = mCardViewList.get(position);
-        holder.mTextView1.setText(currentItem.getmText1());
+        holder.title.setText(currentItem.getmText1());
+
+        holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //actions that happen on cardboardclick
+                Intent intent = new Intent(mContext, Scoreboard.class);
+
+                //change this
+                String [] players = {"tim", "mark", "okorn"};
+
+                intent.putExtra("playerNames", players);
+                if(!(mContext == null)) {
+                    mContext.startActivity(intent);
+                }
+            }
+        });
     }
 
     @Override

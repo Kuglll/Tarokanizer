@@ -1,5 +1,6 @@
 package com.example.tarokanizer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -47,11 +48,6 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
     }
 
 
-    public void ChangeItem(int position, String text){
-        mCardViewList.get(position).OpenCardBoard(text);
-        mAdapter.notifyItemChanged(position);
-    }
-
     public void CreateCardViewList(){
 
         mCardViewList = new ArrayList<>();
@@ -70,7 +66,13 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
             @Override
             public void onCardBoardClick(int position) {
                 //actions that happen on cardboardclick
-                ChangeItem(position, "Clicked.");
+                Intent intent = new Intent(MainActivity.this, scoreboard.class);
+
+                //change this
+                String [] players = {"tim", "mark", "okorn"};
+
+                intent.putExtra("playerNames", players);
+                startActivity(intent);
             }
         });
     }
