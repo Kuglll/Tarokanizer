@@ -4,10 +4,10 @@
     android:padding="16dp">
 
     <EditText
-        android:hint="title"
         android:id="@+id/edit_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:hint="title"/>
 
     <EditText
         android:id="@+id/edit_numberOfPlayers"

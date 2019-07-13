@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class scoreboard extends AppCompatActivity {
+public class Scoreboard extends AppCompatActivity {
 
     LinearLayout linearLayout;
 
@@ -16,19 +16,20 @@ public class scoreboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scoreboard);
 
-        linearLayout.findViewById(R.id.names);
+        linearLayout = findViewById(R.id.names);
 
         initialize();
     }
 
     public void initialize(){
         Intent intent = getIntent();
-        String [] players = intent.getStringArrayExtra("playerNames");
 
+        String [] players = intent.getStringArrayExtra("playerNames");
         for (String player: players) {
             TextView tv = createTextView(player);
             linearLayout.addView(tv);
         }
+
     }
 
 
