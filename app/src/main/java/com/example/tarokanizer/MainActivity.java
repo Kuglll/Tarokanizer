@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
@@ -14,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements Dialog.DialogListener {
+public class MainActivity extends AppCompatActivity implements Dialog.DialogListener{
 
     private ArrayList<CardView> mCardViewList;
     private RecyclerView mRecyclerView;
@@ -59,10 +60,31 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+
+        mAdapter.setOnCardBoardClickListener(new Adapter.OnDeleteButtonClickListener() {
+            @Override
+            //deleting the cardboard
+            public void onDeleteClick(final int position) {
+                final AlertDialog deleteDialog = new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Delete Game")
+                        .setMessage("Do you want to delete selected game?")
+                        .setPositiveButton("Yes", null)
+                        .setNegativeButton("No", null)
+                        .show();
+
+                Button positiveButton = deleteDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        RemoveItem(position);
+                        deleteDialog.dismiss();
+                    }
+                });
+            }
+        });
     }
 
     public void AddNewCardboard(int position, String title){
-
         mCardViewList.add(position, new CardView(title));
         mAdapter.notifyItemInserted(position);
     }
@@ -71,4 +93,10 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
     public void onDialogPositiveClick(String title, String numberOfPlayers) {
         AddNewCardboard(mCardViewList.size(), title);
     }
+
+    public void RemoveItem(int position) {
+        mCardViewList.remove(position);
+        mAdapter.notifyItemRemoved(position);
+    }
+
 }
