@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import androidx.fragment.app.DialogFragment;
@@ -63,9 +65,5 @@ public class Dialog extends DialogFragment {
                 });
         return builder.create();
     }
-
-
-
-
 
 }

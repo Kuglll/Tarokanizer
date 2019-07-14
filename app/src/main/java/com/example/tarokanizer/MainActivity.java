@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
     private Adapter mAdapter; //Adapters provide a binding from an app-specific data set to views that are displayed within a RecyclerView
     private RecyclerView.LayoutManager mLayoutManager;
     private Button buttonNew;
+    private Toolbar toolbar;
 
     //TODO: these 2 variables will be passed into game list
     private EditText textViewtitle;
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         mCardViewList = new ArrayList<>();
         BuildRecyclerView();
