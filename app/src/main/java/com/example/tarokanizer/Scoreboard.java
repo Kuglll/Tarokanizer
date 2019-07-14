@@ -9,9 +9,12 @@ import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class Scoreboard extends AppCompatActivity {
 
     LinearLayout linearLayout;
+    ArrayList<String> players;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +29,7 @@ public class Scoreboard extends AppCompatActivity {
     public void initialize(){
         Intent intent = getIntent();
 
-        String [] players = intent.getStringArrayExtra("playerNames");
+        players = intent.getStringArrayListExtra("playerNames");
         for (String player: players) {
             TextView tv = createTextView(player);
             linearLayout.addView(tv);

@@ -1,18 +1,22 @@
 package com.example.tarokanizer;
 
+import java.util.ArrayList;
+
 public class CardView {
 
-    private String mText1;
+    private String mTitle;
+    private ArrayList<String> mPlayers;
 
-    CardView(String text1){
-        mText1 = text1;
+    CardView(String title, ArrayList<String> players){
+        mTitle = title;
+        mPlayers = players;
     }
 
-    public String getmText1() {
-        return mText1;
+    public String getTitle() {
+        return mTitle;
     }
 
-    public void OpenCardBoard(String text){
-        mText1 = text;
+    public ArrayList<String> getPlayers(){
+        return mPlayers;
     }
 }

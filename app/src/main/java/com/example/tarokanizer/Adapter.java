@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -71,8 +70,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        CardView currentItem = mCardViewList.get(position);
-        holder.title.setText(currentItem.getmText1());
+        final CardView currentItem = mCardViewList.get(position);
+        holder.title.setText(currentItem.getTitle());
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,10 +79,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                 //actions that happen on cardboardclick
                 Intent intent = new Intent(mContext, Scoreboard.class);
 
-                //change this
-                String [] players = {"tim", "mark", "okorn"};
+                ArrayList<String> players = currentItem.getPlayers();
 
-                intent.putExtra("playerNames", players);
+                intent.putStringArrayListExtra("playerNames", players);
                 if(!(mContext == null)) {
                     mContext.startActivity(intent);
                 }

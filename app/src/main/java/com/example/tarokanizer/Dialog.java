@@ -12,14 +12,17 @@ import android.widget.EditText;
 
 import androidx.fragment.app.DialogFragment;
 
+import java.util.ArrayList;
+
 public class Dialog extends DialogFragment {
 
     private EditText editTextTitle;
     private EditText editTextNumberOfPlayers;
     private DialogListener listener;
+    private ArrayList<String> players;
 
     public interface DialogListener{
-        public void onDialogPositiveClick(String title, String numberOfPlayers);
+        public void onDialogPositiveClick(String title, ArrayList<String> players);
     }
 
     @Override
@@ -39,6 +42,7 @@ public class Dialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.layout_dialog, null);
 
+        players = new ArrayList<>();
         editTextTitle = view.findViewById(R.id.edit_title);
         editTextNumberOfPlayers = view.findViewById(R.id.edit_numberOfPlayers);
 
@@ -51,7 +55,8 @@ public class Dialog extends DialogFragment {
                         String numberOfPlayers = editTextNumberOfPlayers.getText().toString();
 
                         if(!title.equals("") && !numberOfPlayers.equals("")) {
-                            listener.onDialogPositiveClick(title, numberOfPlayers);
+                            getPlayersNames(Integer.parseInt(numberOfPlayers));
+                            listener.onDialogPositiveClick(title, players);
                         }
 
                         getDialog().dismiss();
@@ -64,6 +69,13 @@ public class Dialog extends DialogFragment {
                     }
                 });
         return builder.create();
+    }
+
+    public void getPlayersNames(int numberOfPlayers){
+        for(int i=0; i<numberOfPlayers; i++){
+            players.add("player");
+            //TODO: build x dialogs and get player names
+        }
     }
 
 }

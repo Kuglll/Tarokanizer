@@ -84,14 +84,14 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
         });
     }
 
-    public void AddNewCardboard(int position, String title){
-        mCardViewList.add(position, new CardView(title));
+    public void AddNewCardboard(int position, String title, ArrayList<String> players){
+        mCardViewList.add(position, new CardView(title, players));
         mAdapter.notifyItemInserted(position);
     }
 
     @Override
-    public void onDialogPositiveClick(String title, String numberOfPlayers) {
-        AddNewCardboard(mCardViewList.size(), title);
+    public void onDialogPositiveClick(String title, ArrayList<String> players) {
+        AddNewCardboard(mCardViewList.size(), title, players);
     }
 
     public void RemoveItem(int position) {
