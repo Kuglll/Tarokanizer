@@ -8,18 +8,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.fragment.app.DialogFragment;
 
 import java.util.ArrayList;
 
-public class Dialog extends DialogFragment {
+public class Dialog extends DialogFragment implements AdapterView.OnItemSelectedListener {
 
     private EditText editTextTitle;
-    private EditText editTextNumberOfPlayers;
+    private Spinner spinner;
     private DialogListener listener;
     private ArrayList<String> players;
+    private String numberOfPlayers;
 
     public interface DialogListener{
         public void onDialogPositiveClick(String title, ArrayList<String> players);
@@ -36,6 +40,17 @@ public class Dialog extends DialogFragment {
         }
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
+        String text =  parent.getItemAtPosition(position).toString();
+        numberOfPlayers = text;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
     public android.app.Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -44,7 +59,12 @@ public class Dialog extends DialogFragment {
 
         players = new ArrayList<>();
         editTextTitle = view.findViewById(R.id.edit_title);
-        editTextNumberOfPlayers = view.findViewById(R.id.edit_numberOfPlayers);
+        spinner = view.findViewById(R.id.edit_numberOfPlayers);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.peopleNumber, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
 
         builder.setView(view)
                 .setTitle("New game")
@@ -52,7 +72,7 @@ public class Dialog extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                         // Send the positive button event back to the host activity
                         String title = editTextTitle.getText().toString();
-                        String numberOfPlayers = editTextNumberOfPlayers.getText().toString();
+                         //numberOfPlayers = spinner.getText().toString();
 
                         if(!title.equals("") && !numberOfPlayers.equals("")) {
                             getPlayersNames(Integer.parseInt(numberOfPlayers));
