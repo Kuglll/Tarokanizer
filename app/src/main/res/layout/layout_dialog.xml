@@ -7,14 +7,26 @@
         android:id="@+id/edit_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="title"/>
+        android:hint="title" />
 
-    <EditText
+    <Spinner
         android:id="@+id/edit_numberOfPlayers"
-        android:layout_width="match_parent"
+        android:layout_width="203dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/edit_title"
+        android:layout_alignTop="@+id/edit_title"
+        android:layout_alignEnd="@+id/edit_title"
+        android:layout_marginStart="167dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="9dp"
+        android:hint="number of players" />
+
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/edit_title"
-        android:layout_marginTop="48dp"
-        android:hint="number of players" />
+        android:layout_marginTop="56dp"
+        android:textSize="18dp"
+        android:text="Number of players:" />
     
 </RelativeLayout>
