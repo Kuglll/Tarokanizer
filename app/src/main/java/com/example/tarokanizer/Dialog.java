@@ -3,19 +3,23 @@ package com.example.tarokanizer;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+
+import static java.lang.Thread.*;
 
 public class Dialog extends DialogFragment implements AdapterView.OnItemSelectedListener {
 
@@ -24,6 +28,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
     private DialogListener listener;
     private ArrayList<String> players;
     private String numberOfPlayers;
+    private String mName;
 
     public interface DialogListener{
         public void onDialogPositiveClick(String title, ArrayList<String> players);
@@ -41,6 +46,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
     }
 
     @Override
+    //gets the number of players from  spinner
     public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
         String text =  parent.getItemAtPosition(position).toString();
         numberOfPlayers = text;
@@ -54,10 +60,11 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
     public android.app.Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+        players = new ArrayList<>();
+
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.layout_dialog, null);
 
-        players = new ArrayList<>();
         editTextTitle = view.findViewById(R.id.edit_title);
         spinner = view.findViewById(R.id.edit_numberOfPlayers);
 
@@ -72,13 +79,11 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
                     public void onClick(DialogInterface dialog, int id) {
                         // Send the positive button event back to the host activity
                         String title = editTextTitle.getText().toString();
-                         //numberOfPlayers = spinner.getText().toString();
 
                         if(!title.equals("") && !numberOfPlayers.equals("")) {
                             getPlayersNames(Integer.parseInt(numberOfPlayers));
-                            listener.onDialogPositiveClick(title, players);
                         }
-
+                        //getPlayersNames(Integer.parseInt(numberOfPlayers));
                         getDialog().dismiss();
                     }
                 })
@@ -88,14 +93,71 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
                         getDialog().dismiss();
                     }
                 });
+
         return builder.create();
     }
 
-    public void getPlayersNames(int numberOfPlayers){
-        for(int i=0; i<numberOfPlayers; i++){
-            players.add("player");
-            //TODO: build x dialogs and get player names
+    public String CreatePlayerNamesDialog(int i)
+    {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.player_names, null);
+        RelativeLayout l = (RelativeLayout) view.findViewById(R.id.playerNames);
+        final RelativeLayout layout = new RelativeLayout(getActivity());
+
+        final EditText t = new EditText(getActivity());
+        t.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT ));
+        t.setTextColor(Color.BLACK);
+        l.addView(t);
+
+        builder.setView(view)
+                .setTitle("Player " + i)
+                .setPositiveButton("Next", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Send the positive button event back to the host activity
+                        String name;
+                        name = t.getText().toString();
+                        players.add(name);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Send the negative button event back to the host activity
+                    }
+                })
+                .show();
+        return mName;
+    }
+
+    public void getPlayersNames(int numberOfPlayers) {
+        finishDialog();
+        for (int i = numberOfPlayers; i >= 1; i--) {
+            String name = CreatePlayerNamesDialog(i);
         }
+    }
+
+    public void finishDialog(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.finish_player_name, null);
+
+        //TODO: Create dynamic preview, last alertdialog: Player1: name..
+        builder.setView(view)
+                .setTitle("Preview")
+                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String title = editTextTitle.getText().toString();
+                        listener.onDialogPositiveClick(title, players);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Send the negative button event back to the host activity
+                    }
+                })
+                .show();
     }
 
 }
