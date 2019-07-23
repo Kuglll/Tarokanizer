@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +29,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
     private DialogListener listener;
     private ArrayList<String> players;
     private String numberOfPlayers;
-    private String mName;
+    private ArrayList<String> mName = new ArrayList<String>();
 
     public interface DialogListener{
         public void onDialogPositiveClick(String title, ArrayList<String> players);
@@ -83,7 +84,6 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
                         if(!title.equals("") && !numberOfPlayers.equals("")) {
                             getPlayersNames(Integer.parseInt(numberOfPlayers));
                         }
-                        //getPlayersNames(Integer.parseInt(numberOfPlayers));
                         getDialog().dismiss();
                     }
                 })
@@ -97,14 +97,13 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
         return builder.create();
     }
 
-    public String CreatePlayerNamesDialog(int i)
+    public ArrayList<String> CreatePlayerNamesDialog(final int i)
     {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.player_names, null);
         RelativeLayout l = (RelativeLayout) view.findViewById(R.id.playerNames);
-        final RelativeLayout layout = new RelativeLayout(getActivity());
 
         final EditText t = new EditText(getActivity());
         t.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT ));
@@ -119,6 +118,13 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
                         String name;
                         name = t.getText().toString();
                         players.add(name);
+                        mName.add(name);
+
+                        // when the last name is assigned the next button creates an instance
+                        if(i == Integer.parseInt(numberOfPlayers)) {
+                            String title = editTextTitle.getText().toString();
+                            listener.onDialogPositiveClick(title, players);
+                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -131,33 +137,12 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
     }
 
     public void getPlayersNames(int numberOfPlayers) {
-        finishDialog();
+
         for (int i = numberOfPlayers; i >= 1; i--) {
-            String name = CreatePlayerNamesDialog(i);
+            CreatePlayerNamesDialog(i);
         }
     }
 
-    public void finishDialog(){
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.finish_player_name, null);
-
-        //TODO: Create dynamic preview, last alertdialog: Player1: name..
-        builder.setView(view)
-                .setTitle("Preview")
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        String title = editTextTitle.getText().toString();
-                        listener.onDialogPositiveClick(title, players);
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // Send the negative button event back to the host activity
-                    }
-                })
-                .show();
-    }
 
 }
