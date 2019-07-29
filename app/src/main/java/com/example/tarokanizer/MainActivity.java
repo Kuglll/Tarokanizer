@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
             @Override
             public void onClick(View view) {
                 //creates a dialog that runs in another thread (class Dialog)
-                Dialog dialog = new Dialog();
+                Dialog dialog = new Dialog(MainActivity.this);
                 dialog.show(getSupportFragmentManager(), "dialog");
             }
         });

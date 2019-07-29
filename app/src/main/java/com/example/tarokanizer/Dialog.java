@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +15,12 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-
-import static java.lang.Thread.*;
 
 public class Dialog extends DialogFragment implements AdapterView.OnItemSelectedListener {
 
@@ -30,6 +30,13 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
     private ArrayList<String> players;
     private String numberOfPlayers;
     private ArrayList<String> mName = new ArrayList<String>();
+    private static boolean readyForNew = true;
+    private int mPlayers;
+    private Context context;
+
+    public Dialog(Context context){
+        this.context = context;
+    }
 
     public interface DialogListener{
         public void onDialogPositiveClick(String title, ArrayList<String> players);
@@ -58,7 +65,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
 
     }
 
-    public android.app.Dialog onCreateDialog(Bundle savedInstanceState){
+    public synchronized android.app.Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         players = new ArrayList<>();
@@ -74,15 +81,15 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
+
         builder.setView(view)
                 .setTitle("New game")
                 .setPositiveButton("Create", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Send the positive button event back to the host activity
                         String title = editTextTitle.getText().toString();
-
                         if(!title.equals("") && !numberOfPlayers.equals("")) {
-                            getPlayersNames(Integer.parseInt(numberOfPlayers));
+                            CreatePlayerNamesDialog(Integer.parseInt(numberOfPlayers));
                         }
                         getDialog().dismiss();
                     }
@@ -97,22 +104,22 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
         return builder.create();
     }
 
-    public ArrayList<String> CreatePlayerNamesDialog(final int i)
+    public void CreatePlayerNamesDialog(final int i)
     {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.player_names, null);
-        RelativeLayout l = (RelativeLayout) view.findViewById(R.id.playerNames);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        final EditText t = new EditText(getActivity());
-        t.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT ));
-        t.setTextColor(Color.BLACK);
-        l.addView(t);
+                View view = LayoutInflater.from(context).inflate(R.layout.player_names, null);
+                RelativeLayout l = (RelativeLayout) view.findViewById(R.id.playerNames);
 
-        builder.setView(view)
-                .setTitle("Player " + i)
-                .setPositiveButton("Next", new DialogInterface.OnClickListener() {
+                final EditText t = new EditText(context);
+                t.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                t.setTextColor(Color.BLACK);
+                l.addView(t);
+
+                builder.setView(view);
+                builder.setTitle("Player " + i);
+                builder.setPositiveButton("Next", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Send the positive button event back to the host activity
                         String name;
@@ -120,29 +127,25 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
                         players.add(name);
                         mName.add(name);
 
+                        mPlayers = i - 1;
                         // when the last name is assigned the next button creates an instance
-                        if(i == Integer.parseInt(numberOfPlayers)) {
+                        if (i == 1) {
                             String title = editTextTitle.getText().toString();
                             listener.onDialogPositiveClick(title, players);
+                            return;
                         }
+                        //Creating new dialogs until we run out of players
+                        CreatePlayerNamesDialog(mPlayers);
                     }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Send the negative button event back to the host activity
+                        mPlayers = 0;
                     }
-                })
-                .show();
-        return mName;
+                });
+                builder.show();
+
     }
-
-    public void getPlayersNames(int numberOfPlayers) {
-
-        for (int i = numberOfPlayers; i >= 1; i--) {
-            CreatePlayerNamesDialog(i);
-        }
-    }
-
-
 
 }
