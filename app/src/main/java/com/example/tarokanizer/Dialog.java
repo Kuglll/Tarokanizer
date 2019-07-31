@@ -28,11 +28,9 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
     private Spinner spinner;
     private DialogListener listener;
     private ArrayList<String> players;
-    private String numberOfPlayers;
-    private ArrayList<String> mName = new ArrayList<String>();
-    private static boolean readyForNew = true;
-    private int mPlayers;
+    private int numberOfPlayers;
     private Context context;
+    private int mPlayers;
 
     public Dialog(Context context){
         this.context = context;
@@ -57,7 +55,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
     //gets the number of players from  spinner
     public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
         String text =  parent.getItemAtPosition(position).toString();
-        numberOfPlayers = text;
+        numberOfPlayers = Integer.parseInt(text);
     }
 
     @Override
@@ -88,8 +86,8 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
                     public void onClick(DialogInterface dialog, int id) {
                         // Send the positive button event back to the host activity
                         String title = editTextTitle.getText().toString();
-                        if(!title.equals("") && !numberOfPlayers.equals("")) {
-                            CreatePlayerNamesDialog(Integer.parseInt(numberOfPlayers));
+                        if(!title.equals("")) {
+                            CreatePlayerNamesDialog(numberOfPlayers);
                         }
                         getDialog().dismiss();
                     }
@@ -108,7 +106,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         View view = LayoutInflater.from(context).inflate(R.layout.player_names, null);
-        RelativeLayout l = (RelativeLayout) view.findViewById(R.id.playerNames);
+        RelativeLayout l = view.findViewById(R.id.playerNames);
 
         final EditText t = new EditText(context);
         t.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -116,14 +114,13 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
         l.addView(t);
 
         builder.setView(view);
-        builder.setTitle("Player " + i);
+        builder.setTitle("Player " + (numberOfPlayers+1-i));
         builder.setPositiveButton("Next", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // Send the positive button event back to the host activity
                 String name;
                 name = t.getText().toString();
                 players.add(name);
-                mName.add(name);
 
                 mPlayers = i - 1;
                 // when the last name is assigned the next button creates an instance
