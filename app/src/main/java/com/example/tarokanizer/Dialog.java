@@ -104,47 +104,45 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
         return builder.create();
     }
 
-    public void CreatePlayerNamesDialog(final int i)
-    {
+    public void CreatePlayerNamesDialog(final int i) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = LayoutInflater.from(context).inflate(R.layout.player_names, null);
+        RelativeLayout l = (RelativeLayout) view.findViewById(R.id.playerNames);
 
-                View view = LayoutInflater.from(context).inflate(R.layout.player_names, null);
-                RelativeLayout l = (RelativeLayout) view.findViewById(R.id.playerNames);
+        final EditText t = new EditText(context);
+        t.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        t.setTextColor(Color.BLACK);
+        l.addView(t);
 
-                final EditText t = new EditText(context);
-                t.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                t.setTextColor(Color.BLACK);
-                l.addView(t);
+        builder.setView(view);
+        builder.setTitle("Player " + i);
+        builder.setPositiveButton("Next", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Send the positive button event back to the host activity
+                String name;
+                name = t.getText().toString();
+                players.add(name);
+                mName.add(name);
 
-                builder.setView(view);
-                builder.setTitle("Player " + i);
-                builder.setPositiveButton("Next", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // Send the positive button event back to the host activity
-                        String name;
-                        name = t.getText().toString();
-                        players.add(name);
-                        mName.add(name);
-
-                        mPlayers = i - 1;
-                        // when the last name is assigned the next button creates an instance
-                        if (i == 1) {
-                            String title = editTextTitle.getText().toString();
-                            listener.onDialogPositiveClick(title, players);
-                            return;
-                        }
-                        //Creating new dialogs until we run out of players
-                        CreatePlayerNamesDialog(mPlayers);
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // Send the negative button event back to the host activity
-                        mPlayers = 0;
-                    }
-                });
-                builder.show();
+                mPlayers = i - 1;
+                // when the last name is assigned the next button creates an instance
+                if (i == 1) {
+                    String title = editTextTitle.getText().toString();
+                    listener.onDialogPositiveClick(title, players);
+                    return;
+                }
+                //Creating new dialogs until we run out of players
+                CreatePlayerNamesDialog(mPlayers);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Send the negative button event back to the host activity
+                mPlayers = 0;
+            }
+        });
+        builder.show();
 
     }
 
