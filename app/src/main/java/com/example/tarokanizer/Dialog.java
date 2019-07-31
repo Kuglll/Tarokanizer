@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
@@ -88,8 +89,9 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
                         String title = editTextTitle.getText().toString();
                         if(!title.equals("")) {
                             CreatePlayerNamesDialog(numberOfPlayers);
+                        } else{
+                            Toast.makeText(getActivity(), "Missing game title! Better luck next time.", Toast.LENGTH_LONG).show();
                         }
-                        getDialog().dismiss();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
