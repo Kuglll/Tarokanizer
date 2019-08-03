@@ -1,5 +1,6 @@
 package com.example.tarokanizer;
 
+import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -43,6 +44,9 @@ public class Scoreboard extends AppCompatActivity {
             TextView tv = createTextViewPlayer(player);
             linearLayoutPlayers.addView(tv);
         }
+        for(int i=0; i<players.size(); i++){
+            createTextViewScore(i);
+        }
 
     }
 
@@ -53,9 +57,10 @@ public class Scoreboard extends AppCompatActivity {
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36);
         textView.setText(player);
         textView.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
         textView.setGravity(Gravity.CENTER);
+        textView.setBackgroundResource(R.drawable.black);
         return textView;
     }
 
@@ -63,20 +68,26 @@ public class Scoreboard extends AppCompatActivity {
         return null;
     }
 
-    public void createTextView(){
+    public void createTextViewScore(int textViewId){
         TextView textView = new TextView(this);
+        textView.setId(textViewId);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
         textView.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT, 1f));
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
+        textView.setBackgroundResource(R.drawable.black);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                TextView tv = scores.get(view.getId());
+                String s = tv.getText().toString();
+                //Tim please provide dialog here
+                tv.setText(s + "10\n");
             }
         });
 
+        linearLayoutScore.addView(textView);
         scores.add(textView);
     }
 
