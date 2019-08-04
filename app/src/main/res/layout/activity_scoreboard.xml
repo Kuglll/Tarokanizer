@@ -19,48 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <!--
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:background="@drawable/black">
-
-
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        app:srcCompat="@color/colorAccent"
-                        android:padding="2sp"/>
-
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:padding="2sp"
-                        app:srcCompat="@color/colorAccent" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:background="@drawable/black">
-
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="20sp"
-                android:layout_height="20sp"
-                android:padding="2sp"
-                app:srcCompat="@color/colorAccent" />
-        </LinearLayout>
-            -->
 
     </LinearLayout>
 

@@ -118,7 +118,7 @@ public class Scoreboard extends AppCompatActivity {
                 //adding new row to score
                 TextView tv = scores.get(view.getId());
                 String s = tv.getText().toString();
-                //Tim please provide dialog here
+                //TODO: Tim please provide dialog here
                 tv.setText(s + "10\n");
 
 
@@ -155,3 +155,8 @@ public class Scoreboard extends AppCompatActivity {
     }
 
 }
+
+//TODO: automatic scrolling to bottom of scrollview when updating it
+//TODO: adding and removing radlci
+//TODO: storing radlci + scores in CardView class
+//TODO: storing CardView class locally on the phone
