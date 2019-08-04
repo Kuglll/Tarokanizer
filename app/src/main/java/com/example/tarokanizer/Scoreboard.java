@@ -4,14 +4,20 @@ import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class Scoreboard extends AppCompatActivity {
@@ -22,6 +28,8 @@ public class Scoreboard extends AppCompatActivity {
     LinearLayout linearLayoutSum;
     ArrayList<String> players;
     ArrayList<TextView> scores = new ArrayList<>();
+    ArrayList<TextView> sums = new ArrayList<>();
+    ArrayList<LinearLayout> radlci = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +53,14 @@ public class Scoreboard extends AppCompatActivity {
             linearLayoutPlayers.addView(tv);
         }
         for(int i=0; i<players.size(); i++){
-            createTextViewScore(i);
+            TextView tv = createTextViewScore(i);
+            linearLayoutScore.addView(tv);
+
+            tv = createTextViewSum(i);
+            linearLayoutSum.addView(tv);
+
+            LinearLayout ll = createPlayersRadlcLayout(i);
+            linearLayoutRadlci.addView(ll);
         }
 
     }
@@ -61,16 +76,35 @@ public class Scoreboard extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
         textView.setGravity(Gravity.CENTER);
         textView.setBackgroundResource(R.drawable.black);
+
         return textView;
     }
 
-    public TextView createTextViewRadlci(){
-        return null;
+    public LinearLayout createPlayersRadlcLayout(int i){
+        LinearLayout ll = new LinearLayout(this);
+        ll.setId(i);
+        ll.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                50,1f));
+        ll.setGravity(Gravity.CENTER_HORIZONTAL);
+        ll.setBackgroundResource(R.drawable.black);
+
+        radlci.add(ll);
+        return ll;
     }
 
-    public void createTextViewScore(int textViewId){
+    public ImageView createRadlc(){
+        ImageView radlc = new ImageView(this);
+        radlc.setLayoutParams(new LinearLayout.LayoutParams(40,40));
+        radlc.setPadding(5,10,5,0);
+        radlc.setImageResource(R.color.colorAccent);
+
+        return radlc;
+    }
+
+    public TextView createTextViewScore(int id){
         TextView textView = new TextView(this);
-        textView.setId(textViewId);
+        textView.setId(id);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
         textView.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -80,15 +114,44 @@ public class Scoreboard extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //adding new row to score
                 TextView tv = scores.get(view.getId());
                 String s = tv.getText().toString();
                 //Tim please provide dialog here
                 tv.setText(s + "10\n");
+
+
+                //updating sum at the end
+                tv = sums.get(view.getId());
+                int i = Integer.parseInt(tv.getText().toString());
+                i += 10;
+                tv.setText(""+i);
+
+                //test - adding radlc when clicking on textview to add score
+                LinearLayout ll = radlci.get(view.getId());
+                ll.addView(createRadlc());
             }
         });
 
-        linearLayoutScore.addView(textView);
         scores.add(textView);
+        return textView;
+    }
+
+    public TextView createTextViewSum(int id){
+        TextView textView = new TextView(this);
+        textView.setText("0");
+        textView.setId(id);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+        textView.setTypeface(Typeface.DEFAULT_BOLD);
+        textView.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT, 1f));
+        textView.setGravity(Gravity.CENTER_HORIZONTAL);
+        textView.setBackgroundResource(R.drawable.black2);
+
+        sums.add(textView);
+        return textView;
     }
 
 }
