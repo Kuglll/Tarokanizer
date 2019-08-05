@@ -7,9 +7,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -20,6 +24,7 @@ import android.widget.Toast;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
+import android.view.WindowManager.LayoutParams;
 
 import java.util.ArrayList;
 
@@ -32,6 +37,8 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
     private int numberOfPlayers;
     private Context context;
     private int mPlayers;
+    private String mScore;
+    private boolean resultValue;
 
     public Dialog(Context context){
         this.context = context;
@@ -66,6 +73,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
 
     public synchronized android.app.Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog dialog;
 
         players = new ArrayList<>();
 
@@ -101,11 +109,17 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
                     }
                 });
 
-        return builder.create();
+        //this part makes sure that the keyboard pops up at the start of the dialog
+        dialog = builder.create();
+        dialog.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        dialog.show();
+
+        return dialog;
     }
 
     public void CreatePlayerNamesDialog(final int i) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog dialog;
 
         View view = LayoutInflater.from(context).inflate(R.layout.player_names, null);
         RelativeLayout l = view.findViewById(R.id.playerNames);
@@ -141,8 +155,62 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
                 mPlayers = 0;
             }
         });
-        builder.show();
 
+        //this part makes sure that the keyboard pops up at the start of the dialog
+        dialog = builder.create();
+        dialog.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        dialog.show();
+
+    }
+
+    public String ScoreDialog (View view, Context cont){
+
+        final Handler handler = new Handler()
+        {
+            @Override
+            public void handleMessage(Message mesg)
+            {
+                throw new RuntimeException();
+            }
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(cont);
+        AlertDialog dialog;
+
+        view = LayoutInflater.from(cont).inflate(R.layout.player_names, null);
+        RelativeLayout l = view.findViewById(R.id.playerNames);
+
+        final EditText t = new EditText(cont);
+        t.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        t.setInputType(InputType.TYPE_CLASS_NUMBER); //numbers only
+        t.setTextColor(Color.BLACK);
+        l.addView(t);
+
+        builder.setView(view);
+        builder.setTitle("Score");
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Send the positive button event back to the host activity
+                mScore = t.getText().toString();
+                handler.sendMessage(handler.obtainMessage());
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Send the negative button event back to the host activity
+                Dialog.this.notify();
+                handler.sendMessage(handler.obtainMessage());
+            }
+        });
+
+        //this part makes sure that the keyboard pops up at the start of the dialog
+        dialog = builder.create();
+        dialog.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        dialog.show();
+
+        try{ Looper.loop(); }
+        catch(RuntimeException e){}
+
+        return mScore;
     }
 
 }

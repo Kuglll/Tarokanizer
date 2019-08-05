@@ -2,16 +2,24 @@ package com.example.tarokanizer;
 
 import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +38,7 @@ public class Scoreboard extends AppCompatActivity {
     ArrayList<TextView> scores = new ArrayList<>();
     ArrayList<TextView> sums = new ArrayList<>();
     ArrayList<LinearLayout> radlci = new ArrayList<>();
+    String mScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,19 +127,26 @@ public class Scoreboard extends AppCompatActivity {
                 //adding new row to score
                 TextView tv = scores.get(view.getId());
                 String s = tv.getText().toString();
-                //TODO: Tim please provide dialog here
-                tv.setText(s + "10\n");
 
+                Dialog scoreDialog = new Dialog(Scoreboard.this);
+                mScore = scoreDialog.ScoreDialog(view, Scoreboard.this);
+                if(mScore != null) {
+                    if(mScore.trim().isEmpty()){Toast.makeText(Scoreboard.this,
+                            "Invalid Score", Toast.LENGTH_LONG).show(); }
+                    else {
+                        tv.setText(s + mScore + "\n");
 
-                //updating sum at the end
-                tv = sums.get(view.getId());
-                int i = Integer.parseInt(tv.getText().toString());
-                i += 10;
-                tv.setText(""+i);
+                        //updating sum at the end
+                        tv = sums.get(view.getId());
+                        int i = Integer.parseInt(tv.getText().toString());
+                        i += Integer.parseInt(mScore);
+                        tv.setText("" + i);
 
-                //test - adding radlc when clicking on textview to add score
-                LinearLayout ll = radlci.get(view.getId());
-                ll.addView(createRadlc());
+                        //test - adding radlc when clicking on textview to add score
+                        LinearLayout ll = radlci.get(view.getId());
+                        ll.addView(createRadlc());
+                    }
+                }
             }
         });
 
@@ -156,6 +172,7 @@ public class Scoreboard extends AppCompatActivity {
 
 }
 
+//TODO: add +/- to ScoreDialog
 //TODO: automatic scrolling to bottom of scrollview when updating it
 //TODO: adding and removing radlci
 //TODO: storing radlci + scores in CardView class
