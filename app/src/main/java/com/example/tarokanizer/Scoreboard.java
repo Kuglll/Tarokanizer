@@ -131,8 +131,8 @@ public class Scoreboard extends AppCompatActivity {
                 Dialog scoreDialog = new Dialog(Scoreboard.this);
                 mScore = scoreDialog.ScoreDialog(view, Scoreboard.this);
                 if(mScore != null) {
-                    if(mScore.trim().isEmpty()){Toast.makeText(Scoreboard.this,
-                            "Invalid Score", Toast.LENGTH_LONG).show(); }
+                    if(mScore.trim().isEmpty()){
+                        Toast.makeText(Scoreboard.this,"Invalid Score", Toast.LENGTH_LONG).show(); }
                     else {
                         tv.setText(s + mScore + "\n");
 
@@ -174,6 +174,8 @@ public class Scoreboard extends AppCompatActivity {
 
 //TODO: add +/- to ScoreDialog
 //TODO: automatic scrolling to bottom of scrollview when updating it
+
 //TODO: adding and removing radlci
+
 //TODO: storing radlci + scores in CardView class
 //TODO: storing CardView class locally on the phone
