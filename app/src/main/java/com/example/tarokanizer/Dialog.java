@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -37,8 +38,9 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
     private int numberOfPlayers;
     private Context context;
     private int mPlayers;
-    private String mScore;
+    private int mScore;
     private boolean resultValue;
+    private boolean mPositive = true;
 
     public Dialog(Context context){
         this.context = context;
@@ -163,7 +165,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
 
     }
 
-    public String ScoreDialog (View view, Context cont){
+    public int ScoreDialog (View view, final Context cont){
 
         final Handler handler = new Handler()
         {
@@ -173,6 +175,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
                 throw new RuntimeException();
             }
         };
+        final CharSequence[] items = {"+", "-"};
         AlertDialog.Builder builder = new AlertDialog.Builder(cont);
         AlertDialog dialog;
 
@@ -186,11 +189,18 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
         l.addView(t);
 
         builder.setView(view);
+        builder.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int item) {
+               if(item == 1){mPositive = false;}
+               else{mPositive = true;}
+            }
+        });
         builder.setTitle("Score");
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // Send the positive button event back to the host activity
-                mScore = t.getText().toString();
+                mScore = Integer.parseInt(t.getText().toString());
                 handler.sendMessage(handler.obtainMessage());
             }
         });
@@ -209,6 +219,8 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
 
         try{ Looper.loop(); }
         catch(RuntimeException e){}
+
+        if(!mPositive){mScore *= -1;}
 
         return mScore;
     }
