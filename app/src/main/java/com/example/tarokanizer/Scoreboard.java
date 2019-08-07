@@ -129,7 +129,8 @@ public class Scoreboard extends AppCompatActivity {
                 String s = tv.getText().toString();
 
                 Dialog scoreDialog = new Dialog(Scoreboard.this);
-                mScore = scoreDialog.ScoreDialog(view, Scoreboard.this);
+                int score = scoreDialog.ScoreDialog(view, Scoreboard.this);
+                mScore = Integer.toString(score);
                 if(mScore != null) {
                     if(mScore.trim().isEmpty()){
                         Toast.makeText(Scoreboard.this,"Invalid Score", Toast.LENGTH_LONG).show(); }
