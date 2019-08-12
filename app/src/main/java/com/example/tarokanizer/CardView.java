@@ -10,7 +10,7 @@ public class CardView {
     private ArrayList<String> mPlayers;
     private ArrayList <TextView> mScore = new ArrayList<>();
     private ArrayList<ArrayList> mRadlci = new ArrayList<>();
-    private ArrayList <Integer> mSums = new ArrayList<>();
+    private ArrayList<TextView> mSums = new ArrayList<>();
 
     CardView(String title, ArrayList<String> players){
         mTitle = title;
@@ -33,5 +33,5 @@ public class CardView {
         return mRadlci;
     }
 
-    public ArrayList<Integer> getmSums() { return mSums; }
+    public ArrayList<TextView> getmSums() { return mSums; }
 }

@@ -37,7 +37,7 @@ public class Scoreboard extends AppCompatActivity {
     CardView cardView;
     ArrayList<String> players;
     ArrayList<TextView> scores;
-    ArrayList<TextView> sums = new ArrayList<>();
+    ArrayList<TextView> sums;
     ArrayList<LinearLayout> radlci = new ArrayList<>();
     String mScore;
     int position;
@@ -61,27 +61,36 @@ public class Scoreboard extends AppCompatActivity {
         position = intent.getIntExtra("position", -1);
         cardView = MainActivity.getCardViewList().get(position);
 
-        scores = cardView.getScore();
         players = cardView.getPlayers();
+        scores = cardView.getScore();
+        sums = cardView.getmSums();
 
         for (String player: players) {
             TextView tv = createTextViewPlayer(player);
             linearLayoutPlayers.addView(tv);
         }
         for(int i=0; i<players.size(); i++) {
-            TextView tv = createTextViewScore(i);
-            tv.setText(scores.get(i).getText());
+            TextView tv = null;
+            if(scores.size() != players.size()) {
+                tv = createTextViewScore(i);
+            } else{
+                tv = scores.get(i);
+                ((ViewGroup)tv.getParent()).removeView(tv);
+            }
+            //tv.setText(scores.get(i).getText());
             linearLayoutScore.addView(tv);
 
-
-            tv = createTextViewSum(i);
+            if(sums.size() != players.size()) {
+                tv = createTextViewSum(i);
+            } else{
+                tv = sums.get(i);
+                ((ViewGroup)tv.getParent()).removeView(tv);
+            }
             linearLayoutSum.addView(tv);
 
             LinearLayout ll = createPlayersRadlcLayout(i);
             linearLayoutRadlci.addView(ll);
         }
-
-        //loadData();
     }
 
 
@@ -190,12 +199,14 @@ public class Scoreboard extends AppCompatActivity {
 
 }
 
+//Sark
 //TODO: automatic scrolling to bottom of scrollview when updating it
-
 //TODO: adding and removing radlci
 
-//TODO: storing radlci + scores in CardView class
+//Kugl
+//TODO: storing radlci in CardView class
 //TODO: storing CardView class locally on the phone
+//TODO: FIX crashing of app, when deleting certain item (game)
 
 
 //TEST: pressing back button and closing app
