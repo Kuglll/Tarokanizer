@@ -34,11 +34,13 @@ public class Scoreboard extends AppCompatActivity {
     LinearLayout linearLayoutRadlci;
     LinearLayout linearLayoutScore;
     LinearLayout linearLayoutSum;
+    CardView cardView;
     ArrayList<String> players;
-    ArrayList<TextView> scores = new ArrayList<>();
+    ArrayList<TextView> scores;
     ArrayList<TextView> sums = new ArrayList<>();
     ArrayList<LinearLayout> radlci = new ArrayList<>();
     String mScore;
+    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +58,21 @@ public class Scoreboard extends AppCompatActivity {
     public void initialize(){
         Intent intent = getIntent();
 
-        players = intent.getStringArrayListExtra("playerNames");
+        position = intent.getIntExtra("position", -1);
+        cardView = MainActivity.getCardViewList().get(position);
+
+        scores = cardView.getScore();
+        players = cardView.getPlayers();
+
         for (String player: players) {
             TextView tv = createTextViewPlayer(player);
             linearLayoutPlayers.addView(tv);
         }
-        for(int i=0; i<players.size(); i++){
+        for(int i=0; i<players.size(); i++) {
             TextView tv = createTextViewScore(i);
+            tv.setText(scores.get(i).getText());
             linearLayoutScore.addView(tv);
+
 
             tv = createTextViewSum(i);
             linearLayoutSum.addView(tv);
@@ -72,6 +81,7 @@ public class Scoreboard extends AppCompatActivity {
             linearLayoutRadlci.addView(ll);
         }
 
+        //loadData();
     }
 
 
@@ -135,7 +145,9 @@ public class Scoreboard extends AppCompatActivity {
                     if(mScore.trim().isEmpty()){
                         Toast.makeText(Scoreboard.this,"Invalid Score", Toast.LENGTH_LONG).show(); }
                     else {
-                        tv.setText(s + mScore + "\n");
+                        s = s + mScore + "\n";
+                        tv.setText(s);
+                        saveData(view.getId(), tv);
 
                         //updating sum at the end
                         tv = sums.get(view.getId());
@@ -171,12 +183,21 @@ public class Scoreboard extends AppCompatActivity {
         return textView;
     }
 
+    public void saveData(int id, TextView tv){
+        TextView t = cardView.getScore().get(id);
+        t = tv;
+    }
+
 }
 
-//TODO: add +/- to ScoreDialog
 //TODO: automatic scrolling to bottom of scrollview when updating it
 
 //TODO: adding and removing radlci
 
 //TODO: storing radlci + scores in CardView class
 //TODO: storing CardView class locally on the phone
+
+
+//TEST: pressing back button and closing app
+//TEST: closing app from scoreboard
+//TEST: tilting the phone

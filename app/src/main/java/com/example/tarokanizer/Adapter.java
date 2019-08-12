@@ -1,5 +1,6 @@
 package com.example.tarokanizer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -14,19 +15,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import static android.app.Activity.RESULT_OK;
+
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     private ArrayList<CardView> mCardViewList;
-    private Context mContext;
+    private Activity mActivity;
     public OnDeleteButtonClickListener mListener;
+    static final int INTENT_REQUEST = 1;
 
     public interface OnDeleteButtonClickListener {
         void onDeleteClick(int position);
     }
 
-    public Adapter(Context context, ArrayList<CardView> cardViewList) {
+    public Adapter(Activity activity, ArrayList<CardView> cardViewList) {
         mCardViewList = cardViewList;
-        mContext = context;
+        mActivity = activity;
     }
 
     public void setOnCardBoardClickListener (final OnDeleteButtonClickListener listener){
@@ -69,7 +73,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         final CardView currentItem = mCardViewList.get(position);
         holder.title.setText(currentItem.getTitle());
 
@@ -77,13 +81,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             @Override
             public void onClick(View view) {
                 //actions that happen on cardboardclick
-                Intent intent = new Intent(mContext, Scoreboard.class);
+                Intent intent = new Intent(mActivity, Scoreboard.class);
 
-                ArrayList<String> players = currentItem.getPlayers();
-
-                intent.putStringArrayListExtra("playerNames", players);
-                if(!(mContext == null)) {
-                    mContext.startActivity(intent);
+                intent.putExtra("position", position);
+                if(!(mActivity == null)) {
+                    mActivity.startActivityForResult(intent, INTENT_REQUEST);
                 }
             }
         });
@@ -93,4 +95,5 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     public int getItemCount() {
         return mCardViewList.size();
     }
+
 }

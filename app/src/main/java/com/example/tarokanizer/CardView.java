@@ -1,13 +1,16 @@
 package com.example.tarokanizer;
 
+import android.widget.TextView;
+
 import java.util.ArrayList;
 
 public class CardView {
 
     private String mTitle;
     private ArrayList<String> mPlayers;
-    private ArrayList<String> mScore;
-    private ArrayList<ArrayList> mRadlci;
+    private ArrayList <TextView> mScore = new ArrayList<>();
+    private ArrayList<ArrayList> mRadlci = new ArrayList<>();
+    private ArrayList <Integer> mSums = new ArrayList<>();
 
     CardView(String title, ArrayList<String> players){
         mTitle = title;
@@ -22,11 +25,13 @@ public class CardView {
         return mPlayers;
     }
 
-    public ArrayList<String> getScore() {
+    public ArrayList<TextView> getScore() {
         return mScore;
     }
 
     public ArrayList<ArrayList> getRadlci() {
         return mRadlci;
     }
+
+    public ArrayList<Integer> getmSums() { return mSums; }
 }

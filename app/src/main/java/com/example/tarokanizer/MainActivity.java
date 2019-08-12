@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -17,12 +18,14 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Dialog.DialogListener{
 
-    private ArrayList<CardView> mCardViewList;
+    private static ArrayList<CardView> mCardViewList = new ArrayList<>();;
     private RecyclerView mRecyclerView;
     private Adapter mAdapter; //Adapters provide a binding from an app-specific data set to views that are displayed within a RecyclerView
     private RecyclerView.LayoutManager mLayoutManager;
     private Button buttonNew;
     private Toolbar toolbar;
+
+    static final int INTENT_REQUEST = 1;
 
     //TODO: these 2 variables will be passed into game list
     private EditText textViewtitle;
@@ -36,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mCardViewList = new ArrayList<>();
         BuildRecyclerView();
 
         buttonNew = findViewById(R.id.button_new);
@@ -84,6 +86,10 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
         });
     }
 
+    public static ArrayList<CardView> getCardViewList(){
+        return mCardViewList;
+    }
+
     public void AddNewCardboard(int position, String title, ArrayList<String> players){
         mCardViewList.add(position, new CardView(title, players));
         mAdapter.notifyItemInserted(position);
@@ -98,5 +104,4 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
         mCardViewList.remove(position);
         mAdapter.notifyItemRemoved(position);
     }
-
 }
