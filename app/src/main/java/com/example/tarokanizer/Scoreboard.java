@@ -65,12 +65,11 @@ public class Scoreboard extends AppCompatActivity {
         scores = cardView.getScore();
         sums = cardView.getmSums();
 
-        for (String player: players) {
-            TextView tv = createTextViewPlayer(player);
-            linearLayoutPlayers.addView(tv);
-        }
+
         for(int i=0; i<players.size(); i++) {
-            TextView tv = null;
+            TextView tv = createTextViewPlayer(players.get(i), i);
+            linearLayoutPlayers.addView(tv);
+
             if(scores.size() != players.size()) {
                 tv = createTextViewScore(i);
             } else{
@@ -94,9 +93,10 @@ public class Scoreboard extends AppCompatActivity {
     }
 
 
-    public TextView createTextViewPlayer(String player){
+    public TextView createTextViewPlayer(String player, int id){
         //params = params are set here rather than in xml in layout
         TextView textView = new TextView(this);
+        textView.setId(id);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36);
         textView.setText(player);
         textView.setLayoutParams(new LinearLayout.LayoutParams(
@@ -108,7 +108,14 @@ public class Scoreboard extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Dialog scoreDialog = new Dialog(Scoreboard.this);
-                scoreDialog.RadlcDialog(view, Scoreboard.this);
+                Integer a = scoreDialog.RadlcDialog(view, Scoreboard.this);
+                if(a != null) {
+                    radlci.get(view.getId()).removeAllViews();
+                    LinearLayout ll = radlci.get(view.getId());
+                    for (int i = 0; i < a; i++) {
+                        ll.addView(createRadlc());
+                    }
+                }
             }
         });
 
@@ -164,17 +171,13 @@ public class Scoreboard extends AppCompatActivity {
                     else {
                         s = s + mScore + "\n";
                         tv.setText(s);
-                        saveData(view.getId(), tv);
+                        saveScore(view.getId(), tv);
 
                         //updating sum at the end
                         tv = sums.get(view.getId());
                         int i = Integer.parseInt(tv.getText().toString());
                         i += Integer.parseInt(mScore);
                         tv.setText("" + i);
-
-                        //test - adding radlc when clicking on textview to add score
-                        LinearLayout ll = radlci.get(view.getId());
-                        ll.addView(createRadlc());
                     }
                 }
                 mScore = null;
@@ -201,7 +204,7 @@ public class Scoreboard extends AppCompatActivity {
         return textView;
     }
 
-    public void saveData(int id, TextView tv){
+    public void saveScore(int id, TextView tv){
         TextView t = cardView.getScore().get(id);
         t = tv;
     }

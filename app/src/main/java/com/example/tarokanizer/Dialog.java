@@ -36,8 +36,8 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
     private int numberOfPlayers;
     private Context context;
     private int mPlayers;
-    private java.lang.Integer mScore;
-    private java.lang.Integer mRadlc;
+    private Integer mScore;
+    private Integer mRadlc;
     private boolean resultValue;
     private boolean mPositive = true;
 
