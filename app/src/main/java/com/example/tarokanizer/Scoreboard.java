@@ -35,10 +35,11 @@ public class Scoreboard extends AppCompatActivity {
     LinearLayout linearLayoutScore;
     LinearLayout linearLayoutSum;
     CardView cardView;
-    ArrayList<String> players;
+    ArrayList<String> players = new ArrayList<>();
     ArrayList<TextView> scores;
     ArrayList<TextView> sums;
     ArrayList<LinearLayout> radlci = new ArrayList<>();
+    int[] mRadlci;
     String mScore;
     int position;
 
@@ -64,31 +65,41 @@ public class Scoreboard extends AppCompatActivity {
         players = cardView.getPlayers();
         scores = cardView.getScore();
         sums = cardView.getmSums();
+        mRadlci = cardView.getRadlci();
 
 
         for(int i=0; i<players.size(); i++) {
-            TextView tv = createTextViewPlayer(players.get(i), i);
-            linearLayoutPlayers.addView(tv);
+            TextView tvPlayer = createTextViewPlayer(players.get(i), i);
+            linearLayoutPlayers.addView(tvPlayer);
 
-            if(scores.size() != players.size()) {
-                tv = createTextViewScore(i);
+            TextView tvScore;
+            TextView tvSum;
+
+            if(scores.size() != players.size()) {  //first time setup
+                tvScore = createTextViewScore(i);
+                tvSum = createTextViewSum(i);
             } else{
-                tv = scores.get(i);
-                ((ViewGroup)tv.getParent()).removeView(tv);
+                tvScore = scores.get(i);
+                ((ViewGroup)tvScore.getParent()).removeView(tvScore);
+                tvSum = sums.get(i);
+                ((ViewGroup)tvSum.getParent()).removeView(tvSum);
             }
             //tv.setText(scores.get(i).getText());
-            linearLayoutScore.addView(tv);
-
-            if(sums.size() != players.size()) {
-                tv = createTextViewSum(i);
-            } else{
-                tv = sums.get(i);
-                ((ViewGroup)tv.getParent()).removeView(tv);
-            }
-            linearLayoutSum.addView(tv);
+            linearLayoutScore.addView(tvScore);
+            linearLayoutSum.addView(tvSum);
 
             LinearLayout ll = createPlayersRadlcLayout(i);
             linearLayoutRadlci.addView(ll);
+        }
+        loadRadlci();
+    }
+
+    public void loadRadlci(){
+        for(int i=0; i<players.size(); i++){
+            for(int k=0; k<mRadlci[i]; k++){
+                LinearLayout ll = radlci.get(i);
+                ll.addView(createRadlc());
+            }
         }
     }
 
@@ -112,6 +123,7 @@ public class Scoreboard extends AppCompatActivity {
                 if(a != null) {
                     radlci.get(view.getId()).removeAllViews();
                     LinearLayout ll = radlci.get(view.getId());
+                    mRadlci[view.getId()] = a; //saving integer of radlci
                     for (int i = 0; i < a; i++) {
                         ll.addView(createRadlc());
                     }
@@ -208,12 +220,11 @@ public class Scoreboard extends AppCompatActivity {
         TextView t = cardView.getScore().get(id);
         t = tv;
     }
-
 }
 
 //Sark
 //TODO: automatic scrolling to bottom of scrollview when updating it
-//TODO: adding and removing radlci
+//TODO: adding and removing radlci32
 
 //Kugl
 //TODO: storing radlci in CardView class
