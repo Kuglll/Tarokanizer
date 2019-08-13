@@ -104,6 +104,13 @@ public class Scoreboard extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
         textView.setGravity(Gravity.CENTER);
         textView.setBackgroundResource(R.drawable.black);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Dialog scoreDialog = new Dialog(Scoreboard.this);
+                scoreDialog.RadlcDialog(view, Scoreboard.this);
+            }
+        });
 
         return textView;
     }
@@ -148,8 +155,9 @@ public class Scoreboard extends AppCompatActivity {
                 String s = tv.getText().toString();
 
                 Dialog scoreDialog = new Dialog(Scoreboard.this);
-                int score = scoreDialog.ScoreDialog(view, Scoreboard.this);
-                mScore = Integer.toString(score);
+                java.lang.Integer score = scoreDialog.ScoreDialog(view, Scoreboard.this);
+                if(score != null) mScore = Integer.toString(score);
+                score = null;
                 if(mScore != null) {
                     if(mScore.trim().isEmpty()){
                         Toast.makeText(Scoreboard.this,"Invalid Score", Toast.LENGTH_LONG).show(); }
@@ -169,6 +177,7 @@ public class Scoreboard extends AppCompatActivity {
                         ll.addView(createRadlc());
                     }
                 }
+                mScore = null;
             }
         });
 

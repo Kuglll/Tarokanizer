@@ -12,18 +12,16 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.RadioButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.WindowManager.LayoutParams;
 
@@ -38,7 +36,8 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
     private int numberOfPlayers;
     private Context context;
     private int mPlayers;
-    private int mScore;
+    private java.lang.Integer mScore;
+    private java.lang.Integer mRadlc;
     private boolean resultValue;
     private boolean mPositive = true;
 
@@ -165,7 +164,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
 
     }
 
-    public int ScoreDialog (View view, final Context cont){
+    public java.lang.Integer ScoreDialog (View view, final Context cont){
 
         final Handler handler = new Handler()
         {
@@ -208,6 +207,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
             public void onClick(DialogInterface dialog, int id) {
                 // Send the negative button event back to the host activity
                 Dialog.this.notify();
+                mScore = null;
                 handler.sendMessage(handler.obtainMessage());
             }
         });
@@ -223,6 +223,78 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
         if(!mPositive){mScore *= -1;}
 
         return mScore;
+    }
+
+    public java.lang.Integer RadlcDialog (View view, final Context cont){
+
+        final Handler handler = new Handler()
+        {
+            @Override
+            public void handleMessage(Message mesg)
+            {
+                throw new RuntimeException();
+            }
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(cont);
+        AlertDialog dialog;
+
+        view = LayoutInflater.from(cont).inflate(R.layout.radlci_layout, null);
+        RelativeLayout l = view.findViewById(R.id.radlcLayout);
+        final TextView t = view.findViewById(R.id.add_radlc_number);
+        final ImageView plusImage = view.findViewById(R.id.image_plus_radlc);
+        final ImageView minusImage = view.findViewById(R.id.image_minus_radlc);
+        plusImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int text = Integer.parseInt(t.getText().toString()) + 1;
+                String textToString = String.valueOf(text);
+                t.setText(textToString);
+            }
+        });
+        minusImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int text = Integer.parseInt(t.getText().toString()) - 1;
+                String textToString = String.valueOf(text);
+                t.setText(textToString);
+            }
+        });
+
+        //t.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        //t.setInputType(InputType.TYPE_CLASS_NUMBER); //numbers only
+        //t.setTextColor(Color.BLACK);
+        //l.addView(t);
+
+        builder.setView(view);
+        builder.setTitle("Radlces to add/remove:");
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                mRadlc = Integer.parseInt(t.getText().toString());
+                handler.sendMessage(handler.obtainMessage());
+            }
+        });
+        builder.setNegativeButton("Remove", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Dialog.this.notify();
+                mRadlc = null;
+                handler.sendMessage(handler.obtainMessage());
+            }
+        });
+
+        //this part makes sure that the keyboard pops up at the start of the dialog
+        dialog = builder.create();
+        dialog.show();
+
+        try{ Looper.loop(); }
+        catch(RuntimeException e){}
+
+        return mRadlc;
     }
 
 }
