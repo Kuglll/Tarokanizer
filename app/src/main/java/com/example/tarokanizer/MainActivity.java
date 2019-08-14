@@ -25,8 +25,6 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
     private Button buttonNew;
     private Toolbar toolbar;
 
-    static final int INTENT_REQUEST = 1;
-
     //TODO: these 2 variables will be passed into game list
     private EditText textViewtitle;
     private EditText textViewnumberOfPlayers;
