@@ -1,7 +1,9 @@
 package com.example.tarokanizer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,9 +16,14 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Dialog.DialogListener{
+
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
 
     private static ArrayList<CardView> mCardViewList = new ArrayList<>();;
     private RecyclerView mRecyclerView;
@@ -34,13 +41,17 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //preferences = getApplicationContext().getSharedPreferences("mPreferences", MODE_PRIVATE);
+        preferences = getPreferences(MODE_PRIVATE);
+        loadCardViewList();
 
         BuildRecyclerView();
 
         buttonNew = findViewById(R.id.button_new);
-
         buttonNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,6 +60,18 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
                 dialog.show(getSupportFragmentManager(), "dialog");
             }
         });
+    }
+
+    public void loadCardViewList(){
+        Gson gson = new Gson();
+        int numberOfCardViews = preferences.getInt("numberOfCardViews", 0);
+        CardView cv = null;
+
+        for(int i=0; i<numberOfCardViews; i++){
+            String json = preferences.getString("carView" + i, "");
+            cv = gson.fromJson(json, CardView.class);
+            mCardViewList.add(cv);
+        }
     }
 
     public void BuildRecyclerView() {
@@ -101,5 +124,25 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
     public void RemoveItem(int position) {
         mCardViewList.remove(position);
         mAdapter.notifyItemRemoved(position);
+    }
+
+    public void onStop() {
+        super.onStop();
+        storeCardViewList();
+    }
+
+    public void storeCardViewList(){
+        editor = preferences.edit();
+        Gson gson = new Gson();
+        int i = 0;
+
+        for(CardView cv: mCardViewList){
+            String json = gson.toJson(cv);
+            editor.putString("cardView" + i, json);
+            i++;
+        }
+        editor.putInt("numberOfCardViews", i);
+
+        editor.apply();
     }
 }
