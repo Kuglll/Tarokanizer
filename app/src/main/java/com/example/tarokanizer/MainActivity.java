@@ -1,5 +1,6 @@
 package com.example.tarokanizer;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,12 +19,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Dialog.DialogListener{
 
-    private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
+    FileOutputStream fos;
+    ObjectOutputStream os;
+    FileInputStream fis;
+    ObjectInputStream ois;
 
     private static ArrayList<CardView> mCardViewList = new ArrayList<>();;
     private RecyclerView mRecyclerView;
@@ -46,8 +56,8 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
         setSupportActionBar(toolbar);
 
         //preferences = getApplicationContext().getSharedPreferences("mPreferences", MODE_PRIVATE);
-        preferences = getPreferences(MODE_PRIVATE);
-        loadCardViewList();
+        //preferences = getPreferences(MODE_PRIVATE);
+        
 
         BuildRecyclerView();
 
@@ -62,15 +72,47 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
         });
     }
 
-    public void loadCardViewList(){
-        Gson gson = new Gson();
-        int numberOfCardViews = preferences.getInt("numberOfCardViews", 0);
-        CardView cv = null;
+    public void onResume() {
+        super.onResume();
 
-        for(int i=0; i<numberOfCardViews; i++){
-            String json = preferences.getString("carView" + i, "");
-            cv = gson.fromJson(json, CardView.class);
-            mCardViewList.add(cv);
+        try {
+            fos = getApplicationContext().openFileOutput("storage", Context.MODE_PRIVATE);
+            os = new ObjectOutputStream(fos);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        loadCardViewList();
+    }
+
+    public void loadCardViewList(){
+        try {
+            fis = getApplicationContext().openFileInput("storage");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        ObjectInputStream ois = null;
+        try {
+            ois = new ObjectInputStream(fis);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try{
+            Integer numberOfCardViews = ois.readInt();
+            for(int i=0; i<numberOfCardViews; i++){
+                CardView cv = (CardView) ois.readObject();
+                mCardViewList.add(cv);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            ois.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -126,23 +168,29 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
         mAdapter.notifyItemRemoved(position);
     }
 
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         storeCardViewList();
     }
 
     public void storeCardViewList(){
-        editor = preferences.edit();
-        Gson gson = new Gson();
-        int i = 0;
-
-        for(CardView cv: mCardViewList){
-            String json = gson.toJson(cv);
-            editor.putString("cardView" + i, json);
-            i++;
+        Integer numberOfCardViews = mCardViewList.size();
+        try {
+            os.writeInt(numberOfCardViews);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        editor.putInt("numberOfCardViews", i);
-
-        editor.apply();
+        for(CardView cv: mCardViewList){
+            try {
+                os.writeObject(cv);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
