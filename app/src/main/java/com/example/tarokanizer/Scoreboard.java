@@ -119,11 +119,13 @@ public class Scoreboard extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Dialog scoreDialog = new Dialog(Scoreboard.this);
-                Integer a = scoreDialog.RadlcDialog(view, Scoreboard.this);
-                if(a != null) {
+                mRadlci[view.getId()] += scoreDialog.RadlcDialog(view, Scoreboard.this);
+                if(mRadlci[view.getId()] < 0){mRadlci[view.getId()] = 0;}
+                Integer a;
+                a = mRadlci[view.getId()];
+                if(a != null || a != 0) {
                     radlci.get(view.getId()).removeAllViews();
                     LinearLayout ll = radlci.get(view.getId());
-                    mRadlci[view.getId()] = a; //saving integer of radlci
                     for (int i = 0; i < a; i++) {
                         ll.addView(createRadlc());
                     }

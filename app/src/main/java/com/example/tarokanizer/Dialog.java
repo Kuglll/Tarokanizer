@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -236,29 +237,13 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
             }
         };
         AlertDialog.Builder builder = new AlertDialog.Builder(cont);
-        AlertDialog dialog;
+        final AlertDialog dialog;
 
         view = LayoutInflater.from(cont).inflate(R.layout.radlci_layout, null);
         RelativeLayout l = view.findViewById(R.id.radlcLayout);
-        final TextView t = view.findViewById(R.id.add_radlc_number);
-        final ImageView plusImage = view.findViewById(R.id.image_plus_radlc);
-        final ImageView minusImage = view.findViewById(R.id.image_minus_radlc);
-        plusImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int text = Integer.parseInt(t.getText().toString()) + 1;
-                String textToString = String.valueOf(text);
-                t.setText(textToString);
-            }
-        });
-        minusImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int text = Integer.parseInt(t.getText().toString()) - 1;
-                String textToString = String.valueOf(text);
-                t.setText(textToString);
-            }
-        });
+        final TextView plusText = view.findViewById(R.id.add_radlc);
+        final TextView minusText = view.findViewById(R.id.remove_radlc);
+        final ImageView closeRadlcWindow = view.findViewById(R.id.image_delete_radlc_window);
 
         //t.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         //t.setInputType(InputType.TYPE_CLASS_NUMBER); //numbers only
@@ -266,30 +251,34 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
         //l.addView(t);
 
         builder.setView(view);
-        builder.setTitle("Radlces to add/remove:");
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                mRadlc = Integer.parseInt(t.getText().toString());
-                handler.sendMessage(handler.obtainMessage());
-            }
-        });
-        builder.setNegativeButton("Remove", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
 
-            }
-        });
-        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Dialog.this.notify();
-                mRadlc = null;
-                handler.sendMessage(handler.obtainMessage());
-            }
-        });
-
-        //this part makes sure that the keyboard pops up at the start of the dialog
         dialog = builder.create();
         dialog.show();
+
+        plusText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRadlc = 1;
+                dialog.cancel();
+                handler.sendMessage(handler.obtainMessage());
+            }
+        });
+        minusText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRadlc = -1;
+                dialog.cancel();
+                handler.sendMessage(handler.obtainMessage());
+            }
+        });
+        closeRadlcWindow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRadlc = 0;
+                dialog.cancel();
+                handler.sendMessage(handler.obtainMessage());
+            }
+        });
 
         try{ Looper.loop(); }
         catch(RuntimeException e){}
