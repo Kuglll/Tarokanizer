@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -119,21 +120,25 @@ public class Scoreboard extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Dialog scoreDialog = new Dialog(Scoreboard.this);
-                mRadlci[view.getId()] += scoreDialog.RadlcDialog(view, Scoreboard.this);
-                if(mRadlci[view.getId()] < 0){mRadlci[view.getId()] = 0;}
-                Integer a;
-                a = mRadlci[view.getId()];
-                if(a != null || a != 0) {
-                    radlci.get(view.getId()).removeAllViews();
-                    LinearLayout ll = radlci.get(view.getId());
-                    for (int i = 0; i < a; i++) {
-                        ll.addView(createRadlc());
-                    }
-                }
+                AddRadlcOnClick(view, scoreDialog);
             }
         });
 
         return textView;
+    }
+
+    public void AddRadlcOnClick(View view, Dialog scoreDialog){
+        mRadlci[view.getId()] += scoreDialog.RadlcDialog(view, Scoreboard.this);
+        if(mRadlci[view.getId()] < 0){mRadlci[view.getId()] = 0;}
+        Integer a;
+        a = mRadlci[view.getId()];
+        if(a != null || a != 0) {
+            radlci.get(view.getId()).removeAllViews();
+            LinearLayout ll = radlci.get(view.getId());
+            for (int i = 0; i < a; i++) {
+                ll.addView(createRadlc());
+            }
+        }
     }
 
     public LinearLayout createPlayersRadlcLayout(int i){
@@ -144,7 +149,13 @@ public class Scoreboard extends AppCompatActivity {
                 50,1f));
         ll.setGravity(Gravity.CENTER_HORIZONTAL);
         ll.setBackgroundResource(R.drawable.black);
-
+        ll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Dialog scoreDialog = new Dialog(Scoreboard.this);
+                AddRadlcOnClick(view, scoreDialog);
+            }
+        });
         radlci.add(ll);
         return ll;
     }
@@ -195,9 +206,15 @@ public class Scoreboard extends AppCompatActivity {
                     }
                 }
                 mScore = null;
+
+                //scroll down everytime a result is added
+                ((ScrollView) findViewById(R.id.scrollViewInScoreBoard)).post(new Runnable() {
+                    public void run() {
+                        ((ScrollView) findViewById(R.id.scrollViewInScoreBoard)).fullScroll(View.FOCUS_DOWN);
+                    }
+                });
             }
         });
-
         scores.add(textView);
         return textView;
     }
@@ -225,7 +242,6 @@ public class Scoreboard extends AppCompatActivity {
 }
 
 //Sark
-//TODO: automatic scrolling to bottom of scrollview when updating it
 //TODO: adding and removing radlci32
 
 //Kugl
