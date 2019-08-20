@@ -246,14 +246,14 @@ public class Scoreboard extends AppCompatActivity {
 }
 
 //Sark
-//TODO: adding and removing radlci32
+//TODO: adding and removing radlci
 
 //Kugl
-//TODO: storing radlci in CardView class
-//TODO: storing CardView class locally on the phone
+//TODO: storing CardViews locally on the phone
 //TODO: FIX crashing of app, when deleting certain item (game)
 
+//TODO: first time setup - quick tutorial
 
-//TEST: pressing back button and closing app
+//TEST: pressing back button and closing app from recycler view
 //TEST: closing app from scoreboard
 //TEST: tilting the phone
