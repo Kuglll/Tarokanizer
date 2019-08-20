@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
         CardView cv = null;
 
         for(int i=0; i<numberOfCardViews; i++){
-            String json = preferences.getString("carView" + i, "");
+            String json = preferences.getString("cardView" + i, "");
             cv = gson.fromJson(json, CardView.class);
             mCardViewList.add(cv);
         }
@@ -126,8 +126,8 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
         mAdapter.notifyItemRemoved(position);
     }
 
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         storeCardViewList();
     }
 

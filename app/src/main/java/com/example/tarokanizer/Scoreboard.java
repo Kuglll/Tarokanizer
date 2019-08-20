@@ -35,11 +35,16 @@ public class Scoreboard extends AppCompatActivity {
     LinearLayout linearLayoutScore;
     LinearLayout linearLayoutSum;
     CardView cardView;
-    ArrayList<String> players = new ArrayList<>();
-    ArrayList<TextView> scores;
-    ArrayList<TextView> sums;
+
+    ArrayList<String> players;
+    ArrayList<ArrayList<String>> scores;
+
+    ArrayList<TextView> sums = new ArrayList<>();
+    int[] mSums = {0,0,0,0,0,0,0,0};
+
     ArrayList<LinearLayout> radlci = new ArrayList<>();
     int[] mRadlci;
+
     String mScore;
     int position;
 
@@ -64,45 +69,47 @@ public class Scoreboard extends AppCompatActivity {
 
         players = cardView.getPlayers();
         scores = cardView.getScore();
-        sums = cardView.getmSums();
+        mSums = cardView.getmSums();
         mRadlci = cardView.getRadlci();
 
 
         for(int i=0; i<players.size(); i++) {
-            TextView tvPlayer = createTextViewPlayer(players.get(i), i);
-            linearLayoutPlayers.addView(tvPlayer);
+            TextView tv = createTextViewPlayer(players.get(i), i);
+            linearLayoutPlayers.addView(tv);
 
-            TextView tvScore;
-            TextView tvSum;
+            tv = createTextViewScore(i);
+            linearLayoutScore.addView(tv);
 
-            if(scores.size() != players.size()) {  //first time setup
-                tvScore = createTextViewScore(i);
-                tvSum = createTextViewSum(i);
-            } else{
-                tvScore = scores.get(i);
-                ((ViewGroup)tvScore.getParent()).removeView(tvScore);
-                tvSum = sums.get(i);
-                ((ViewGroup)tvSum.getParent()).removeView(tvSum);
-            }
-            //tv.setText(scores.get(i).getText());
-            linearLayoutScore.addView(tvScore);
-            linearLayoutSum.addView(tvSum);
+            tv = createTextViewSum(i);
+            linearLayoutSum.addView(tv);
 
             LinearLayout ll = createPlayersRadlcLayout(i);
             linearLayoutRadlci.addView(ll);
         }
+        loadScores();
         loadRadlci();
+        loadSums();
+    }
+
+    public void loadScores(){
+
     }
 
     public void loadRadlci(){
         for(int i=0; i<players.size(); i++){
+            LinearLayout ll = radlci.get(i);
             for(int k=0; k<mRadlci[i]; k++){
-                LinearLayout ll = radlci.get(i);
                 ll.addView(createRadlc());
             }
         }
     }
 
+    public void loadSums(){
+        for(int i=0; i<players.size(); i++){
+            TextView tv = sums.get(i);
+            tv.setText(mSums[i]);
+        }
+    }
 
     public TextView createTextViewPlayer(String player, int id){
         //params = params are set here rather than in xml in layout
@@ -196,7 +203,6 @@ public class Scoreboard extends AppCompatActivity {
             }
         });
 
-        scores.add(textView);
         return textView;
     }
 
