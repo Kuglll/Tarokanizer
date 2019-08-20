@@ -2,6 +2,7 @@ package com.example.tarokanizer;
 
 import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
@@ -111,6 +112,7 @@ public class Scoreboard extends AppCompatActivity {
         textView.setId(id);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36);
         textView.setText(player);
+        textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.colorAccent));
         textView.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
@@ -178,6 +180,7 @@ public class Scoreboard extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT, 1f));
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
         textView.setBackgroundResource(R.drawable.black);
+        textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.colorAccent));
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -223,6 +226,7 @@ public class Scoreboard extends AppCompatActivity {
         TextView textView = new TextView(this);
         textView.setText("0");
         textView.setId(id);
+        textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.colorAccent));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
         textView.setTypeface(Typeface.DEFAULT_BOLD);
         textView.setLayoutParams(new LinearLayout.LayoutParams(
