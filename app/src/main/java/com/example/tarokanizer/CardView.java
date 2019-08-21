@@ -15,6 +15,9 @@ public class CardView {
     CardView(String title, ArrayList<String> players){
         mTitle = title;
         mPlayers = players;
+        for(int i=0; i<mPlayers.size(); i++){
+            mScore.add(new ArrayList<String>());
+        }
     }
 
     public String getTitle() {
