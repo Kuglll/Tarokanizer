@@ -1,6 +1,8 @@
 package com.example.tarokanizer;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -10,6 +12,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -112,6 +116,7 @@ public class Scoreboard extends AppCompatActivity {
         textView.setId(id);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36);
         textView.setText(player);
+        textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.colorAccent));
         textView.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
@@ -121,19 +126,25 @@ public class Scoreboard extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Dialog scoreDialog = new Dialog(Scoreboard.this);
-                Integer a = scoreDialog.RadlcDialog(view, Scoreboard.this);
-                if(a != null) {
-                    radlci.get(view.getId()).removeAllViews();
-                    LinearLayout ll = radlci.get(view.getId());
-                    mRadlci[view.getId()] = a; //saving integer of radlci
-                    for (int i = 0; i < a; i++) {
-                        ll.addView(createRadlc());
-                    }
-                }
+                AddRadlcOnClick(view, scoreDialog);
             }
         });
 
         return textView;
+    }
+
+    public void AddRadlcOnClick(View view, Dialog scoreDialog){
+        mRadlci[view.getId()] += scoreDialog.RadlcDialog(view, Scoreboard.this);
+        if(mRadlci[view.getId()] < 0){mRadlci[view.getId()] = 0;}
+        Integer a;
+        a = mRadlci[view.getId()];
+        if(a != null || a != 0) {
+            radlci.get(view.getId()).removeAllViews();
+            LinearLayout ll = radlci.get(view.getId());
+            for (int i = 0; i < a; i++) {
+                ll.addView(createRadlc());
+            }
+        }
     }
 
     public LinearLayout createPlayersRadlcLayout(int i){
@@ -144,7 +155,13 @@ public class Scoreboard extends AppCompatActivity {
                 50,1f));
         ll.setGravity(Gravity.CENTER_HORIZONTAL);
         ll.setBackgroundResource(R.drawable.black);
-
+        ll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Dialog scoreDialog = new Dialog(Scoreboard.this);
+                AddRadlcOnClick(view, scoreDialog);
+            }
+        });
         radlci.add(ll);
         return ll;
     }
@@ -190,6 +207,13 @@ public class Scoreboard extends AppCompatActivity {
                 }
                 score = null;
                 mScore = null;
+
+                //scroll down everytime a result is added
+                ((ScrollView) findViewById(R.id.scrollViewInScoreBoard)).post(new Runnable() {
+                    public void run() {
+                        ((ScrollView) findViewById(R.id.scrollViewInScoreBoard)).fullScroll(View.FOCUS_DOWN);
+                    }
+                });
             }
         });
 
@@ -219,6 +243,7 @@ public class Scoreboard extends AppCompatActivity {
         TextView textView = new TextView(this);
         textView.setText("0");
         textView.setId(id);
+        textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.colorAccent));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
         textView.setTypeface(Typeface.DEFAULT_BOLD);
         textView.setLayoutParams(new LinearLayout.LayoutParams(
@@ -247,6 +272,7 @@ public class Scoreboard extends AppCompatActivity {
 //TODO: first time setup - quick tutorial
 //TODO: editing score textviews
 
-//TEST: pressing back button and closing app
+
+//TEST: pressing back button and closing app from recycler view
 //TEST: closing app from scoreboard
 //TEST: tilting the phone
