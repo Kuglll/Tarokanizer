@@ -1,23 +1,15 @@
 package com.example.tarokanizer;
 
-import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,9 +17,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class Scoreboard extends AppCompatActivity {
@@ -37,11 +26,18 @@ public class Scoreboard extends AppCompatActivity {
     LinearLayout linearLayoutScore;
     LinearLayout linearLayoutSum;
     CardView cardView;
-    ArrayList<String> players = new ArrayList<>();
-    ArrayList<TextView> scores;
-    ArrayList<TextView> sums;
+
+    ArrayList<String> players;
+
+    ArrayList<LinearLayout> scores = new ArrayList<>();
+    ArrayList<ArrayList<String>> mScores;
+
+    ArrayList<TextView> sums = new ArrayList<>();
+    int[] mSums = {0,0,0,0,0,0,0,0};
+
     ArrayList<LinearLayout> radlci = new ArrayList<>();
     int[] mRadlci;
+
     String mScore;
     int position;
 
@@ -65,46 +61,54 @@ public class Scoreboard extends AppCompatActivity {
         cardView = MainActivity.getCardViewList().get(position);
 
         players = cardView.getPlayers();
-        scores = cardView.getScore();
-        sums = cardView.getmSums();
+        mScores = cardView.getScore();
+        mSums = cardView.getmSums();
         mRadlci = cardView.getRadlci();
 
-
         for(int i=0; i<players.size(); i++) {
-            TextView tvPlayer = createTextViewPlayer(players.get(i), i);
-            linearLayoutPlayers.addView(tvPlayer);
+            TextView tv = createTextViewPlayer(players.get(i), i);
+            linearLayoutPlayers.addView(tv);
 
-            TextView tvScore;
-            TextView tvSum;
+            LinearLayout ll = createScoreLayout(i);
+            linearLayoutScore.addView(ll);
 
-            if(scores.size() != players.size()) {  //first time setup
-                tvScore = createTextViewScore(i);
-                tvSum = createTextViewSum(i);
-            } else{
-                tvScore = scores.get(i);
-                ((ViewGroup)tvScore.getParent()).removeView(tvScore);
-                tvSum = sums.get(i);
-                ((ViewGroup)tvSum.getParent()).removeView(tvSum);
-            }
-            //tv.setText(scores.get(i).getText());
-            linearLayoutScore.addView(tvScore);
-            linearLayoutSum.addView(tvSum);
+            tv = createTextViewSum(i);
+            linearLayoutSum.addView(tv);
 
-            LinearLayout ll = createPlayersRadlcLayout(i);
+            ll = createPlayersRadlcLayout(i);
             linearLayoutRadlci.addView(ll);
         }
+
+        loadScores();
         loadRadlci();
+        loadSums();
+    }
+
+    public void loadScores(){
+        TextView tv;
+        for(int i=0; i<players.size(); i++){
+            for(int k=0; k<mScores.get(i).size(); k++) {
+                tv = createTextViewScore(0, mScores.get(i).get(k));
+                scores.get(i).addView(tv);
+            }
+        }
     }
 
     public void loadRadlci(){
         for(int i=0; i<players.size(); i++){
+            LinearLayout ll = radlci.get(i);
             for(int k=0; k<mRadlci[i]; k++){
-                LinearLayout ll = radlci.get(i);
                 ll.addView(createRadlc());
             }
         }
     }
 
+    public void loadSums(){
+        for(int i=0; i<players.size(); i++){
+            TextView tv = sums.get(i);
+            tv.setText(""+mSums[i]);
+        }
+    }
 
     public TextView createTextViewPlayer(String player, int id){
         //params = params are set here rather than in xml in layout
@@ -171,43 +175,37 @@ public class Scoreboard extends AppCompatActivity {
         return radlc;
     }
 
-    public TextView createTextViewScore(int id){
-        TextView textView = new TextView(this);
-        textView.setId(id);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
-        textView.setLayoutParams(new LinearLayout.LayoutParams(
+    public LinearLayout createScoreLayout(int id) {
+        LinearLayout ll = new LinearLayout(this);
+        ll.setId(id);
+        ll.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT, 1f));
-        textView.setGravity(Gravity.CENTER_HORIZONTAL);
-        textView.setBackgroundResource(R.drawable.black);
-        textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.colorAccent));
-        textView.setOnClickListener(new View.OnClickListener() {
+                LinearLayout.LayoutParams.MATCH_PARENT,1f));
+        ll.setGravity(Gravity.CENTER_HORIZONTAL);
+        ll.setBackgroundResource(R.drawable.black);
+        ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //adding new row to score
-                TextView tv = scores.get(view.getId());
-                String s = tv.getText().toString();
 
                 Dialog scoreDialog = new Dialog(Scoreboard.this);
                 java.lang.Integer score = scoreDialog.ScoreDialog(view, Scoreboard.this);
                 if(score != null) mScore = Integer.toString(score);
-                score = null;
                 if(mScore != null) {
                     if(mScore.trim().isEmpty()){
                         Toast.makeText(Scoreboard.this,"Invalid Score", Toast.LENGTH_LONG).show(); }
                     else {
-                        s = s + mScore + "\n";
-                        tv.setText(s);
-                        saveScore(view.getId(), tv);
+
+                        TextView tv = createTextViewScore(view.getId(), mScore);
+                        scores.get(view.getId()).addView(tv);
+                        mScores.get(view.getId()).add(mScore);
 
                         //updating sum at the end
+                        mSums[view.getId()] += score;
                         tv = sums.get(view.getId());
-                        int i = Integer.parseInt(tv.getText().toString());
-                        i += Integer.parseInt(mScore);
-                        tv.setText("" + i);
+                        tv.setText(""+mSums[view.getId()]);
                     }
                 }
+                score = null;
                 mScore = null;
 
                 //scroll down everytime a result is added
@@ -218,7 +216,26 @@ public class Scoreboard extends AppCompatActivity {
                 });
             }
         });
-        scores.add(textView);
+
+        scores.add(ll);
+        return ll;
+    }
+
+    public TextView createTextViewScore(int id, String score){
+        TextView textView = new TextView(this);
+        textView.setText(score);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+        textView.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+        textView.setGravity(Gravity.CENTER_HORIZONTAL);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //on long press - edit or delete the textview
+            }
+        });
+
         return textView;
     }
 
@@ -240,8 +257,8 @@ public class Scoreboard extends AppCompatActivity {
     }
 
     public void saveScore(int id, TextView tv){
-        TextView t = cardView.getScore().get(id);
-        t = tv;
+        //TextView t = cardView.getScore().get(id);
+        //t = tv;
     }
 }
 
@@ -249,10 +266,12 @@ public class Scoreboard extends AppCompatActivity {
 //TODO: adding and removing radlci
 
 //Kugl
-//TODO: storing CardViews locally on the phone
+//TODO: storing CardView class locally on the phone
 //TODO: FIX crashing of app, when deleting certain item (game)
 
 //TODO: first time setup - quick tutorial
+//TODO: editing score textviews
+
 
 //TEST: pressing back button and closing app from recycler view
 //TEST: closing app from scoreboard

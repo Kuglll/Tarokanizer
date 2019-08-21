@@ -8,13 +8,16 @@ public class CardView {
 
     private String mTitle;
     private ArrayList<String> mPlayers;
-    private ArrayList <TextView> mScore = new ArrayList<>();
+    private ArrayList<ArrayList<String>> mScore = new ArrayList<>();
     private int [] mRadlci = {0,0,0,0,0,0,0,0};
-    private ArrayList<TextView> mSums = new ArrayList<>();
+    private int [] mSums = {0,0,0,0,0,0,0,0};
 
     CardView(String title, ArrayList<String> players){
         mTitle = title;
         mPlayers = players;
+        for(int i=0; i<mPlayers.size(); i++){
+            mScore.add(new ArrayList<String>());
+        }
     }
 
     public String getTitle() {
@@ -25,7 +28,7 @@ public class CardView {
         return mPlayers;
     }
 
-    public ArrayList<TextView> getScore() {
+    public ArrayList<ArrayList<String>> getScore() {
         return mScore;
     }
 
@@ -33,5 +36,5 @@ public class CardView {
         return mRadlci;
     }
 
-    public ArrayList<TextView> getmSums() { return mSums; }
+    public int[] getmSums() { return mSums; }
 }
