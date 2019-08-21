@@ -182,6 +182,7 @@ public class Scoreboard extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT,1f));
         ll.setGravity(Gravity.CENTER_HORIZONTAL);
+        ll.setOrientation(LinearLayout.VERTICAL);
         ll.setBackgroundResource(R.drawable.black);
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,7 +210,7 @@ public class Scoreboard extends AppCompatActivity {
                 mScore = null;
 
                 //scroll down everytime a result is added
-                ((ScrollView) findViewById(R.id.scrollViewInScoreBoard)).post(new Runnable() {
+                (findViewById(R.id.scrollViewInScoreBoard)).post(new Runnable() {
                     public void run() {
                         ((ScrollView) findViewById(R.id.scrollViewInScoreBoard)).fullScroll(View.FOCUS_DOWN);
                     }
@@ -227,12 +228,13 @@ public class Scoreboard extends AppCompatActivity {
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
         textView.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+                LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //on long press - edit or delete the textview
+                System.out.println("test");
             }
         });
 
@@ -256,17 +258,12 @@ public class Scoreboard extends AppCompatActivity {
         return textView;
     }
 
-    public void saveScore(int id, TextView tv){
-        //TextView t = cardView.getScore().get(id);
-        //t = tv;
-    }
 }
 
 //Sark
 //TODO: adding and removing radlci
 
 //Kugl
-//TODO: storing CardView class locally on the phone
 //TODO: FIX crashing of app, when deleting certain item (game)
 
 //TODO: first time setup - quick tutorial
