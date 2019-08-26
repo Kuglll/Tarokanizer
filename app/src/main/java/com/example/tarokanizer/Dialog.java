@@ -9,6 +9,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.InputType;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +25,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.WindowManager.LayoutParams;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -41,6 +47,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
     private Integer mRadlc;
     private boolean resultValue;
     private boolean mPositive = true;
+    private boolean mDestroy = false;
 
     public Dialog(Context context){
         this.context = context;
@@ -85,6 +92,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
         editTextTitle = view.findViewById(R.id.edit_title);
         spinner = view.findViewById(R.id.edit_numberOfPlayers);
 
+        editTextTitle.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.peopleNumber, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -128,8 +136,10 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
 
         final EditText t = new EditText(context);
         t.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        t.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         t.setTextColor(Color.BLACK);
         l.addView(t);
+
 
         builder.setView(view);
         builder.setTitle("Player " + (numberOfPlayers+1-i));
@@ -245,11 +255,6 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
         final TextView minusText = view.findViewById(R.id.remove_radlc);
         final ImageView closeRadlcWindow = view.findViewById(R.id.image_delete_radlc_window);
 
-        //t.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        //t.setInputType(InputType.TYPE_CLASS_NUMBER); //numbers only
-        //t.setTextColor(Color.BLACK);
-        //l.addView(t);
-
         builder.setView(view);
 
         dialog = builder.create();
@@ -285,5 +290,60 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
 
         return mRadlc;
     }
+
+    public boolean DeleteScoreDialog (final Context cont, final TextView textView){
+        final Handler handler = new Handler()
+        {
+            @Override
+            public void handleMessage(Message mesg)
+            {
+                throw new RuntimeException();
+            }
+        };
+        View view = LayoutInflater.from(context).inflate(R.layout.score_deletion, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(cont);
+        final AlertDialog dialog;
+        RelativeLayout l = view.findViewById(R.id.scoreDeletion);
+        TextView t = view.findViewById(R.id.remove_score_tv);
+        t.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+        CharSequence text = textView.getText();
+        t.setText(text);
+
+        if(t.getParent() != null){
+            ((ViewGroup)t.getParent()).removeView(t);
+        }
+
+        l.addView(t);
+        builder.setView(view);
+        builder.setTitle("Delete Score: ");
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Send the positive button event back to the host activity
+                //mScore = Integer.parseInt(t.getText().toString());
+                mDestroy = true;
+                handler.sendMessage(handler.obtainMessage());
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                boolean destroy = false;
+                // Send the negative button event back to the host activity
+                Dialog.this.notify();
+                //mScore = null;
+                mDestroy = false;
+                handler.sendMessage(handler.obtainMessage());
+            }
+        });
+
+        dialog = builder.create();
+        dialog.show();
+
+
+        try{ Looper.loop(); }
+        catch(RuntimeException e){}
+        return  mDestroy;
+    }
+
+
 
 }

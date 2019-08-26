@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,6 +26,7 @@ public class Scoreboard extends AppCompatActivity {
     LinearLayout linearLayoutRadlci;
     LinearLayout linearLayoutScore;
     LinearLayout linearLayoutSum;
+    LinearLayout ll;
     CardView cardView;
 
     ArrayList<String> players;
@@ -176,7 +178,7 @@ public class Scoreboard extends AppCompatActivity {
     }
 
     public LinearLayout createScoreLayout(int id) {
-        LinearLayout ll = new LinearLayout(this);
+        ll = new LinearLayout(this);
         ll.setId(id);
         ll.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -187,34 +189,7 @@ public class Scoreboard extends AppCompatActivity {
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Dialog scoreDialog = new Dialog(Scoreboard.this);
-                java.lang.Integer score = scoreDialog.ScoreDialog(view, Scoreboard.this);
-                if(score != null) mScore = Integer.toString(score);
-                if(mScore != null) {
-                    if(mScore.trim().isEmpty()){
-                        Toast.makeText(Scoreboard.this,"Invalid Score", Toast.LENGTH_LONG).show(); }
-                    else {
-
-                        TextView tv = createTextViewScore(view.getId(), mScore);
-                        scores.get(view.getId()).addView(tv);
-                        mScores.get(view.getId()).add(mScore);
-
-                        //updating sum at the end
-                        mSums[view.getId()] += score;
-                        tv = sums.get(view.getId());
-                        tv.setText(""+mSums[view.getId()]);
-                    }
-                }
-                score = null;
-                mScore = null;
-
-                //scroll down everytime a result is added
-                (findViewById(R.id.scrollViewInScoreBoard)).post(new Runnable() {
-                    public void run() {
-                        ((ScrollView) findViewById(R.id.scrollViewInScoreBoard)).fullScroll(View.FOCUS_DOWN);
-                    }
-                });
+                AddScoreDialog(view, null); //If not null that means we clicked the textview, if null we clicked linearlayout. They use different views!
             }
         });
 
@@ -223,18 +198,37 @@ public class Scoreboard extends AppCompatActivity {
     }
 
     public TextView createTextViewScore(int id, String score){
-        TextView textView = new TextView(this);
+        final TextView textView = new TextView(this);
         textView.setText(score);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
         textView.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
+        textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.colorAccent));
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //on long press - edit or delete the textview
-                System.out.println("test");
+                AddScoreDialog(view, textView);
+            }
+        });
+        textView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Dialog dialog = new Dialog(Scoreboard.this);
+                if(dialog.DeleteScoreDialog(Scoreboard.this, textView)){
+                    textView.setVisibility(View.GONE);
+                    int score = Integer.parseInt(textView.getText().toString());
+                    view = (View)view.getParent();
+                    TextView tv = createTextViewScore(view.getId(), mScore);
+
+                    //updating sum at the end
+                    mSums[view.getId()] += score * -1;
+                    tv = sums.get(view.getId());
+                    tv.setText("" + mSums[view.getId()]);
+                }
+
+                return true;
             }
         });
 
@@ -256,6 +250,38 @@ public class Scoreboard extends AppCompatActivity {
 
         sums.add(textView);
         return textView;
+    }
+
+    public void AddScoreDialog(View view, TextView textView){
+        Dialog scoreDialog = new Dialog(Scoreboard.this);
+        java.lang.Integer score = scoreDialog.ScoreDialog(view, Scoreboard.this);
+        if(score != null) mScore = Integer.toString(score);
+        if(mScore != null) {
+            if(mScore.trim().isEmpty()){
+                Toast.makeText(Scoreboard.this,"Invalid Score", Toast.LENGTH_LONG).show(); }
+            else {
+                if (textView != null) {
+                    view = (View) view.getParent();
+                }
+                TextView tv = createTextViewScore(view.getId(), mScore);
+                scores.get(view.getId()).addView(tv);
+                mScores.get(view.getId()).add(mScore);
+
+                //updating sum at the end
+                mSums[view.getId()] += score;
+                tv = sums.get(view.getId());
+                tv.setText("" + mSums[view.getId()]);
+            }
+        }
+        score = null;
+        mScore = null;
+
+        //scroll down everytime a result is added
+        (findViewById(R.id.scrollViewInScoreBoard)).post(new Runnable() {
+            public void run() {
+                ((ScrollView) findViewById(R.id.scrollViewInScoreBoard)).fullScroll(View.FOCUS_DOWN);
+            }
+        });
     }
 
 }
