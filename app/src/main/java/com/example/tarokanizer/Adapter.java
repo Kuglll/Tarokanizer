@@ -81,8 +81,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             @Override
             public void onClick(View view) {
                 //actions that happen on cardboardclick
+                notifyDataSetChanged();
                 Intent intent = new Intent(mActivity, Scoreboard.class);
-
                 intent.putExtra("position", position);
                 if(!(mActivity == null)) {
                     mActivity.startActivityForResult(intent, INTENT_REQUEST);

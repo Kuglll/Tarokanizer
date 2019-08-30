@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
                 positiveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
                         RemoveItem(position);
                         deleteDialog.dismiss();
                     }
@@ -124,6 +125,8 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
     public void RemoveItem(int position) {
         mCardViewList.remove(position);
         mAdapter.notifyItemRemoved(position);
+        mAdapter.notifyDataSetChanged();
+        //mAdapter.notifyItemRangeChanged(position, mCardViewList.size());
     }
 
     public void onPause() {
