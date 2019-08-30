@@ -105,10 +105,15 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
                     public void onClick(DialogInterface dialog, int id) {
                         // Send the positive button event back to the host activity
                         String title = editTextTitle.getText().toString();
-                        if(!title.equals("")) {
-                            CreatePlayerNamesDialog(numberOfPlayers);
-                        } else{
-                            Toast.makeText(getActivity(), "Missing game title! Better luck next time.", Toast.LENGTH_LONG).show();
+                        if(title.length() > 15)
+                        {
+                            Toast.makeText(context, "Title must not exceed 15 letters!" , Toast.LENGTH_SHORT ).show();
+                        }else {
+                            if (!title.equals("")) {
+                                CreatePlayerNamesDialog(numberOfPlayers);
+                            } else {
+                                Toast.makeText(getActivity(), "Missing game title! Better luck next time.", Toast.LENGTH_LONG).show();
+                            }
                         }
                     }
                 })
@@ -148,6 +153,10 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
                 // Send the positive button event back to the host activity
                 String name;
                 name = t.getText().toString();
+                if(name.length() > 15)
+                {
+                    Toast.makeText(context, "Player name must not exceed 15 letters!" , Toast.LENGTH_SHORT ).show();
+                }else{
                 players.add(name);
 
                 mPlayers = i - 1;
@@ -159,6 +168,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
                 }
                 //Creating new dialogs until we run out of players
                 CreatePlayerNamesDialog(mPlayers);
+                }
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

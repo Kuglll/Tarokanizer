@@ -2,6 +2,7 @@ package com.example.tarokanizer;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.TextViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -69,6 +70,8 @@ public class Scoreboard extends AppCompatActivity {
 
         for(int i=0; i<players.size(); i++) {
             TextView tv = createTextViewPlayer(players.get(i), i);
+            TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(tv, 1, 200, 1,
+                    TypedValue.COMPLEX_UNIT_DIP);
             linearLayoutPlayers.addView(tv);
 
             LinearLayout ll = createScoreLayout(i);
