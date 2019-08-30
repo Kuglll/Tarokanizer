@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
 
-    private static ArrayList<CardView> mCardViewList = new ArrayList<>();;
+    private static ArrayList<CardView> mCardViewList;
     private RecyclerView mRecyclerView;
     private Adapter mAdapter; //Adapters provide a binding from an app-specific data set to views that are displayed within a RecyclerView
     private RecyclerView.LayoutManager mLayoutManager;
@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mCardViewList = new ArrayList<>();
 
         //preferences = getApplicationContext().getSharedPreferences("mPreferences", MODE_PRIVATE);
         preferences = getPreferences(MODE_PRIVATE);
