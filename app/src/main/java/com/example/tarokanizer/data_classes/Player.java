@@ -1,0 +1,23 @@
+package com.example.tarokanizer.data_classes;
+
+public class Player {
+
+    private String name;
+    private int id;
+
+    public Player(String name, int id){
+        name = name;
+        id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getId(){
+        return id;
+    }
+}
+
+
+

@@ -30,6 +30,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.WindowManager.LayoutParams;
 
+import com.example.tarokanizer.data_classes.Player;
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
     private EditText editTextTitle;
     private Spinner spinner;
     private DialogListener listener;
-    private ArrayList<String> players;
+    private ArrayList<Player> players;
     private int numberOfPlayers;
     private Context context;
     private int mPlayers;
@@ -54,7 +56,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
     }
 
     public interface DialogListener{
-        public void onDialogPositiveClick(String title, ArrayList<String> players);
+        public void onDialogPositiveClick(String title, ArrayList<Player> players);
     }
 
     @Override
@@ -157,7 +159,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
                 {
                     Toast.makeText(context, "Player name must not exceed 15 letters!" , Toast.LENGTH_SHORT ).show();
                 }else{
-                players.add(name);
+                players.add(new Player(name,numberOfPlayers-i));
 
                 mPlayers = i - 1;
                 // when the last name is assigned the next button creates an instance

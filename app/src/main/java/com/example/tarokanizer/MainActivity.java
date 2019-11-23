@@ -1,21 +1,19 @@
 package com.example.tarokanizer;
 
-import android.content.Intent;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tarokanizer.data_classes.CardView;
+import com.example.tarokanizer.data_classes.Player;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -114,13 +112,13 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
         return mCardViewList;
     }
 
-    public void AddNewCardboard(int position, String title, ArrayList<String> players){
+    public void AddNewCardboard(int position, String title, ArrayList<Player> players){
         mCardViewList.add(position, new CardView(title, players));
         mAdapter.notifyItemInserted(position);
     }
 
     @Override
-    public void onDialogPositiveClick(String title, ArrayList<String> players) {
+    public void onDialogPositiveClick(String title, ArrayList<Player> players) {
         AddNewCardboard(mCardViewList.size(), title, players);
     }
 

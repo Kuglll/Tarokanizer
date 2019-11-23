@@ -1,23 +1,28 @@
 package com.example.tarokanizer;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.TextViewCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.tarokanizer.data_classes.CardView;
+import com.example.tarokanizer.data_classes.Player;
 
 import java.util.ArrayList;
 
@@ -29,8 +34,10 @@ public class Scoreboard extends AppCompatActivity {
     LinearLayout linearLayoutSum;
     LinearLayout ll;
     CardView cardView;
+    private Toolbar toolbar;
+    private Button buttonNew;
 
-    ArrayList<String> players;
+    ArrayList<Player> players;
 
     ArrayList<LinearLayout> scores = new ArrayList<>();
     ArrayList<ArrayList<String>> mScores;
@@ -48,16 +55,63 @@ public class Scoreboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scoreboard);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         linearLayoutPlayers = findViewById(R.id.names);
         linearLayoutRadlci = findViewById(R.id.radlci);
         linearLayoutScore = findViewById(R.id.score);
         linearLayoutSum = findViewById(R.id.sum);
 
-        initialize();
+        initializeUi();
+        initializeOnClickListeners();
     }
 
-    public void initialize(){
+    public void initializeOnClickListeners(){
+        buttonNew = findViewById(R.id.button_new);
+        buttonNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayNewGameDialog();
+            }
+        });
+    }
+
+    public void displayNewGameDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
+        builder.setTitle("Who played the game?");
+        String [] mPlayers = new String[players.size()];
+        final boolean [] checked = new boolean[players.size()];
+
+        for(int i=0; i<players.size(); i++){
+            mPlayers[i] = players.get(i).getName();
+            checked[i] = false;
+            Log.d("PLAYERS", mPlayers[i]);
+        }
+
+        builder.setMultiChoiceItems(new String[] {"a", "b"}, checked, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+
+            }
+        });
+
+        builder.setPositiveButton("NEXT", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                for(int k=0; k<checked.length; k++){
+                    Log.d("CHECKED", ""+checked[k]);
+                }
+            }
+        });
+
+        builder.setNegativeButton("CANCEL", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void initializeUi(){
         Intent intent = getIntent();
 
         position = intent.getIntExtra("position", -1);
@@ -69,7 +123,7 @@ public class Scoreboard extends AppCompatActivity {
         mRadlci = cardView.getRadlci();
 
         for(int i=0; i<players.size(); i++) {
-            TextView tv = createTextViewPlayer(players.get(i), i);
+            TextView tv = createTextViewPlayer(players.get(i).getName(), i);
             TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(tv, 1, 200, 1,
                     TypedValue.COMPLEX_UNIT_DIP);
             linearLayoutPlayers.addView(tv);
