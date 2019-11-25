@@ -6,8 +6,8 @@ public class Player {
     private int id;
 
     public Player(String name, int id){
-        name = name;
-        id = id;
+        this.name = name;
+        this.id = id;
     }
 
     public String getName() {

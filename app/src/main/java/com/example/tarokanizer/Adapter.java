@@ -84,6 +84,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                 Intent intent = new Intent(mActivity, Scoreboard.class);
                 intent.putExtra("position", position);
                 if(!(mActivity == null)) {
+                    //TODO: check settings start different scoreboard
                     mActivity.startActivityForResult(intent, INTENT_REQUEST);
                 }
             }

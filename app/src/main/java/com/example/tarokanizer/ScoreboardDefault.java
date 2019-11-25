@@ -1,20 +1,14 @@
 package com.example.tarokanizer;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.TextViewCompat;
-
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -26,7 +20,7 @@ import com.example.tarokanizer.data_classes.Player;
 
 import java.util.ArrayList;
 
-public class Scoreboard extends AppCompatActivity {
+public class ScoreboardDefault extends AppCompatActivity {
 
     LinearLayout linearLayoutPlayers;
     LinearLayout linearLayoutRadlci;
@@ -34,8 +28,6 @@ public class Scoreboard extends AppCompatActivity {
     LinearLayout linearLayoutSum;
     LinearLayout ll;
     CardView cardView;
-    private Toolbar toolbar;
-    private Button buttonNew;
 
     ArrayList<Player> players;
 
@@ -55,90 +47,16 @@ public class Scoreboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scoreboard);
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         linearLayoutPlayers = findViewById(R.id.names);
         linearLayoutRadlci = findViewById(R.id.radlci);
         linearLayoutScore = findViewById(R.id.score);
         linearLayoutSum = findViewById(R.id.sum);
 
-        initializeUi();
-        initializeOnClickListeners();
+        initialize();
     }
 
-    public void initializeOnClickListeners(){
-        buttonNew = findViewById(R.id.button_new);
-        buttonNew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                displayWhoPlayedDialog();
-            }
-        });
-    }
-
-    public void displayWhoPlayedDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
-        builder.setTitle("Who played the game?");
-        String [] mPlayers = new String[players.size()];
-        final boolean [] checked = new boolean[players.size()];
-
-        for(int i=0; i<players.size(); i++){
-            mPlayers[i] = players.get(i).getName();
-            checked[i] = false;
-            Log.d("PLAYERS", mPlayers[i]);
-        }
-
-        builder.setMultiChoiceItems(mPlayers, checked, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-
-            }
-        });
-
-        builder.setPositiveButton("NEXT", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                displayWhatGameWasPlayed(checked);
-                for(int k=0; k<checked.length; k++) {
-                    Log.d("CHECKED", "" + checked[k]);
-                }
-            }
-        });
-
-        builder.setNegativeButton("CANCEL", null);
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    public void displayWhatGameWasPlayed(boolean [] checked){
-        //klop 70, berac 70, pikolo 70 - radlci
-        //ena 30, dva 20, tri 10
-        //solo tri 40, solo dva 50, solo ena 60, solo brez 80
-        //
-    }
-
-    public void displayDodatki(){
-        /*
-        Trula Ekipa pobere škisa, monda ter pagata. Nenapovedana 10, napovedana 20 točk.
-        Kralji Ekipa pobere vse štiri kralje. Nenapovedani 10, napovedani 20 točk.
-        Kralj ultimo V zadnjem štihu ekipa nosilca igre pobere klicanega kralja, možno le pri štirih igralcih. Nenapovedan 10, napovedan 20 točk.
-        Pagat ultimo Zadnji štih pobere pagat. Nenapovedan 25, napovedan 50 točk. Če štih s pagatom pobere tvoj partner, je pagat ultimo izgubljen!
-        Barvni valat Če je prva karta na mizi barva, je katera koli karta te barve močnejša od taroka. Nosilec napovedi mora pobrati vse karte, možno napovedati le, ko je nosilec sam v ekipi. Možen je le napovedani barvni valat, ki je vreden 125 točk.
-        Valat Ekipa pobere vse štihe. Nenapovedan je vreden 250, napovedan 500 točk.
-         */
-    }
-
-    public void selectDialogForGame(String igra){
-        switch(igra){
-            case "klop": break;
-            case "berac": break;
-
-        }
-    }
-
-    public void initializeUi(){
+    public void initialize(){
         Intent intent = getIntent();
 
         position = intent.getIntExtra("position", -1);
@@ -202,7 +120,7 @@ public class Scoreboard extends AppCompatActivity {
         textView.setId(id);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36);
         textView.setText(player);
-        textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.colorAccent));
+        textView.setTextColor(ContextCompat.getColor(ScoreboardDefault.this, R.color.colorAccent));
         textView.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
@@ -211,7 +129,7 @@ public class Scoreboard extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog scoreDialog = new Dialog(Scoreboard.this);
+                Dialog scoreDialog = new Dialog(ScoreboardDefault.this);
                 AddRadlcOnClick(view, scoreDialog);
             }
         });
@@ -220,7 +138,7 @@ public class Scoreboard extends AppCompatActivity {
     }
 
     public void AddRadlcOnClick(View view, Dialog scoreDialog){
-        mRadlci[view.getId()] += scoreDialog.RadlcDialog(view, Scoreboard.this);
+        mRadlci[view.getId()] += scoreDialog.RadlcDialog(view, ScoreboardDefault.this);
         if(mRadlci[view.getId()] < 0){mRadlci[view.getId()] = 0;}
         Integer a;
         a = mRadlci[view.getId()];
@@ -244,7 +162,7 @@ public class Scoreboard extends AppCompatActivity {
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog scoreDialog = new Dialog(Scoreboard.this);
+                Dialog scoreDialog = new Dialog(ScoreboardDefault.this);
                 AddRadlcOnClick(view, scoreDialog);
             }
         });
@@ -289,7 +207,7 @@ public class Scoreboard extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
-        textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.colorAccent));
+        textView.setTextColor(ContextCompat.getColor(ScoreboardDefault.this, R.color.colorAccent));
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -299,8 +217,8 @@ public class Scoreboard extends AppCompatActivity {
         textView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Dialog dialog = new Dialog(Scoreboard.this);
-                if(dialog.DeleteScoreDialog(Scoreboard.this, textView)){
+                Dialog dialog = new Dialog(ScoreboardDefault.this);
+                if(dialog.DeleteScoreDialog(ScoreboardDefault.this, textView)){
                     textView.setVisibility(View.GONE);
                     int score = Integer.parseInt(textView.getText().toString());
                     view = (View)view.getParent();
@@ -323,7 +241,7 @@ public class Scoreboard extends AppCompatActivity {
         TextView textView = new TextView(this);
         textView.setText("0");
         textView.setId(id);
-        textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.colorAccent));
+        textView.setTextColor(ContextCompat.getColor(ScoreboardDefault.this, R.color.colorAccent));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
         textView.setTypeface(Typeface.DEFAULT_BOLD);
         textView.setLayoutParams(new LinearLayout.LayoutParams(
@@ -337,27 +255,22 @@ public class Scoreboard extends AppCompatActivity {
     }
 
     public void AddScoreDialog(View view, TextView textView){
-        Dialog scoreDialog = new Dialog(Scoreboard.this);
-        java.lang.Integer score = scoreDialog.ScoreDialog(view, Scoreboard.this);
+        Dialog scoreDialog = new Dialog(ScoreboardDefault.this);
+        java.lang.Integer score = scoreDialog.ScoreDialog(view, ScoreboardDefault.this);
         if(score != null) mScore = Integer.toString(score);
         if(mScore != null) {
             if(mScore.trim().isEmpty()){
-                Toast.makeText(Scoreboard.this,"Invalid Score", Toast.LENGTH_LONG).show(); }
+                Toast.makeText(ScoreboardDefault.this,"Invalid Score", Toast.LENGTH_LONG).show(); }
             else {
                 if (textView != null) {
                     view = (View) view.getParent();
                 }
-                //create textview with score
                 TextView tv = createTextViewScore(view.getId(), mScore);
-                //add textview to scores (Linear layout)
                 scores.get(view.getId()).addView(tv);
-                //add score to array of scores in cardview
                 mScores.get(view.getId()).add(mScore);
 
-                //updating sum in the cardview
+                //updating sum at the end
                 mSums[view.getId()] += score;
-
-                //get current textview and override with new sum
                 tv = sums.get(view.getId());
                 tv.setText("" + mSums[view.getId()]);
             }
