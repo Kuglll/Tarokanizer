@@ -112,11 +112,59 @@ public class Scoreboard extends AppCompatActivity {
         dialog.show();
     }
 
-    public void displayWhatGameWasPlayed(boolean [] checked){
+    public void displayWhatGameWasPlayed(final boolean [] checked){
+        AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
+        final String [] games = {"ena", "dva", "tri", "klop", "berac", "pikolo", "solo ena", "solo dva", "solo tri", "solo brez", "valat", "barvni valat"};
+        builder.setTitle("Select the game that was played")
+                .setItems(games, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0: selectDialogForGame(checked, games[0]); break;
+                            case 1: selectDialogForGame(checked, games[1]); break;
+                            case 2: selectDialogForGame(checked, games[2]); break;
+                            case 3: selectDialogForGame(checked, games[3]); break;
+                            case 4: selectDialogForGame(checked, games[4]); break;
+                            case 5: selectDialogForGame(checked, games[5]); break;
+                            case 6: selectDialogForGame(checked, games[6]); break;
+                            case 7: selectDialogForGame(checked, games[7]); break;
+                            case 8: selectDialogForGame(checked, games[8]); break;
+                            case 9: selectDialogForGame(checked, games[9]); break;
+                            case 10: selectDialogForGame(checked, games[10]); break;
+                            case 11: selectDialogForGame(checked, games[11]); break;
+                        }
+                    }
+                });
+
+        builder.setNegativeButton("CANCEL", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
         //klop 70, berac 70, pikolo 70 - radlci
         //ena 30, dva 20, tri 10
         //solo tri 40, solo dva 50, solo ena 60, solo brez 80
-        //
+    }
+
+    public void selectDialogForGame(boolean [] checked, String game){
+        switch(game){
+            //display razlika + 30/20/10 + radlci
+            case "ena": System.out.println(game+ "was selected"); break;
+            case "dva": System.out.println(game+ "was selected"); break;
+            case "tri": System.out.println(game+ "was selected"); break;
+            //set number of points for each player + radlci
+            case "klop": System.out.println(game+ "was selected"); break;
+            case "berac": System.out.println(game+ "was selected"); break;
+            case "pikolo": System.out.println(game+ "was selected"); break;
+            //display razlika + 60/50/40 + radlci
+            case "solo ena": System.out.println(game+ "was selected"); break;
+            case "solo dva": System.out.println(game+ "was selected"); break;
+            case "solo tri": System.out.println(game+ "was selected"); break;
+            case "solo brez": System.out.println(game+ "was selected"); break;
+
+            case "valat": System.out.println(game+ "was selected"); break;
+            case "barvni valat": System.out.println(game+ "was selected"); break;
+
+        }
     }
 
     public void displayDodatki(){
@@ -128,14 +176,6 @@ public class Scoreboard extends AppCompatActivity {
         Barvni valat Če je prva karta na mizi barva, je katera koli karta te barve močnejša od taroka. Nosilec napovedi mora pobrati vse karte, možno napovedati le, ko je nosilec sam v ekipi. Možen je le napovedani barvni valat, ki je vreden 125 točk.
         Valat Ekipa pobere vse štihe. Nenapovedan je vreden 250, napovedan 500 točk.
          */
-    }
-
-    public void selectDialogForGame(String igra){
-        switch(igra){
-            case "klop": break;
-            case "berac": break;
-
-        }
     }
 
     public void initializeUi(){
