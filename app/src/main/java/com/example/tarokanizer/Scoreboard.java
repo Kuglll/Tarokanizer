@@ -10,11 +10,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -56,6 +58,8 @@ public class Scoreboard extends AppCompatActivity {
 
     //add game variables
     boolean [] checked;
+    int sum;
+    boolean win;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,25 +159,57 @@ public class Scoreboard extends AppCompatActivity {
     }
 
     public void selectDialogForGame(String game){
-        int tocke = 0;
         switch(game){
             //display razlika + 30/20/10 + radlci
-            case "ena": tocke = settings.getEna(); System.out.println(game+ "was selected"); break;
-            case "dva": tocke = settings.getDva(); System.out.println(game+ "was selected"); break;
-            case "tri": tocke = settings.getTri(); System.out.println(game+ "was selected"); break;
+            case "ena": pointsDialog(settings.getEna()); break;
+            case "dva": pointsDialog(settings.getDva()); break;
+            case "tri": pointsDialog(settings.getTri()); break;
             //set number of points for each player + radlci
             case "klop": System.out.println(game+ "was selected"); break;
             case "berac": System.out.println(game+ "was selected"); break;
             case "pikolo": System.out.println(game+ "was selected"); break;
             //display razlika + 60/50/40 + radlci
-            case "solo ena": tocke = settings.getSoloEna(); System.out.println(game+ "was selected"); break;
-            case "solo dva": tocke = settings.getSoloDva(); System.out.println(game+ "was selected"); break;
-            case "solo tri": tocke = settings.getSoloTri(); System.out.println(game+ "was selected"); break;
-            case "solo brez": tocke = settings.getSoloBrez(); System.out.println(game+ "was selected"); break;
+            case "solo ena":  pointsDialog(settings.getSoloEna()); break;
+            case "solo dva":  pointsDialog(settings.getSoloDva()); break;
+            case "solo tri":  pointsDialog(settings.getSoloTri()); break;
+            case "solo brez": pointsDialog(settings.getSoloBrez()); break;
 
             case "valat": System.out.println(game+ "was selected"); break;
             case "barvni valat": System.out.println(game+ "was selected"); break;
         }
+    }
+
+    public void pointsDialog(final int tocke){
+        sum = 0;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("What was the difference?");
+
+        final EditText editext = new EditText(this);
+        editext.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+        builder.setView(editext);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int input = Integer.parseInt(editext.getText().toString());
+                if(input < 0){
+                    win = false;
+                } else{
+                    win = true;
+                }
+                sum = input + tocke;
+                displayDodatki();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
     public void displayDodatki(){
@@ -226,7 +262,7 @@ public class Scoreboard extends AppCompatActivity {
         TextView tv;
         for(int i=0; i<players.size(); i++){
             for(int k=0; k<mScores.get(i).size(); k++) {
-                tv = createTextViewScore(0, mScores.get(i).get(k));
+                tv = createTextViewScore(mScores.get(i).get(k));
                 scores.get(i).addView(tv);
             }
         }
@@ -322,7 +358,7 @@ public class Scoreboard extends AppCompatActivity {
         return ll;
     }
 
-    public TextView createTextViewScore(int id, String score){
+    public TextView createTextViewScore(String score){
         final TextView textView = new TextView(this);
         textView.setText(score);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
@@ -345,7 +381,7 @@ public class Scoreboard extends AppCompatActivity {
                     textView.setVisibility(View.GONE);
                     int score = Integer.parseInt(textView.getText().toString());
                     view = (View)view.getParent();
-                    TextView tv = createTextViewScore(view.getId(), mScore);
+                    TextView tv = createTextViewScore(mScore);
 
                     //updating sum at the end
                     mSums[view.getId()] += score * -1;
@@ -389,7 +425,7 @@ public class Scoreboard extends AppCompatActivity {
                     view = (View) view.getParent();
                 }
                 //create textview with score
-                TextView tv = createTextViewScore(view.getId(), mScore);
+                TextView tv = createTextViewScore(mScore);
                 //add textview to scores (Linear layout)
                 scores.get(view.getId()).addView(tv);
                 //add score to array of scores in cardview
