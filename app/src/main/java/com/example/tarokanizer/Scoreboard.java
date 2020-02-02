@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.tarokanizer.data_classes.CardView;
 import com.example.tarokanizer.data_classes.Player;
+import com.example.tarokanizer.data_classes.Settings;
 
 import java.util.ArrayList;
 
@@ -51,24 +52,35 @@ public class Scoreboard extends AppCompatActivity {
     String mScore;
     int position;
 
+    Settings settings;
+
+    //add game variables
+    boolean [] checked;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scoreboard);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        settings = new Settings();
 
-        linearLayoutPlayers = findViewById(R.id.names);
-        linearLayoutRadlci = findViewById(R.id.radlci);
-        linearLayoutScore = findViewById(R.id.score);
-        linearLayoutSum = findViewById(R.id.sum);
+        initViews();
 
         initializeUi();
         initializeOnClickListeners();
     }
 
-    public void initializeOnClickListeners(){
+    public void initViews(){
+        linearLayoutPlayers = findViewById(R.id.names);
+        linearLayoutRadlci = findViewById(R.id.radlci);
+        linearLayoutScore = findViewById(R.id.score);
+        linearLayoutSum = findViewById(R.id.sum);
+
         buttonNew = findViewById(R.id.button_new);
+    }
+
+    public void initializeOnClickListeners(){
         buttonNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +93,7 @@ public class Scoreboard extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
         builder.setTitle("Who played the game?");
         String [] mPlayers = new String[players.size()];
-        final boolean [] checked = new boolean[players.size()];
+        checked = new boolean[players.size()];
 
         for(int i=0; i<players.size(); i++){
             mPlayers[i] = players.get(i).getName();
@@ -99,7 +111,7 @@ public class Scoreboard extends AppCompatActivity {
         builder.setPositiveButton("NEXT", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                displayWhatGameWasPlayed(checked);
+                displayWhatGameWasPlayed();
                 for(int k=0; k<checked.length; k++) {
                     Log.d("CHECKED", "" + checked[k]);
                 }
@@ -112,7 +124,7 @@ public class Scoreboard extends AppCompatActivity {
         dialog.show();
     }
 
-    public void displayWhatGameWasPlayed(final boolean [] checked){
+    public void displayWhatGameWasPlayed(){
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
         final String [] games = {"ena", "dva", "tri", "klop", "berac", "pikolo", "solo ena", "solo dva", "solo tri", "solo brez", "valat", "barvni valat"};
         builder.setTitle("Select the game that was played")
@@ -120,18 +132,18 @@ public class Scoreboard extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
-                            case 0: selectDialogForGame(checked, games[0]); break;
-                            case 1: selectDialogForGame(checked, games[1]); break;
-                            case 2: selectDialogForGame(checked, games[2]); break;
-                            case 3: selectDialogForGame(checked, games[3]); break;
-                            case 4: selectDialogForGame(checked, games[4]); break;
-                            case 5: selectDialogForGame(checked, games[5]); break;
-                            case 6: selectDialogForGame(checked, games[6]); break;
-                            case 7: selectDialogForGame(checked, games[7]); break;
-                            case 8: selectDialogForGame(checked, games[8]); break;
-                            case 9: selectDialogForGame(checked, games[9]); break;
-                            case 10: selectDialogForGame(checked, games[10]); break;
-                            case 11: selectDialogForGame(checked, games[11]); break;
+                            case 0: selectDialogForGame(games[0]); break;
+                            case 1: selectDialogForGame(games[1]); break;
+                            case 2: selectDialogForGame(games[2]); break;
+                            case 3: selectDialogForGame(games[3]); break;
+                            case 4: selectDialogForGame(games[4]); break;
+                            case 5: selectDialogForGame(games[5]); break;
+                            case 6: selectDialogForGame(games[6]); break;
+                            case 7: selectDialogForGame(games[7]); break;
+                            case 8: selectDialogForGame(games[8]); break;
+                            case 9: selectDialogForGame(games[9]); break;
+                            case 10: selectDialogForGame(games[10]); break;
+                            case 11: selectDialogForGame(games[11]); break;
                         }
                     }
                 });
@@ -140,41 +152,41 @@ public class Scoreboard extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
-        //klop 70, berac 70, pikolo 70 - radlci
-        //ena 30, dva 20, tri 10
-        //solo tri 40, solo dva 50, solo ena 60, solo brez 80
     }
 
-    public void selectDialogForGame(boolean [] checked, String game){
+    public void selectDialogForGame(String game){
+        int tocke = 0;
         switch(game){
             //display razlika + 30/20/10 + radlci
-            case "ena": System.out.println(game+ "was selected"); break;
-            case "dva": System.out.println(game+ "was selected"); break;
-            case "tri": System.out.println(game+ "was selected"); break;
+            case "ena": tocke = settings.getEna(); System.out.println(game+ "was selected"); break;
+            case "dva": tocke = settings.getDva(); System.out.println(game+ "was selected"); break;
+            case "tri": tocke = settings.getTri(); System.out.println(game+ "was selected"); break;
             //set number of points for each player + radlci
             case "klop": System.out.println(game+ "was selected"); break;
             case "berac": System.out.println(game+ "was selected"); break;
             case "pikolo": System.out.println(game+ "was selected"); break;
             //display razlika + 60/50/40 + radlci
-            case "solo ena": System.out.println(game+ "was selected"); break;
-            case "solo dva": System.out.println(game+ "was selected"); break;
-            case "solo tri": System.out.println(game+ "was selected"); break;
-            case "solo brez": System.out.println(game+ "was selected"); break;
+            case "solo ena": tocke = settings.getSoloEna(); System.out.println(game+ "was selected"); break;
+            case "solo dva": tocke = settings.getSoloDva(); System.out.println(game+ "was selected"); break;
+            case "solo tri": tocke = settings.getSoloTri(); System.out.println(game+ "was selected"); break;
+            case "solo brez": tocke = settings.getSoloBrez(); System.out.println(game+ "was selected"); break;
 
             case "valat": System.out.println(game+ "was selected"); break;
             case "barvni valat": System.out.println(game+ "was selected"); break;
-
         }
     }
 
     public void displayDodatki(){
         /*
-        Trula Ekipa pobere škisa, monda ter pagata. Nenapovedana 10, napovedana 20 točk.
-        Kralji Ekipa pobere vse štiri kralje. Nenapovedani 10, napovedani 20 točk.
-        Kralj ultimo V zadnjem štihu ekipa nosilca igre pobere klicanega kralja, možno le pri štirih igralcih. Nenapovedan 10, napovedan 20 točk.
-        Pagat ultimo Zadnji štih pobere pagat. Nenapovedan 25, napovedan 50 točk. Če štih s pagatom pobere tvoj partner, je pagat ultimo izgubljen!
-        Barvni valat Če je prva karta na mizi barva, je katera koli karta te barve močnejša od taroka. Nosilec napovedi mora pobrati vse karte, možno napovedati le, ko je nosilec sam v ekipi. Možen je le napovedani barvni valat, ki je vreden 125 točk.
-        Valat Ekipa pobere vse štihe. Nenapovedan je vreden 250, napovedan 500 točk.
+        TODO: checkbox
+        trula 10
+        napovedana trula 20
+        krali 10
+        napovedani krali 20
+        špička 25
+        napovedana špička 50
+        kralj 10
+        napovedan kralj 20
          */
     }
 
@@ -248,29 +260,25 @@ public class Scoreboard extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
         textView.setGravity(Gravity.CENTER);
         textView.setBackgroundResource(R.drawable.black);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Dialog scoreDialog = new Dialog(Scoreboard.this);
-                AddRadlcOnClick(view, scoreDialog);
-            }
-        });
 
         return textView;
     }
 
     public void AddRadlcOnClick(View view, Dialog scoreDialog){
+        //updating number of radlci for player
         mRadlci[view.getId()] += scoreDialog.RadlcDialog(view, Scoreboard.this);
-        if(mRadlci[view.getId()] < 0){mRadlci[view.getId()] = 0;}
-        Integer a;
-        a = mRadlci[view.getId()];
-        if(a != null || a != 0) {
-            radlci.get(view.getId()).removeAllViews();
-            LinearLayout ll = radlci.get(view.getId());
-            for (int i = 0; i < a; i++) {
-                ll.addView(createRadlc());
-            }
+
+        //if radlci < 0, radlci = 0
+        if(mRadlci[view.getId()] < 0){
+            mRadlci[view.getId()] = 0;
         }
+        int a = mRadlci[view.getId()];
+        radlci.get(view.getId()).removeAllViews(); //removing all
+        LinearLayout ll = radlci.get(view.getId());
+        for (int i = 0; i < a; i++) { //adding number of current radlci
+            ll.addView(createRadlc());
+        }
+
     }
 
     public LinearLayout createPlayersRadlcLayout(int i){
@@ -310,13 +318,6 @@ public class Scoreboard extends AppCompatActivity {
         ll.setGravity(Gravity.CENTER_HORIZONTAL);
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setBackgroundResource(R.drawable.black);
-        ll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddScoreDialog(view, null); //If not null that means we clicked the textview, if null we clicked linearlayout. They use different views!
-            }
-        });
-
         scores.add(ll);
         return ll;
     }
