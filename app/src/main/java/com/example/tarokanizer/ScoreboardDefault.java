@@ -287,10 +287,3 @@ public class ScoreboardDefault extends AppCompatActivity {
     }
 
 }
-
-
-//TODO: first time setup - quick tutorial
-
-//TEST: pressing back button and closing app from recycler view
-//TEST: closing app from scoreboard
-//TEST: tilting the phone

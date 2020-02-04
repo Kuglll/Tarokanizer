@@ -6,6 +6,17 @@ public class Settings {
     //ena 30, dva 20, tri 10
     //solo tri 40, solo dva 50, solo ena 60, solo brez 80
 
+    /*
+        trula 10
+        napovedana trula 20
+        krali 10
+        napovedani krali 20
+        špička 25
+        napovedana špička 50
+        kralj 10
+        napovedan kralj 20
+    */
+
     int ena = 30;
     int dva = 20;
     int tri = 10;
@@ -14,6 +25,16 @@ public class Settings {
     int soloDva = 50;
     int soloTri = 40;
     int soloBrez = 80;
+
+    //addons
+    int trula = 10;
+    int napovedanaTrula = 20;
+    int kralji = 10;
+    int napovedaniKralji = 20;
+    int spicka = 25;
+    int napovedanaSpicka = 50;
+    int kralj = 10;
+    int napovedanKralj = 20;
 
     public int getEna() {
         return ena;
@@ -69,5 +90,69 @@ public class Settings {
 
     public void setSoloBrez(int soloBrez) {
         this.soloBrez = soloBrez;
+    }
+
+    public int getTrula() {
+        return trula;
+    }
+
+    public void setTrula(int trula) {
+        this.trula = trula;
+    }
+
+    public int getNapovedanaTrula() {
+        return napovedanaTrula;
+    }
+
+    public void setNapovedanaTrula(int napovedanaTrula) {
+        this.napovedanaTrula = napovedanaTrula;
+    }
+
+    public int getKralji() {
+        return kralji;
+    }
+
+    public void setKralji(int kralji) {
+        this.kralji = kralji;
+    }
+
+    public int getNapovedaniKralji() {
+        return napovedaniKralji;
+    }
+
+    public void setNapovedaniKralji(int napovedaniKralji) {
+        this.napovedaniKralji = napovedaniKralji;
+    }
+
+    public int getSpicka() {
+        return spicka;
+    }
+
+    public void setSpicka(int spicka) {
+        this.spicka = spicka;
+    }
+
+    public int getNapovedanaSpicka() {
+        return napovedanaSpicka;
+    }
+
+    public void setNapovedanaSpicka(int napovedanaSpicka) {
+        this.napovedanaSpicka = napovedanaSpicka;
+    }
+
+    public int getKralj() {
+        return kralj;
+    }
+
+    public void setKralj(int kralj) {
+        this.kralj = kralj;
+    }
+
+    public int getNapovedanKralj() {
+        return napovedanKralj;
+    }
+
+    public void setNapovedanKralj(int napovedanKralj) {
+        this.napovedanKralj = napovedanKralj;
     }
 }

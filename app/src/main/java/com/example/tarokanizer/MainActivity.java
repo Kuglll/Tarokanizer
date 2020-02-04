@@ -30,11 +30,6 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
     private Button buttonNew;
     private Toolbar toolbar;
 
-    //TODO: these 2 variables will be passed into game list
-    private EditText textViewtitle;
-    private EditText textViewnumberOfPlayers;
-    private String returnTitle;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

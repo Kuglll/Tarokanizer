@@ -29,6 +29,8 @@ import com.example.tarokanizer.data_classes.Settings;
 
 import java.util.ArrayList;
 
+import static java.lang.Math.abs;
+
 public class Scoreboard extends AppCompatActivity {
 
     LinearLayout linearLayoutPlayers;
@@ -95,7 +97,7 @@ public class Scoreboard extends AppCompatActivity {
 
     public void displayWhoPlayedDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
-        builder.setTitle("Who played the game?");
+        builder.setTitle("Kdo je igral?");
         String [] mPlayers = new String[players.size()];
         checked = new boolean[players.size()];
 
@@ -112,7 +114,7 @@ public class Scoreboard extends AppCompatActivity {
             }
         });
 
-        builder.setPositiveButton("NEXT", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 displayWhatGameWasPlayed();
@@ -122,7 +124,7 @@ public class Scoreboard extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton("CANCEL", null);
+        builder.setNegativeButton("PREKLIČI", null);
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -131,7 +133,7 @@ public class Scoreboard extends AppCompatActivity {
     public void displayWhatGameWasPlayed(){
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
         final String [] games = {"ena", "dva", "tri", "klop", "berac", "pikolo", "solo ena", "solo dva", "solo tri", "solo brez", "valat", "barvni valat"};
-        builder.setTitle("Select the game that was played")
+        builder.setTitle("Katera igra je bila igrana?")
                 .setItems(games, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -152,7 +154,7 @@ public class Scoreboard extends AppCompatActivity {
                     }
                 });
 
-        builder.setNegativeButton("CANCEL", null);
+        builder.setNegativeButton("PREKLIČI", null);
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -183,13 +185,13 @@ public class Scoreboard extends AppCompatActivity {
         sum = 0;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("What was the difference?");
+        builder.setTitle("Kakšna je bila razlika?");
 
         final EditText editext = new EditText(this);
         editext.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
         builder.setView(editext);
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 int input = Integer.parseInt(editext.getText().toString());
@@ -198,11 +200,12 @@ public class Scoreboard extends AppCompatActivity {
                 } else{
                     win = true;
                 }
-                sum = input + tocke;
+                sum = abs(input) + tocke;
+                Log.d("SUM", Integer.toString(sum));
                 displayDodatki();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("PREKLIČI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -213,17 +216,51 @@ public class Scoreboard extends AppCompatActivity {
     }
 
     public void displayDodatki(){
-        /*
-        TODO: checkbox
-        trula 10
-        napovedana trula 20
-        krali 10
-        napovedani krali 20
-        špička 25
-        napovedana špička 50
-        kralj 10
-        napovedan kralj 20
-         */
+        AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
+        final String [] addons = {"Trula", "Napovedana Trula", "Kralji", "Napovedani Kralji", "Špička", "Napovedana Špička", "Kralj Zadnja Runda ", "Napovedan Kralj Zadnja Runda"};
+        final boolean [] check = {false, false, false, false, false, false, false, false};
+        builder.setTitle("Izberi dodatke!")
+                .setMultiChoiceItems(addons, check, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+
+                    }
+                });
+
+        builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                for(int k=0; k<check.length; k++) {
+                    if(check[k]){
+                        switch (k){
+                            case 0: sum += settings.getTrula(); break;
+                            case 1: sum += settings.getNapovedanaTrula(); break;
+                            case 2: sum += settings.getKralji(); break;
+                            case 3: sum += settings.getNapovedaniKralji(); break;
+                            case 4: sum += settings.getSpicka(); break;
+                            case 5: sum += settings.getNapovedanaSpicka(); break;
+                            case 6: sum += settings.getKralj(); break;
+                            case 7: sum += settings.getNapovedanKralj(); break;
+                        }
+                    }
+                }
+                finalizeScore();
+            }
+        });
+
+        builder.setNegativeButton("PREKLIČI", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    void finalizeScore(){
+        if(win){
+            Log.d("SUMara mafa", Integer.toString(sum));
+        }else{
+            Log.d("SUMara mafa", Integer.toString(-sum));
+        }
+        //TODO: tocke, win/lose, radlci
     }
 
     public void initializeUi(){
