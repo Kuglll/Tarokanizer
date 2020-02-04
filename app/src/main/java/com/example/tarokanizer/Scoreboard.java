@@ -258,9 +258,29 @@ public class Scoreboard extends AppCompatActivity {
         if(win){
             Log.d("SUMara mafa", Integer.toString(sum));
         }else{
+            sum = sum*-1;
             Log.d("SUMara mafa", Integer.toString(-sum));
         }
-        //TODO: tocke, win/lose, radlci
+
+        for(int i=0; i<checked.length; i++){
+            if(checked[i]){
+                //create textview with score
+                TextView tv = createTextViewScore(Integer.toString(sum));
+                //add score visually
+                scores.get(i).addView(tv);
+                //add score to store
+                mScores.get(i).add(Integer.toString(sum));
+
+                //updating sum in the cardview
+                mSums[i] += sum;
+
+                //get current textview and override with new sum
+                tv = sums.get(i);
+                tv.setText("" + mSums[i]);
+            }
+        }
+
+        //TODO: radlci
     }
 
     public void initializeUi(){
@@ -491,6 +511,10 @@ public class Scoreboard extends AppCompatActivity {
 
 
 //TODO: first time setup - quick tutorial
+
+//TODO: each game its own row -sus
+//TODO: settings screen
+//TODO: UI update
 
 //TEST: pressing back button and closing app from recycler view
 //TEST: closing app from scoreboard
