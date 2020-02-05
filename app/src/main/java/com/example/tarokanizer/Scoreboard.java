@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.tarokanizer.data_classes.CardView;
 import com.example.tarokanizer.data_classes.Player;
+import com.example.tarokanizer.data_classes.Round;
 import com.example.tarokanizer.data_classes.Settings;
 
 import java.util.ArrayList;
@@ -58,10 +59,8 @@ public class Scoreboard extends AppCompatActivity {
 
     Settings settings;
 
-    //add game variables
-    boolean [] checked;
-    int sum;
-    boolean win;
+    Round round;
+    ArrayList<Round> rounds = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,18 +95,18 @@ public class Scoreboard extends AppCompatActivity {
     }
 
     public void displayWhoPlayedDialog(){
+        // create new round
+        round = new Round(players.size());
+
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
         builder.setTitle("Kdo je igral?");
         String [] mPlayers = new String[players.size()];
-        checked = new boolean[players.size()];
 
         for(int i=0; i<players.size(); i++){
             mPlayers[i] = players.get(i).getName();
-            checked[i] = false;
-            Log.d("PLAYERS", mPlayers[i]);
         }
 
-        builder.setMultiChoiceItems(mPlayers, checked, new DialogInterface.OnMultiChoiceClickListener() {
+        builder.setMultiChoiceItems(mPlayers, round.getChecked(), new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i, boolean b) {
 
@@ -118,9 +117,6 @@ public class Scoreboard extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 displayWhatGameWasPlayed();
-                for(int k=0; k<checked.length; k++) {
-                    Log.d("CHECKED", "" + checked[k]);
-                }
             }
         });
 
@@ -182,8 +178,6 @@ public class Scoreboard extends AppCompatActivity {
     }
 
     public void pointsDialog(final int tocke){
-        sum = 0;
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Kakšna je bila razlika?");
 
@@ -196,12 +190,12 @@ public class Scoreboard extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 int input = Integer.parseInt(editext.getText().toString());
                 if(input < 0){
-                    win = false;
+                    round.setWon(false);
                 } else{
-                    win = true;
+                    round.setWon(true);
                 }
-                sum = abs(input) + tocke;
-                Log.d("SUM", Integer.toString(sum));
+                round.setPoints(abs(input) + tocke);
+                Log.d("SUM", Integer.toString(round.getPoints()));
                 displayDodatki();
             }
         });
@@ -233,14 +227,14 @@ public class Scoreboard extends AppCompatActivity {
                 for(int k=0; k<check.length; k++) {
                     if(check[k]){
                         switch (k){
-                            case 0: sum += settings.getTrula(); break;
-                            case 1: sum += settings.getNapovedanaTrula(); break;
-                            case 2: sum += settings.getKralji(); break;
-                            case 3: sum += settings.getNapovedaniKralji(); break;
-                            case 4: sum += settings.getSpicka(); break;
-                            case 5: sum += settings.getNapovedanaSpicka(); break;
-                            case 6: sum += settings.getKralj(); break;
-                            case 7: sum += settings.getNapovedanKralj(); break;
+                            case 0: round.addPoints(settings.getTrula()); break;
+                            case 1: round.addPoints(settings.getNapovedanaTrula()); break;
+                            case 2: round.addPoints(settings.getKralji()); break;
+                            case 3: round.addPoints(settings.getNapovedaniKralji()); break;
+                            case 4: round.addPoints(settings.getSpicka()); break;
+                            case 5: round.addPoints(settings.getNapovedanaSpicka()); break;
+                            case 6: round.addPoints(settings.getKralj()); break;
+                            case 7: round.addPoints(settings.getNapovedanKralj()); break;
                         }
                     }
                 }
@@ -255,30 +249,47 @@ public class Scoreboard extends AppCompatActivity {
     }
 
     void finalizeScore(){
-        if(win){
-            Log.d("SUMara mafa", Integer.toString(sum));
+        if(round.isWon()){
+            Log.d("SUMara win", Integer.toString(round.getPoints()));
         }else{
-            sum = sum*-1;
-            Log.d("SUMara mafa", Integer.toString(-sum));
+            round.setPoints(-round.getPoints());
+            Log.d("SUMara lose", Integer.toString(round.getPoints()));
         }
 
-        for(int i=0; i<checked.length; i++){
-            if(checked[i]){
+        for(int i=0; i<round.getChecked().length; i++){
+            if(round.getChecked()[i]){
                 //create textview with score
-                TextView tv = createTextViewScore(Integer.toString(sum));
+                TextView tv = createTextViewScore(Integer.toString(round.getPoints()));
                 //add score visually
                 scores.get(i).addView(tv);
                 //add score to store
-                mScores.get(i).add(Integer.toString(sum));
+                mScores.get(i).add(Integer.toString(round.getPoints()));
 
                 //updating sum in the cardview
-                mSums[i] += sum;
+                mSums[i] += round.getPoints();
 
                 //get current textview and override with new sum
                 tv = sums.get(i);
                 tv.setText("" + mSums[i]);
+            }else{ // add blank score so every game is its own row
+                //create textview with score
+                TextView tv = createTextViewScore("0");
+                //add score visually
+                scores.get(i).addView(tv);
+                //add score to store
+                mScores.get(i).add("");
             }
         }
+
+        //scroll down everytime a result is added
+        (findViewById(R.id.scrollViewInScoreBoard)).post(new Runnable() {
+            public void run() {
+                ((ScrollView) findViewById(R.id.scrollViewInScoreBoard)).fullScroll(View.FOCUS_DOWN);
+            }
+        });
+
+        //TODO: first look if there is radlc and count it
+        //TODO: then add it if the game is correct
 
         //TODO: radlci
     }
@@ -319,7 +330,11 @@ public class Scoreboard extends AppCompatActivity {
         TextView tv;
         for(int i=0; i<players.size(); i++){
             for(int k=0; k<mScores.get(i).size(); k++) {
-                tv = createTextViewScore(mScores.get(i).get(k));
+                if(mScores.get(i).get(k) == ""){
+                    tv = createTextViewScore("0");
+                }else{
+                    tv = createTextViewScore(mScores.get(i).get(k));
+                }
                 scores.get(i).addView(tv);
             }
         }
@@ -424,12 +439,6 @@ public class Scoreboard extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
         textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.colorAccent));
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddScoreDialog(view, textView);
-            }
-        });
         textView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -470,43 +479,6 @@ public class Scoreboard extends AppCompatActivity {
         return textView;
     }
 
-    public void AddScoreDialog(View view, TextView textView){
-        Dialog scoreDialog = new Dialog(Scoreboard.this);
-        java.lang.Integer score = scoreDialog.ScoreDialog(view, Scoreboard.this);
-        if(score != null) mScore = Integer.toString(score);
-        if(mScore != null) {
-            if(mScore.trim().isEmpty()){
-                Toast.makeText(Scoreboard.this,"Invalid Score", Toast.LENGTH_LONG).show(); }
-            else {
-                if (textView != null) {
-                    view = (View) view.getParent();
-                }
-                //create textview with score
-                TextView tv = createTextViewScore(mScore);
-                //add textview to scores (Linear layout)
-                scores.get(view.getId()).addView(tv);
-                //add score to array of scores in cardview
-                mScores.get(view.getId()).add(mScore);
-
-                //updating sum in the cardview
-                mSums[view.getId()] += score;
-
-                //get current textview and override with new sum
-                tv = sums.get(view.getId());
-                tv.setText("" + mSums[view.getId()]);
-            }
-        }
-        score = null;
-        mScore = null;
-
-        //scroll down everytime a result is added
-        (findViewById(R.id.scrollViewInScoreBoard)).post(new Runnable() {
-            public void run() {
-                ((ScrollView) findViewById(R.id.scrollViewInScoreBoard)).fullScroll(View.FOCUS_DOWN);
-            }
-        });
-    }
-
 }
 
 
@@ -515,6 +487,9 @@ public class Scoreboard extends AppCompatActivity {
 //TODO: each game its own row -sus
 //TODO: settings screen
 //TODO: UI update
+//TODO: delete whole round (1 row)
+
+//TODO: FIX deleting score on long press
 
 //TEST: pressing back button and closing app from recycler view
 //TEST: closing app from scoreboard
