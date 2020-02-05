@@ -60,7 +60,7 @@ public class Scoreboard extends AppCompatActivity {
     Settings settings;
 
     Round round;
-    ArrayList<Round> rounds = new ArrayList<>();
+    ArrayList<Round> rounds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -336,7 +336,7 @@ public class Scoreboard extends AppCompatActivity {
                 //add score visually
                 scores.get(i).addView(tv);
                 //add score to store
-                mScores.get(i).add("");
+                mScores.get(i).add("0");
             }
         }
 
@@ -346,6 +346,8 @@ public class Scoreboard extends AppCompatActivity {
                 ((ScrollView) findViewById(R.id.scrollViewInScoreBoard)).fullScroll(View.FOCUS_DOWN);
             }
         });
+
+        rounds.add(round);
 
         //TODO: first look if there is radlc and count it
         //TODO: then add it if the game is correct
@@ -361,6 +363,7 @@ public class Scoreboard extends AppCompatActivity {
 
         players = cardView.getPlayers();
         mScores = cardView.getScore();
+        rounds = cardView.getRounds();
         mSums = cardView.getmSums();
         mRadlci = cardView.getRadlci();
 
@@ -380,21 +383,22 @@ public class Scoreboard extends AppCompatActivity {
             linearLayoutRadlci.addView(ll);
         }
 
-        loadScores();
+        loadRounds();
         loadRadlci();
         loadSums();
     }
 
-    public void loadScores(){
+    public void loadRounds(){
         TextView tv;
-        for(int i=0; i<players.size(); i++){
-            for(int k=0; k<mScores.get(i).size(); k++) {
-                if(mScores.get(i).get(k).equals("")){
+        for(int i=0; i<rounds.size(); i++) {
+            String points = Integer.toString(rounds.get(i).getPoints());
+            for(int k=0; k<rounds.get(i).getChecked().length; k++){
+                if(rounds.get(i).getChecked()[k]){
+                    tv = createTextViewScore(points);
+                } else{
                     tv = createTextViewScore("0");
-                }else{
-                    tv = createTextViewScore(mScores.get(i).get(k));
                 }
-                scores.get(i).addView(tv);
+                scores.get(k).addView(tv);
             }
         }
     }
