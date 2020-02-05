@@ -125,7 +125,7 @@ public class ScoreboardDefault extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
         textView.setGravity(Gravity.CENTER);
-        textView.setBackgroundResource(R.drawable.black);
+        textView.setBackgroundResource(R.drawable.border);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,7 +158,7 @@ public class ScoreboardDefault extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 50,1f));
         ll.setGravity(Gravity.CENTER_HORIZONTAL);
-        ll.setBackgroundResource(R.drawable.black);
+        ll.setBackgroundResource(R.drawable.border);
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -187,7 +187,7 @@ public class ScoreboardDefault extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,1f));
         ll.setGravity(Gravity.CENTER_HORIZONTAL);
         ll.setOrientation(LinearLayout.VERTICAL);
-        ll.setBackgroundResource(R.drawable.black);
+        ll.setBackgroundResource(R.drawable.border);
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -248,7 +248,7 @@ public class ScoreboardDefault extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT, 1f));
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
-        textView.setBackgroundResource(R.drawable.black2);
+        textView.setBackgroundResource(R.drawable.border2);
 
         sums.add(textView);
         return textView;

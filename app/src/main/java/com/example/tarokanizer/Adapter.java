@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tarokanizer.data_classes.CardView;
@@ -39,14 +39,14 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView title;
-        RelativeLayout relativeLayout;
+        ConstraintLayout constraintLayout;
         public ImageView mDeleteImage;
 
         public ViewHolder(@NonNull View itemView, final OnDeleteButtonClickListener listener) {
             super(itemView);
             title = itemView.findViewById(R.id.title);
             mDeleteImage = itemView.findViewById(R.id.image_delete);
-            relativeLayout = itemView.findViewById(R.id.parent_layout);
+            constraintLayout = itemView.findViewById(R.id.parent_layout);
 
             mDeleteImage.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -76,7 +76,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         final CardView currentItem = mCardViewList.get(position);
         holder.title.setText(currentItem.getTitle());
 
-        holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+        holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //actions that happen on cardboardclick

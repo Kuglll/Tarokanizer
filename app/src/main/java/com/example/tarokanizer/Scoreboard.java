@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.tarokanizer.data_classes.CardView;
 import com.example.tarokanizer.data_classes.Player;
@@ -362,12 +361,12 @@ public class Scoreboard extends AppCompatActivity {
         textView.setId(id);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36);
         textView.setText(player);
-        textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.colorAccent));
+        textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.brightGray));
         textView.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
         textView.setGravity(Gravity.CENTER);
-        textView.setBackgroundResource(R.drawable.black);
+        textView.setBackgroundResource(R.drawable.border);
 
         return textView;
     }
@@ -396,7 +395,7 @@ public class Scoreboard extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 50,1f));
         ll.setGravity(Gravity.CENTER_HORIZONTAL);
-        ll.setBackgroundResource(R.drawable.black);
+        ll.setBackgroundResource(R.drawable.border);
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -425,7 +424,7 @@ public class Scoreboard extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,1f));
         ll.setGravity(Gravity.CENTER_HORIZONTAL);
         ll.setOrientation(LinearLayout.VERTICAL);
-        ll.setBackgroundResource(R.drawable.black);
+        ll.setBackgroundResource(R.drawable.border);
         scores.add(ll);
         return ll;
     }
@@ -438,7 +437,7 @@ public class Scoreboard extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
-        textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.colorAccent));
+        textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.brightGray));
         textView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -466,14 +465,14 @@ public class Scoreboard extends AppCompatActivity {
         TextView textView = new TextView(this);
         textView.setText("0");
         textView.setId(id);
-        textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.colorAccent));
+        textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.brightGray));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
         textView.setTypeface(Typeface.DEFAULT_BOLD);
         textView.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT, 1f));
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
-        textView.setBackgroundResource(R.drawable.black2);
+        textView.setBackgroundResource(R.drawable.border2);
 
         sums.add(textView);
         return textView;
