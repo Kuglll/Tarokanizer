@@ -4,6 +4,7 @@ public class Round {
 
     boolean [] checked;
     int points;
+    boolean razlikaPozitivna;
     boolean won;
 
     public Round(int numberOfPlayers){
@@ -13,6 +14,7 @@ public class Round {
         }
         points = 0;
         won = false;
+        razlikaPozitivna = false;
     }
 
     public boolean[] getChecked() {
@@ -41,5 +43,13 @@ public class Round {
 
     public void setWon(boolean won) {
         this.won = won;
+    }
+
+    public boolean isRazlikaPozitivna() {
+        return razlikaPozitivna;
+    }
+
+    public void setRazlikaPozitivna(boolean razlikaPozitivna) {
+        this.razlikaPozitivna = razlikaPozitivna;
     }
 }

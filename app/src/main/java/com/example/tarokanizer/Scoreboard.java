@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tarokanizer.data_classes.CardView;
 import com.example.tarokanizer.data_classes.Player;
@@ -187,15 +188,19 @@ public class Scoreboard extends AppCompatActivity {
         builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                int input = Integer.parseInt(editext.getText().toString());
-                if(input < 0){
-                    round.setWon(false);
-                } else{
-                    round.setWon(true);
+                int input=0;
+                try {
+                    input = Integer.parseInt(editext.getText().toString());
+                    if(input < 0) round.setRazlikaPozitivna(false);
+                    else round.setRazlikaPozitivna(true);
+
+                    round.setPoints(abs(input) + tocke);
+                    Log.d("SUM", Integer.toString(round.getPoints()));
+                    displayDodatki();
+                }catch (Exception e){
+                    Toast.makeText(Scoreboard.this, "Vnos je bil napačen!", Toast.LENGTH_LONG).show();
+                    dialog.cancel();
                 }
-                round.setPoints(abs(input) + tocke);
-                Log.d("SUM", Integer.toString(round.getPoints()));
-                displayDodatki();
             }
         });
         builder.setNegativeButton("PREKLIČI", new DialogInterface.OnClickListener() {
@@ -212,7 +217,7 @@ public class Scoreboard extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
         final String [] addons = {"Trula", "Napovedana Trula", "Kralji", "Napovedani Kralji", "Špička", "Napovedana Špička", "Kralj Zadnja Runda ", "Napovedan Kralj Zadnja Runda"};
         final boolean [] check = {false, false, false, false, false, false, false, false};
-        builder.setTitle("Izberi dodatke!")
+        builder.setTitle("Kaj si pobral?")
                 .setMultiChoiceItems(addons, check, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i, boolean b) {
@@ -223,19 +228,70 @@ public class Scoreboard extends AppCompatActivity {
         builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                int tmp = 0;
                 for(int k=0; k<check.length; k++) {
                     if(check[k]){
                         switch (k){
-                            case 0: round.addPoints(settings.getTrula()); break;
-                            case 1: round.addPoints(settings.getNapovedanaTrula()); break;
-                            case 2: round.addPoints(settings.getKralji()); break;
-                            case 3: round.addPoints(settings.getNapovedaniKralji()); break;
-                            case 4: round.addPoints(settings.getSpicka()); break;
-                            case 5: round.addPoints(settings.getNapovedanaSpicka()); break;
-                            case 6: round.addPoints(settings.getKralj()); break;
-                            case 7: round.addPoints(settings.getNapovedanKralj()); break;
+                            case 0: tmp = settings.getTrula(); break;
+                            case 1: tmp = settings.getNapovedanaTrula(); break;
+                            case 2: tmp = settings.getKralji(); break;
+                            case 3: tmp = settings.getNapovedaniKralji(); break;
+                            case 4: tmp = settings.getSpicka(); break;
+                            case 5: tmp = settings.getNapovedanaSpicka(); break;
+                            case 6: tmp = settings.getKralj(); break;
+                            case 7: tmp = settings.getNapovedanKralj(); break;
                         }
                     }
+                }
+                if(round.isRazlikaPozitivna()){
+                    round.addPoints(tmp);
+                }else{
+                    round.addPoints(-tmp);
+                }
+                displayKontraDodatki();
+            }
+        });
+
+        builder.setNegativeButton("PREKLIČI", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void displayKontraDodatki(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
+        final String [] addons = {"Trula", "Napovedana Trula", "Kralji", "Napovedani Kralji", "Špička", "Napovedana Špička", "Kralj Zadnja Runda ", "Napovedan Kralj Zadnja Runda"};
+        final boolean [] check = {false, false, false, false, false, false, false, false};
+        builder.setTitle("Kaj je pobrala nasprotna ekipa?")
+                .setMultiChoiceItems(addons, check, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+
+                    }
+                });
+
+        builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                int tmp = 0;
+                for(int k=0; k<check.length; k++) {
+                    if(check[k]){
+                        switch (k){
+                            case 0: tmp = -settings.getTrula(); break;
+                            case 1: tmp = -settings.getNapovedanaTrula(); break;
+                            case 2: tmp = -settings.getKralji(); break;
+                            case 3: tmp = -settings.getNapovedaniKralji(); break;
+                            case 4: tmp = -settings.getSpicka(); break;
+                            case 5: tmp = -settings.getNapovedanaSpicka(); break;
+                            case 6: tmp = -settings.getKralj(); break;
+                            case 7: tmp = -settings.getNapovedanKralj(); break;
+                        }
+                    }
+                }
+                if(round.isRazlikaPozitivna()){
+                    round.addPoints(tmp);
+                }else{
+                    round.addPoints(-tmp);
                 }
                 finalizeScore();
             }
@@ -248,10 +304,14 @@ public class Scoreboard extends AppCompatActivity {
     }
 
     void finalizeScore(){
+        if(!round.isRazlikaPozitivna()) round.setPoints(round.getPoints()*-1);
+
+        if(round.getPoints() < 0) round.setWon(false);
+        else round.setWon(true);
+
         if(round.isWon()){
             Log.d("SUMara win", Integer.toString(round.getPoints()));
         }else{
-            round.setPoints(-round.getPoints());
             Log.d("SUMara lose", Integer.toString(round.getPoints()));
         }
 
@@ -329,7 +389,7 @@ public class Scoreboard extends AppCompatActivity {
         TextView tv;
         for(int i=0; i<players.size(); i++){
             for(int k=0; k<mScores.get(i).size(); k++) {
-                if(mScores.get(i).get(k) == ""){
+                if(mScores.get(i).get(k).equals("")){
                     tv = createTextViewScore("0");
                 }else{
                     tv = createTextViewScore(mScores.get(i).get(k));
@@ -483,9 +543,7 @@ public class Scoreboard extends AppCompatActivity {
 
 //TODO: first time setup - quick tutorial
 
-//TODO: each game its own row -sus
 //TODO: settings screen
-//TODO: UI update
 //TODO: delete whole round (1 row)
 
 //TODO: FIX deleting score on long press
