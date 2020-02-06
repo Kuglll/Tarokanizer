@@ -155,18 +155,18 @@ public class Scoreboard extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
-                            case 0: selectDialogForGame(games[0]); break;
-                            case 1: selectDialogForGame(games[1]); break;
-                            case 2: selectDialogForGame(games[2]); break;
-                            case 3: selectDialogForGame(games[3]); break;
-                            case 4: selectDialogForGame(games[4]); break;
-                            case 5: selectDialogForGame(games[5]); break;
-                            case 6: selectDialogForGame(games[6]); break;
-                            case 7: selectDialogForGame(games[7]); break;
-                            case 8: selectDialogForGame(games[8]); break;
-                            case 9: selectDialogForGame(games[9]); break;
-                            case 10: selectDialogForGame(games[10]); break;
-                            case 11: selectDialogForGame(games[11]); break;
+                            case 0: selectDialogForGame(games[0]); round.setIdGame(0); break;
+                            case 1: selectDialogForGame(games[1]); round.setIdGame(1); break;
+                            case 2: selectDialogForGame(games[2]); round.setIdGame(2); break;
+                            case 3: selectDialogForGame(games[3]); round.setIdGame(3); break;
+                            case 4: selectDialogForGame(games[4]); round.setIdGame(4); break;
+                            case 5: selectDialogForGame(games[5]); round.setIdGame(5); break;
+                            case 6: selectDialogForGame(games[6]); round.setIdGame(6); break;
+                            case 7: selectDialogForGame(games[7]); round.setIdGame(7); break;
+                            case 8: selectDialogForGame(games[8]); round.setIdGame(8); break;
+                            case 9: selectDialogForGame(games[9]); round.setIdGame(9); break;
+                            case 10: selectDialogForGame(games[10]); round.setIdGame(10); break;
+                            case 11: selectDialogForGame(games[11]); round.setIdGame(11); break;
                         }
                     }
                 });
@@ -184,7 +184,7 @@ public class Scoreboard extends AppCompatActivity {
             case "dva": pointsDialog(settings.getDva()); break;
             case "tri": pointsDialog(settings.getTri()); break;
             //set number of points for each player + radlci
-            case "klop": System.out.println(game+ "was selected"); break;
+            case "klop": System.out.println(game+ "was selected"); break; //TODO: add flow for klop, berac
             case "berac": System.out.println(game+ "was selected"); break;
             case "pikolo": System.out.println(game+ "was selected"); break;
             //display razlika + 60/50/40 + radlci
@@ -329,6 +329,7 @@ public class Scoreboard extends AppCompatActivity {
         if(!round.isRazlikaPozitivna()) round.setPoints(round.getPoints()*-1);
 
         //radlci check
+        //TODO: double the score if idplayer has radlc
 
         if(round.getPoints() < 0) round.setWon(false);
         else round.setWon(true);
@@ -374,10 +375,7 @@ public class Scoreboard extends AppCompatActivity {
 
         rounds.add(round);
 
-        //TODO: first look if there is radlc and count it
-        //TODO: then add it if the game is correct
-
-        //TODO: radlci
+        //TODO: add radlc if game was correct
     }
 
     public void initializeUi(){
@@ -528,25 +526,6 @@ public class Scoreboard extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
         textView.setTextColor(ContextCompat.getColor(Scoreboard.this, R.color.brightGray));
-        textView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Dialog dialog = new Dialog(Scoreboard.this);
-                if(dialog.DeleteScoreDialog(Scoreboard.this, textView)){
-                    textView.setVisibility(View.GONE);
-                    int score = Integer.parseInt(textView.getText().toString());
-                    view = (View)view.getParent();
-                    TextView tv = createTextViewScore(mScore);
-
-                    //updating sum at the end
-                    mSums[view.getId()] += score * -1;
-                    tv = sums.get(view.getId());
-                    tv.setText("" + mSums[view.getId()]);
-                }
-
-                return true;
-            }
-        });
 
         return textView;
     }
@@ -575,8 +554,6 @@ public class Scoreboard extends AppCompatActivity {
 
 //TODO: settings screen
 //TODO: delete whole round (1 row)
-
-//TODO: FIX deleting score on long press
 
 //TEST: pressing back button and closing app from recycler view
 //TEST: closing app from scoreboard

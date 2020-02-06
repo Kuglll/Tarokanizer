@@ -2,6 +2,7 @@ package com.example.tarokanizer.data_classes;
 
 public class Round {
 
+    int idGame; //which game was played
     int idPlayer;
     int idRufanPlayer;
     int points;
@@ -9,11 +10,20 @@ public class Round {
     boolean won;
 
     public Round(){
+        idGame = -1;
         idPlayer = -1;
         idRufanPlayer = -1;
         points = 0;
         won = false;
         razlikaPozitivna = false;
+    }
+
+    public int getIdGame() {
+        return idGame;
+    }
+
+    public void setIdGame(int idGame) {
+        this.idGame = idGame;
     }
 
     public int getIdPlayer() {
