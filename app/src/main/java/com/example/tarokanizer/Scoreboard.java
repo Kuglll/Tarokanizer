@@ -96,29 +96,50 @@ public class Scoreboard extends AppCompatActivity {
 
     public void displayWhoPlayedDialog(){
         // create new round
-        round = new Round(players.size());
+        round = new Round();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
-        builder.setTitle("Kdo je igral?");
         String [] mPlayers = new String[players.size()];
-
         for(int i=0; i<players.size(); i++){
             mPlayers[i] = players.get(i).getName();
         }
 
-        builder.setMultiChoiceItems(mPlayers, round.getChecked(), new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
+        builder.setTitle("Kdo je igral?")
+                .setItems(mPlayers, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        round.setIdPlayer(which);
+                        Log.d("WHICH",Integer.toString(which));
+                        // if there is less or equal than 3 player, no one was rufed
+                        if(players.size()<=3){
+                            displayWhatGameWasPlayed();
+                        }else{
+                            displayWhoGotRufed();
+                        }
+                    }
+                });
 
-            }
-        });
+        builder.setNegativeButton("PREKLIČI", null);
 
-        builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                displayWhatGameWasPlayed();
-            }
-        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void displayWhoGotRufed(){
+        String [] mPlayers = new String[players.size()];
+        for(int i=0; i<players.size(); i++){
+            mPlayers[i] = players.get(i).getName();
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
+        builder.setTitle("Kdo je bil rufan?")
+                .setItems(mPlayers, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        round.setIdRufanPlayer(which);
+                        displayWhatGameWasPlayed();
+                    }
+                });
 
         builder.setNegativeButton("PREKLIČI", null);
 
@@ -304,7 +325,10 @@ public class Scoreboard extends AppCompatActivity {
     }
 
     void finalizeScore(){
+        //if difference < 0, multiply score with -1
         if(!round.isRazlikaPozitivna()) round.setPoints(round.getPoints()*-1);
+
+        //radlci check
 
         if(round.getPoints() < 0) round.setWon(false);
         else round.setWon(true);
@@ -315,8 +339,9 @@ public class Scoreboard extends AppCompatActivity {
             Log.d("SUMara lose", Integer.toString(round.getPoints()));
         }
 
-        for(int i=0; i<round.getChecked().length; i++){
-            if(round.getChecked()[i]){
+        for(int i = 0; i<players.size(); i++){
+            if(players.get(i).getId() == round.getIdPlayer() ||
+                players.get(i).getId() == round.getIdRufanPlayer()){
                 //create textview with score
                 TextView tv = createTextViewScore(Integer.toString(round.getPoints()));
                 //add score visually
@@ -392,8 +417,9 @@ public class Scoreboard extends AppCompatActivity {
         TextView tv;
         for(int i=0; i<rounds.size(); i++) {
             String points = Integer.toString(rounds.get(i).getPoints());
-            for(int k=0; k<rounds.get(i).getChecked().length; k++){
-                if(rounds.get(i).getChecked()[k]){
+            for(int k = 0; k<players.size(); k++){
+                if(players.get(k).getId() == rounds.get(i).getIdPlayer() ||
+                        players.get(k).getId() == rounds.get(i).getIdRufanPlayer()){
                     tv = createTextViewScore(points);
                 } else{
                     tv = createTextViewScore("0");

@@ -2,27 +2,34 @@ package com.example.tarokanizer.data_classes;
 
 public class Round {
 
-    boolean [] checked;
+    int idPlayer;
+    int idRufanPlayer;
     int points;
     boolean razlikaPozitivna;
     boolean won;
 
-    public Round(int numberOfPlayers){
-        checked = new boolean[numberOfPlayers];
-        for(int i=0; i<checked.length; i++){
-            checked[i] = false;
-        }
+    public Round(){
+        idPlayer = -1;
+        idRufanPlayer = -1;
         points = 0;
         won = false;
         razlikaPozitivna = false;
     }
 
-    public boolean[] getChecked() {
-        return checked;
+    public int getIdPlayer() {
+        return idPlayer;
     }
 
-    public void setChecked(boolean[] checked) {
-        this.checked = checked;
+    public void setIdPlayer(int idPlayer) {
+        this.idPlayer = idPlayer;
+    }
+
+    public int getIdRufanPlayer() {
+        return idRufanPlayer;
+    }
+
+    public void setIdRufanPlayer(int idRufanPlayer) {
+        this.idRufanPlayer = idRufanPlayer;
     }
 
     public int getPoints() {

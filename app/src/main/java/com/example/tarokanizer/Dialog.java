@@ -12,6 +12,7 @@ import android.text.InputType;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -153,10 +154,8 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
         builder.setPositiveButton("Next", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // Send the positive button event back to the host activity
-                String name;
-                name = t.getText().toString();
-                if(name.length() > 15)
-                {
+                String name = t.getText().toString();
+                if(name.length() > 15) {
                     Toast.makeText(context, "Player name must not exceed 15 letters!" , Toast.LENGTH_SHORT ).show();
                 }else{
                 players.add(new Player(name,numberOfPlayers-i));
