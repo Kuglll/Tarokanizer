@@ -12,3 +12,11 @@ To write shitty code, try to improve and get into Android studio and Java as muc
 ![2](2.png)
 ![3](3.png)
 ![4](4.png)
+
+### Version 1
+
+![5](images/version1.png)
+
+### Version 2
+
+![6](images/version2.png)
