@@ -89,12 +89,45 @@ public class Scoreboard extends AppCompatActivity {
         buttonNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayWhoPlayedDialog();
+                displayWhatGameWasPlayed();
             }
         });
     }
 
-    public void displayWhoPlayedDialog(){
+    public void displayWhatGameWasPlayed(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
+        final String [] games = {"Ena", "Dva", "Tri", "Klop", "Berac", "Pikolo", "Solo ena", "Solo dva", "Solo tri", "Solo brez", "Valat", "Barvni valat"};
+        builder.setTitle("Katera igra je bila igrana?")
+                .setItems(games, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            //display razlika + 30/20/10 + radlci
+                            case 0: displayWhoPlayedDialog(settings.getEna()); round.setIdGame(0); break;
+                            case 1: displayWhoPlayedDialog(settings.getDva()); round.setIdGame(1); break;
+                            case 2: displayWhoPlayedDialog(settings.getTri()); round.setIdGame(2); break;
+                            //set number of points for each player + radlci
+                            case 3: System.out.println(games[3]+ "was selected"); round.setIdGame(3); break;
+                            case 4: System.out.println(games[4]+ "was selected"); round.setIdGame(4); break;
+                            case 5: System.out.println(games[5]+ "was selected"); round.setIdGame(5); break;
+                            //display razlika + 60/50/40 + radlci
+                            case 6: displayWhoPlayedDialog(settings.getSoloEna()); round.setIdGame(6); break;
+                            case 7: displayWhoPlayedDialog(settings.getSoloDva());  round.setIdGame(7); break;
+                            case 8: displayWhoPlayedDialog(settings.getSoloTri()); round.setIdGame(8); break;
+                            case 9: displayWhoPlayedDialog(settings.getSoloBrez()); round.setIdGame(9); break;
+                            case 10: System.out.println(games[10]+ "was selected"); round.setIdGame(10); break;
+                            case 11: System.out.println(games[11]+ "was selected"); round.setIdGame(11); break;
+                        }
+                    }
+                });
+
+        builder.setNegativeButton("PREKLIČI", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void displayWhoPlayedDialog(final int tocke){
         // create new round
         round = new Round();
 
@@ -112,9 +145,9 @@ public class Scoreboard extends AppCompatActivity {
                         Log.d("WHICH",Integer.toString(which));
                         // if there is less or equal than 3 player, no one was rufed
                         if(players.size()<=3){
-                            displayWhatGameWasPlayed();
+                            pointsDialog(tocke);
                         }else{
-                            displayWhoGotRufed();
+                            displayWhoGotRufed(tocke);
                         }
                     }
                 });
@@ -125,7 +158,7 @@ public class Scoreboard extends AppCompatActivity {
         dialog.show();
     }
 
-    public void displayWhoGotRufed(){
+    public void displayWhoGotRufed(final int tocke){
         String [] mPlayers = new String[players.size()];
         for(int i=0; i<players.size(); i++){
             mPlayers[i] = players.get(i).getName();
@@ -137,9 +170,16 @@ public class Scoreboard extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         round.setIdRufanPlayer(which);
-                        displayWhatGameWasPlayed();
+                        pointsDialog(tocke);
                     }
                 });
+
+        builder.setPositiveButton("Naprej", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                pointsDialog(tocke);
+            }
+        });
 
         builder.setNegativeButton("PREKLIČI", null);
 
@@ -147,56 +187,7 @@ public class Scoreboard extends AppCompatActivity {
         dialog.show();
     }
 
-    public void displayWhatGameWasPlayed(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
-        final String [] games = {"ena", "dva", "tri", "klop", "berac", "pikolo", "solo ena", "solo dva", "solo tri", "solo brez", "valat", "barvni valat"};
-        builder.setTitle("Katera igra je bila igrana?")
-                .setItems(games, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
-                            case 0: selectDialogForGame(games[0]); round.setIdGame(0); break;
-                            case 1: selectDialogForGame(games[1]); round.setIdGame(1); break;
-                            case 2: selectDialogForGame(games[2]); round.setIdGame(2); break;
-                            case 3: selectDialogForGame(games[3]); round.setIdGame(3); break;
-                            case 4: selectDialogForGame(games[4]); round.setIdGame(4); break;
-                            case 5: selectDialogForGame(games[5]); round.setIdGame(5); break;
-                            case 6: selectDialogForGame(games[6]); round.setIdGame(6); break;
-                            case 7: selectDialogForGame(games[7]); round.setIdGame(7); break;
-                            case 8: selectDialogForGame(games[8]); round.setIdGame(8); break;
-                            case 9: selectDialogForGame(games[9]); round.setIdGame(9); break;
-                            case 10: selectDialogForGame(games[10]); round.setIdGame(10); break;
-                            case 11: selectDialogForGame(games[11]); round.setIdGame(11); break;
-                        }
-                    }
-                });
 
-        builder.setNegativeButton("PREKLIČI", null);
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    public void selectDialogForGame(String game){
-        switch(game){
-            //display razlika + 30/20/10 + radlci
-            case "ena": pointsDialog(settings.getEna()); break;
-            case "dva": pointsDialog(settings.getDva()); break;
-            case "tri": pointsDialog(settings.getTri()); break;
-            //set number of points for each player + radlci
-            case "klop": System.out.println(game+ "was selected"); break; //TODO: add flow for klop, berac
-            case "berac": System.out.println(game+ "was selected"); break;
-            case "pikolo": System.out.println(game+ "was selected"); break;
-            //display razlika + 60/50/40 + radlci
-            case "solo ena":  pointsDialog(settings.getSoloEna()); break;
-            case "solo dva":  pointsDialog(settings.getSoloDva()); break;
-            case "solo tri":  pointsDialog(settings.getSoloTri()); break;
-            case "solo brez": pointsDialog(settings.getSoloBrez()); break;
-
-            case "valat": System.out.println(game+ "was selected"); break;
-            case "barvni valat": System.out.println(game+ "was selected"); break;
-        }
-    }
 
     public void pointsDialog(final int tocke){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -209,7 +200,7 @@ public class Scoreboard extends AppCompatActivity {
         builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                int input=0;
+                int input;
                 try {
                     input = Integer.parseInt(editext.getText().toString());
                     if(input < 0) round.setRazlikaPozitivna(false);
@@ -329,13 +320,16 @@ public class Scoreboard extends AppCompatActivity {
         if(!round.isRazlikaPozitivna()) round.setPoints(round.getPoints()*-1);
 
         //radlci check
-        //TODO: double the score if idplayer has radlc
+        if(mRadlci[round.getIdPlayer()]>0){
+            round.setPoints(round.getPoints()*2);
+        }
 
         if(round.getPoints() < 0) round.setWon(false);
         else round.setWon(true);
 
         if(round.isWon()){
             Log.d("SUMara win", Integer.toString(round.getPoints()));
+            mRadlci[round.getIdPlayer()]--; //remove radlc
         }else{
             Log.d("SUMara lose", Integer.toString(round.getPoints()));
         }
