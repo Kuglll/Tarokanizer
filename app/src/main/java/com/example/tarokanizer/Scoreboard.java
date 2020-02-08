@@ -378,19 +378,16 @@ public class Scoreboard extends AppCompatActivity {
         if(!round.isRazlikaPozitivna()) round.setPoints(round.getPoints()*-1);
 
         //radlci check
-        if(mRadlci[round.getIdPlayer()]>0){
+        if(mRadlci[round.getIdPlayer()] > 0){
             round.setPoints(round.getPoints()*2);
         }
 
         if(round.getPoints() < 0) round.setWon(false);
         else round.setWon(true);
 
-        if(round.isWon()){
-            Log.d("SUMara win", Integer.toString(round.getPoints()));
+        if(round.isWon() && mRadlci[round.getIdPlayer()] > 0){
             mRadlci[round.getIdPlayer()]--; //remove radlc
-            updateRadlciLayout(mRadlci);
-        }else{
-            Log.d("SUMara lose", Integer.toString(round.getPoints()));
+            updateRadlciLayout(round.getIdPlayer(), mRadlci);
         }
 
         for(int i = 0; i<players.size(); i++){
@@ -434,20 +431,18 @@ public class Scoreboard extends AppCompatActivity {
                 if(checked[i] || round.getIdPlayer() == i){
                     //updating number of radlci for player
                     mRadlci[i] = mRadlci[i] + 1;
-                    radlci.get(i).removeAllViews(); //removing all
-                    LinearLayout ll = radlci.get(i);
-                    for (int k = 0; k < mRadlci[i]; k++) { //adding number of current radlci
-
-                        Log.d("ZNAKA", "Radlc created!");
-                        ll.addView(createRadlc());
-                    }
+                    updateRadlciLayout(i, mRadlci);
                 }
             }
         }
     }
 
-    public void updateRadlciLayout(int [] radlci){
-
+    public void updateRadlciLayout(int id, int [] mRadlci){
+        radlci.get(id).removeAllViews(); //removing all
+        LinearLayout ll = radlci.get(id);
+        for (int k = 0; k < mRadlci[id]; k++) { //adding number of current radlci
+            ll.addView(createRadlc());
+        }
     }
 
     public void initializeUi(){
