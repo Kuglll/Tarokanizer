@@ -29,6 +29,7 @@ import com.example.tarokanizer.data_classes.Round;
 import com.example.tarokanizer.data_classes.Settings;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static java.lang.Math.abs;
 
@@ -107,9 +108,9 @@ public class Scoreboard extends AppCompatActivity {
                             case 1: displayWhoPlayedDialog(settings.getDva()); round.setIdGame(1); break;
                             case 2: displayWhoPlayedDialog(settings.getTri()); round.setIdGame(2); break;
                             //set number of points for each player + radlci
-                            case 3: System.out.println(games[3]+ "was selected"); round.setIdGame(3); break;
-                            case 4: System.out.println(games[4]+ "was selected"); round.setIdGame(4); break;
-                            case 5: System.out.println(games[5]+ "was selected"); round.setIdGame(5); break;
+                            case 3: System.out.println(games[3]+ "was selected"); round.setIdGame(3); break; //klop
+                            case 4: displayWhoPlayedDialog(0); round.setIdGame(4); break; //berac
+                            case 5: displayWhoPlayedDialog(0); round.setIdGame(5); break; //pikolo
                             //display razlika + 60/50/40 + radlci
                             case 6: displayWhoPlayedDialog(settings.getSoloEna()); round.setIdGame(6); break;
                             case 7: displayWhoPlayedDialog(settings.getSoloDva());  round.setIdGame(7); break;
@@ -142,13 +143,70 @@ public class Scoreboard extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         round.setIdPlayer(which);
-                        Log.d("WHICH",Integer.toString(which));
-                        // if there is less or equal than 3 player, no one was rufed
-                        if(players.size()<=3){
-                            pointsDialog(tocke);
-                        }else{
-                            displayWhoGotRufed(tocke);
+
+                        //berac ali pikolo
+                        if(round.getIdGame() == 4 || round.getIdGame() == 5){
+                            displayWhoPlayedAswell();
+                        }else {
+                            // if there is less or equal than 3 player, no one was rufed
+                            if (players.size() <= 3) {
+                                pointsDialog(tocke);
+                            } else {
+                                displayWhoGotRufed(tocke);
+                            }
                         }
+                    }
+                });
+
+        builder.setNegativeButton("PREKLIČI", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void displayWhoPlayedAswell(){
+        String [] mPlayers = new String[players.size()];
+        final boolean [] checked = new boolean[players.size()];
+        for(int i=0; i<players.size(); i++){
+            mPlayers[i] = players.get(i).getName();
+            checked[i] = false;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
+        builder.setTitle("Kdo je bil udeležen v igri?")
+                .setMultiChoiceItems(mPlayers, checked, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+
+                    }
+                });
+
+        builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                displayWhoWonDialog(checked);
+            }
+        });
+
+        builder.setNegativeButton("PREKLIČI", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void displayWhoWonDialog(final boolean [] checked){
+        String items [] = {"Da", "Ne"};
+        final AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
+        builder.setTitle("Ali je igralec zmagal?")
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0: round.setPoints(70); break;
+                            case 1: round.setPoints(-70); break;
+                        }
+                        round.setRazlikaPozitivna(true);
+                        finalizeScore(checked);
                     }
                 });
 
@@ -305,7 +363,7 @@ public class Scoreboard extends AppCompatActivity {
                 }else{
                     round.addPoints(-tmp);
                 }
-                finalizeScore();
+                finalizeScore(new boolean[0]);
             }
         });
 
@@ -315,7 +373,7 @@ public class Scoreboard extends AppCompatActivity {
         dialog.show();
     }
 
-    void finalizeScore(){
+    void finalizeScore(boolean [] checked){
         //if difference < 0, multiply score with -1
         if(!round.isRazlikaPozitivna()) round.setPoints(round.getPoints()*-1);
 
@@ -330,6 +388,7 @@ public class Scoreboard extends AppCompatActivity {
         if(round.isWon()){
             Log.d("SUMara win", Integer.toString(round.getPoints()));
             mRadlci[round.getIdPlayer()]--; //remove radlc
+            updateRadlciLayout(mRadlci);
         }else{
             Log.d("SUMara lose", Integer.toString(round.getPoints()));
         }
@@ -369,7 +428,26 @@ public class Scoreboard extends AppCompatActivity {
 
         rounds.add(round);
 
-        //TODO: add radlc if game was correct
+        //add radlc if the game is correct
+        if(Arrays.asList("3","4","5").contains(Integer.toString(round.getIdGame()))){
+            for(int i=0; i<checked.length; i++){
+                if(checked[i] || round.getIdPlayer() == i){
+                    //updating number of radlci for player
+                    mRadlci[i] = mRadlci[i] + 1;
+                    radlci.get(i).removeAllViews(); //removing all
+                    LinearLayout ll = radlci.get(i);
+                    for (int k = 0; k < mRadlci[i]; k++) { //adding number of current radlci
+
+                        Log.d("ZNAKA", "Radlc created!");
+                        ll.addView(createRadlc());
+                    }
+                }
+            }
+        }
+    }
+
+    public void updateRadlciLayout(int [] radlci){
+
     }
 
     public void initializeUi(){
