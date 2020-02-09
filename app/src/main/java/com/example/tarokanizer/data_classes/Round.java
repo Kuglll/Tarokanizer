@@ -9,7 +9,9 @@ public class Round {
     boolean razlikaPozitivna;
     boolean won;
 
-    public Round(){
+    int [] pointPerPlayer;
+
+    public Round(int numberOfPlayers){
         idGame = -1;
         idPlayer = -1;
         idRufanPlayer = -1;
@@ -68,5 +70,13 @@ public class Round {
 
     public void setRazlikaPozitivna(boolean razlikaPozitivna) {
         this.razlikaPozitivna = razlikaPozitivna;
+    }
+
+    public int[] getPointPerPlayer() {
+        return pointPerPlayer;
+    }
+
+    public void setPointPerPlayer(int[] pointPerPlayer) {
+        this.pointPerPlayer = pointPerPlayer;
     }
 }

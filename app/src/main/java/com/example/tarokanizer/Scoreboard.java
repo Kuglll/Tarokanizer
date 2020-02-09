@@ -63,6 +63,9 @@ public class Scoreboard extends AppCompatActivity {
     Round round;
     ArrayList<Round> rounds;
 
+    //klop variable
+    int [] pointsPerPlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +99,9 @@ public class Scoreboard extends AppCompatActivity {
     }
 
     public void displayWhatGameWasPlayed(){
+        // create new round
+        round = new Round(players.size());
+
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
         final String [] games = {"Ena", "Dva", "Tri", "Klop", "Berac", "Pikolo", "Solo ena", "Solo dva", "Solo tri", "Solo brez", "Valat", "Barvni valat"};
         builder.setTitle("Katera igra je bila igrana?")
@@ -108,7 +114,7 @@ public class Scoreboard extends AppCompatActivity {
                             case 1: displayWhoPlayedDialog(settings.getDva()); round.setIdGame(1); break;
                             case 2: displayWhoPlayedDialog(settings.getTri()); round.setIdGame(2); break;
                             //set number of points for each player + radlci
-                            case 3: System.out.println(games[3]+ "was selected"); round.setIdGame(3); break; //klop
+                            case 3: displayWhoPlayedAswell(); round.setIdGame(3); break; //klop
                             case 4: displayWhoPlayedDialog(0); round.setIdGame(4); break; //berac
                             case 5: displayWhoPlayedDialog(0); round.setIdGame(5); break; //pikolo
                             //display razlika + 60/50/40 + radlci
@@ -129,9 +135,6 @@ public class Scoreboard extends AppCompatActivity {
     }
 
     public void displayWhoPlayedDialog(final int tocke){
-        // create new round
-        round = new Round();
-
         String [] mPlayers = new String[players.size()];
         for(int i=0; i<players.size(); i++){
             mPlayers[i] = players.get(i).getName();
@@ -184,7 +187,13 @@ public class Scoreboard extends AppCompatActivity {
         builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                displayWhoWonDialog(checked);
+                //klop
+                if(round.getIdGame() ==3){
+                    pointsPerPlayer = new int[players.size()];
+                    getPointsForPlayers(checked);
+                }else{
+                    displayWhoWonDialog(checked);
+                }
             }
         });
 
@@ -192,6 +201,73 @@ public class Scoreboard extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public void getPointsForPlayers(final boolean [] checked){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Vnesi točke za igralce!");
+        final EditText [] fields = new EditText[players.size()];
+
+        LinearLayout layout = new LinearLayout(this);
+        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                                                            LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(parms);
+        layout.setGravity(Gravity.CLIP_VERTICAL);
+        layout.setPadding(2, 2, 2, 2);
+
+        for(int i=0; i<players.size(); i++) {
+            if(checked[i]) {
+                TextView text = new TextView(this);
+                text.setText(players.get(i).getName());
+                text.setPadding(40, 40, 40, 40);
+                text.setGravity(Gravity.CENTER);
+                text.setTextSize(20);
+
+                EditText editext = new EditText(this);
+                editext.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                builder.setView(editext);
+
+                fields[i] = editext;
+                layout.addView(text);
+                layout.addView(editext);
+            }
+        }
+
+        builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String input;
+                try {
+                    for(int i=0; i<fields.length; i++){
+
+                    }
+                    //input = editext.getText().toString();
+                    //if(input.equals("")) input = "0";
+
+                    //int score = Integer.parseInt(input);
+                    //pointsPerPlayer[index] = score;
+
+                }catch (Exception e){
+                    Toast.makeText(Scoreboard.this, "Vnos je bil napačen!", Toast.LENGTH_LONG).show();
+                    dialog.cancel();
+                }
+            }
+        });
+        builder.setNegativeButton("PREKLIČI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    public void finalizeScoreForKlop(){
+        for(int i=0; i<players.size(); i++){
+            Log.d("PPP", Integer.toString(pointsPerPlayer[i]));
+        }
     }
 
     public void displayWhoWonDialog(final boolean [] checked){
@@ -258,14 +334,16 @@ public class Scoreboard extends AppCompatActivity {
         builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                int input;
+                String input;
                 try {
-                    input = Integer.parseInt(editext.getText().toString());
-                    if(input < 0) round.setRazlikaPozitivna(false);
+                    input = (editext.getText().toString());
+                    if(input.equals("")) input = "0";
+
+                    int score = Integer.parseInt(input);
+                    if(score < 0) round.setRazlikaPozitivna(false);
                     else round.setRazlikaPozitivna(true);
 
-                    round.setPoints(abs(input) + tocke);
-                    Log.d("SUM", Integer.toString(round.getPoints()));
+                    round.setPoints(abs(score) + tocke);
                     displayDodatki();
                 }catch (Exception e){
                     Toast.makeText(Scoreboard.this, "Vnos je bil napačen!", Toast.LENGTH_LONG).show();
