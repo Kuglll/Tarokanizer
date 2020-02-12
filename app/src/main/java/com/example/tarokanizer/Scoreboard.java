@@ -226,7 +226,6 @@ public class Scoreboard extends AppCompatActivity {
 
                 EditText editext = new EditText(this);
                 editext.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
-                builder.setView(editext);
 
                 fields[i] = editext;
                 layout.addView(text);
@@ -234,10 +233,13 @@ public class Scoreboard extends AppCompatActivity {
             }
         }
 
+        builder.setView(layout);
+
         builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String input;
+                //TODO: get the input from all the edittexts and update pointsPerPlayer array
                 try {
                     for(int i=0; i<fields.length; i++){
 
@@ -557,6 +559,7 @@ public class Scoreboard extends AppCompatActivity {
     }
 
     public void loadRounds(){
+        //TODO: load different if it is klop round
         TextView tv;
         for(int i=0; i<rounds.size(); i++) {
             String points = Integer.toString(rounds.get(i).getPoints());
