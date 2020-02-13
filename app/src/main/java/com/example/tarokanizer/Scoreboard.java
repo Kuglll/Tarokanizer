@@ -605,15 +605,24 @@ public class Scoreboard extends AppCompatActivity {
     public void loadRounds(){
         TextView tv;
         for(int i=0; i<rounds.size(); i++) {
-            String points = Integer.toString(rounds.get(i).getPoints());
-            for(int k = 0; k<players.size(); k++){
-                if(players.get(k).getId() == rounds.get(i).getIdPlayer() ||
-                        players.get(k).getId() == rounds.get(i).getIdRufanPlayer()){
-                    tv = createTextViewScore(points);
-                } else{
-                    tv = createTextViewScore("0");
+            if(rounds.get(i).getIdGame() == 3){
+                int [] ppp = rounds.get(i).getPointPerPlayer();
+                for(int k=0; k<ppp.length; k++){
+                    tv = createTextViewScore(Integer.toString(ppp[k]));
+                    scores.get(k).addView(tv);
                 }
-                scores.get(k).addView(tv);
+
+            } else {
+                String points = Integer.toString(rounds.get(i).getPoints());
+                for (int k = 0; k < players.size(); k++) {
+                    if (players.get(k).getId() == rounds.get(i).getIdPlayer() ||
+                            players.get(k).getId() == rounds.get(i).getIdRufanPlayer()) {
+                        tv = createTextViewScore(points);
+                    } else {
+                        tv = createTextViewScore("0");
+                    }
+                    scores.get(k).addView(tv);
+                }
             }
         }
     }
