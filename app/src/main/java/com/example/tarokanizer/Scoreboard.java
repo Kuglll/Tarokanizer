@@ -15,6 +15,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -208,6 +209,8 @@ public class Scoreboard extends AppCompatActivity {
         builder.setTitle("Vnesi točke za igralce!");
         final EditText [] fields = new EditText[players.size()];
 
+        ScrollView scroll = new ScrollView(this);
+
         LinearLayout layout = new LinearLayout(this);
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                                                             LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -233,7 +236,8 @@ public class Scoreboard extends AppCompatActivity {
             }
         }
 
-        builder.setView(layout);
+        scroll.addView(layout);
+        builder.setView(scroll);
 
         builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
             @Override
@@ -263,7 +267,8 @@ public class Scoreboard extends AppCompatActivity {
             }
         });
 
-        builder.show();
+        AlertDialog dlg = builder.show();
+        dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     public void finalizeScoreForKlop(){
