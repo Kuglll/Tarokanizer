@@ -189,7 +189,7 @@ public class Scoreboard extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //klop
-                if(round.getIdGame() ==3){
+                if(round.getIdGame() == 3){
                     pointsPerPlayer = new int[players.size()];
                     getPointsForPlayers(checked);
                 }else{
@@ -233,6 +233,8 @@ public class Scoreboard extends AppCompatActivity {
                 fields[i] = editext;
                 layout.addView(text);
                 layout.addView(editext);
+            } else{
+                fields[i] = null;
             }
         }
 
@@ -243,21 +245,24 @@ public class Scoreboard extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String input;
-                //TODO: get the input from all the edittexts and update pointsPerPlayer array
                 try {
-                    for(int i=0; i<fields.length; i++){
+                    for(int k=0; k<checked.length; k++){
+                        if(checked[k]){
+                            input = fields[k].getText().toString();
+                            if(input.equals("")) input = "0";
 
+                            int score = Integer.parseInt(input);
+                            pointsPerPlayer[k] = score;
+                        }else {
+                            pointsPerPlayer[k] = 0;
+                        }
                     }
-                    //input = editext.getText().toString();
-                    //if(input.equals("")) input = "0";
-
-                    //int score = Integer.parseInt(input);
-                    //pointsPerPlayer[index] = score;
 
                 }catch (Exception e){
                     Toast.makeText(Scoreboard.this, "Vnos je bil napačen!", Toast.LENGTH_LONG).show();
                     dialog.cancel();
                 }
+                finalizeScoreForKlop(checked);
             }
         });
         builder.setNegativeButton("PREKLIČI", new DialogInterface.OnClickListener() {
@@ -271,9 +276,43 @@ public class Scoreboard extends AppCompatActivity {
         dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
-    public void finalizeScoreForKlop(){
-        for(int i=0; i<players.size(); i++){
-            Log.d("PPP", Integer.toString(pointsPerPlayer[i]));
+    public void finalizeScoreForKlop(boolean [] checked){
+        for(int i=0; i<players.size(); i++) {
+            if (mRadlci[i] > 0) {
+                pointsPerPlayer[i] = pointsPerPlayer[i] * 2;
+            }
+            //create textview with score
+            TextView tv = createTextViewScore(Integer.toString(pointsPerPlayer[i]));
+            //add score visually
+            scores.get(i).addView(tv);
+            //add score to store
+            mScores.get(i).add(Integer.toString(pointsPerPlayer[i]));
+
+            //updating sum in the cardview
+            mSums[i] += pointsPerPlayer[i];
+
+            //get current textview and override with new sum
+            tv = sums.get(i);
+            tv.setText("" + mSums[i]);
+        }
+
+        round.setPointPerPlayer(pointsPerPlayer);
+
+        //scroll down everytime a result is added
+        (findViewById(R.id.scrollViewInScoreBoard)).post(new Runnable() {
+            public void run() {
+                ((ScrollView) findViewById(R.id.scrollViewInScoreBoard)).fullScroll(View.FOCUS_DOWN);
+            }
+        });
+
+        rounds.add(round);
+
+        for(int i=0; i<checked.length; i++){
+            if(checked[i]){
+                //updating number of radlci for player
+                mRadlci[i] = mRadlci[i] + 1;
+                updateRadlciLayout(i, mRadlci);
+            }
         }
     }
 
@@ -564,7 +603,6 @@ public class Scoreboard extends AppCompatActivity {
     }
 
     public void loadRounds(){
-        //TODO: load different if it is klop round
         TextView tv;
         for(int i=0; i<rounds.size(); i++) {
             String points = Integer.toString(rounds.get(i).getPoints());
