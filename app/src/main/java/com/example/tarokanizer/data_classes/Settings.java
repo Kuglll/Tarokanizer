@@ -17,6 +17,9 @@ public class Settings {
         napovedan kralj 20
     */
 
+    //mode
+    boolean automaticMode = true;
+
     int ena = 30;
     int dva = 20;
     int tri = 10;
@@ -44,6 +47,14 @@ public class Settings {
         if (settings == null) settings = new Settings();
 
         return settings;
+    }
+
+    public boolean isAutomaticMode() {
+        return automaticMode;
+    }
+
+    public void setAutomaticMode(boolean automaticMode) {
+        this.automaticMode = automaticMode;
     }
 
     public int getEna() {

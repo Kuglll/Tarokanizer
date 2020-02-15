@@ -139,13 +139,7 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
 
     public void onPause() {
         super.onPause();
-        storeSettings();
         storeCardViewList();
-    }
-
-    public void storeSettings(){
-        //TODO: Store settings to SP
-        Log.d("SETTINGS", "SETTINGS SAVED!");
     }
 
     public void storeCardViewList(){

@@ -8,9 +8,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.Toast;
+
+import com.example.tarokanizer.data_classes.Settings;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -19,6 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     Toolbar toolbar;
+    Settings settings;
 
     Switch swtch;
     Button saveButton;
@@ -50,16 +59,18 @@ public class SettingsActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        changed = true;
+        settings = Settings.getInstance();
+        changed = false;
 
         initViews();
+        getData();
+        initOnClickListeners();
     }
 
     public void initViews(){
         swtch = findViewById(R.id.switchButton);
         saveButton = findViewById(R.id.saveButton);
 
-        saveButton = findViewById(R.id.saveButton);
         ena = findViewById(R.id.enaEdit);
         dva = findViewById(R.id.dvaEdit);
         tri = findViewById(R.id.triEdit);
@@ -76,6 +87,353 @@ public class SettingsActivity extends AppCompatActivity {
         napovedanaSpicka = findViewById(R.id.napovedanaSpickaEdit);
         kralj = findViewById(R.id.kraljEdit);
         napovedanKralj = findViewById(R.id.napovedanKraljEdit);
+    }
+
+    public void initOnClickListeners(){
+        saveButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                changed = false;
+                storeSettings();
+                Toast.makeText(SettingsActivity.this, "Nastavitve uspešno shranjene!", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        swtch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                changed = true;
+                if(checked){
+                    settings.setAutomaticMode(true);
+                }else{
+                    settings.setAutomaticMode(false);
+                }
+            }
+        });
+
+        ena.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                changed = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        dva.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                changed = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        tri.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                changed = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        soloEna.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                changed = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        soloDva.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                changed = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        soloTri.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                changed = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        soloBrez.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                changed = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        trula.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                changed = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        napovedanaTrula.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                changed = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        kralji.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                changed = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        napovedaniKralji.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                changed = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        spicka.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                changed = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        napovedanaSpicka.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                changed = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        kralj.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                changed = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        napovedanKralj.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                changed = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
+    public void storeSettings(){
+        if(!ena.getText().toString().equals("")){
+            settings.setEna(Integer.parseInt(ena.getText().toString()));
+        }
+        if(!dva.getText().toString().equals("")){
+            settings.setDva(Integer.parseInt(dva.getText().toString()));
+        }
+        if(!tri.getText().toString().equals("")){
+            settings.setTri(Integer.parseInt(tri.getText().toString()));
+        }
+        if(!soloEna.getText().toString().equals("")){
+            settings.setSoloEna(Integer.parseInt(soloEna.getText().toString()));
+        }
+        if(!soloDva.getText().toString().equals("")){
+            settings.setSoloDva(Integer.parseInt(soloDva.getText().toString()));
+        }
+        if(!soloTri.getText().toString().equals("")){
+            settings.setSoloTri(Integer.parseInt(soloTri.getText().toString()));
+        }
+        if(!soloBrez.getText().toString().equals("")){
+            settings.setSoloBrez(Integer.parseInt(soloBrez.getText().toString()));
+        }
+        if(!trula.getText().toString().equals("")){
+            settings.setTrula(Integer.parseInt(trula.getText().toString()));
+        }
+        if(!napovedanaTrula.getText().toString().equals("")){
+            settings.setNapovedanaTrula(Integer.parseInt(napovedanaTrula.getText().toString()));
+        }
+        if(!kralji.getText().toString().equals("")){
+            settings.setKralji(Integer.parseInt(kralji.getText().toString()));
+        }
+        if(!napovedaniKralji.getText().toString().equals("")){
+            settings.setNapovedaniKralji(Integer.parseInt(napovedaniKralji.getText().toString()));
+        }
+        if(!spicka.getText().toString().equals("")){
+            settings.setSpicka(Integer.parseInt(spicka.getText().toString()));
+        }
+        if(!napovedanaSpicka.getText().toString().equals("")){
+            settings.setNapovedanaSpicka(Integer.parseInt(napovedanaSpicka.getText().toString()));
+        }
+        if(!kralj.getText().toString().equals("")){
+            settings.setKralj(Integer.parseInt(kralj.getText().toString()));
+        }
+        if(!napovedanKralj.getText().toString().equals("")){
+            settings.setNapovedanKralj(Integer.parseInt(napovedanKralj.getText().toString()));
+        }
+
+        Log.d("Settings", "Settings stored!");
+    }
+
+    public void getData(){
+        ena.setText(Integer.toString(settings.getEna()));
+        dva.setText(Integer.toString(settings.getDva()));
+        tri.setText(Integer.toString(settings.getTri()));
+        soloEna.setText(Integer.toString(settings.getSoloEna()));
+        soloDva.setText(Integer.toString(settings.getSoloDva()));
+        soloTri.setText(Integer.toString(settings.getSoloTri()));
+        soloBrez.setText(Integer.toString(settings.getSoloBrez()));
+
+        trula.setText(Integer.toString(settings.getTrula()));
+        napovedanaTrula.setText(Integer.toString(settings.getNapovedanaTrula()));
+        kralji.setText(Integer.toString(settings.getKralji()));
+        napovedaniKralji.setText(Integer.toString(settings.getNapovedaniKralji()));
+        spicka.setText(Integer.toString(settings.getSpicka()));
+        napovedanaSpicka.setText(Integer.toString(settings.getNapovedanaSpicka()));
+        kralj.setText(Integer.toString(settings.getKralj()));
+        napovedanKralj.setText(Integer.toString(settings.getNapovedanKralj()));
     }
 
     @Override

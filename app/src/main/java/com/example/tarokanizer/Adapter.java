@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tarokanizer.data_classes.CardView;
+import com.example.tarokanizer.data_classes.Settings;
 
 import java.util.ArrayList;
 
@@ -79,12 +80,17 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //actions that happen on cardboardclick
                 notifyDataSetChanged();
-                Intent intent = new Intent(mActivity, Scoreboard.class);
+
+                Intent intent = null;
+                Settings settings = Settings.getInstance();
+                if(settings.isAutomaticMode()){
+                    intent = new Intent(mActivity, Scoreboard.class);
+                }else{
+                    intent = new Intent(mActivity, ScoreboardDefault.class);
+                }
                 intent.putExtra("position", position);
                 if(!(mActivity == null)) {
-                    //TODO: check settings start different scoreboard
                     mActivity.startActivityForResult(intent, INTENT_REQUEST);
                 }
             }
