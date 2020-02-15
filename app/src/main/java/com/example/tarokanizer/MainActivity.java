@@ -15,11 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tarokanizer.data_classes.CardView;
 import com.example.tarokanizer.data_classes.Player;
+import com.example.tarokanizer.data_classes.Settings;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Dialog.DialogListener{
+
+    public static final String SHARED_PREFERENCES ="SHARED_PREFERENCES";
+
 
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -31,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
     private Button buttonNew;
     private Button buttonSettings;
     private Toolbar toolbar;
+    private Settings settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +47,10 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
 
         mCardViewList = new ArrayList<>();
 
-        preferences = getPreferences(MODE_PRIVATE);
+        settings = Settings.getInstance();
+        preferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
         loadCardViewList();
+        loadSettings();
 
         BuildRecyclerView();
 
@@ -79,6 +86,27 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
             String json = preferences.getString("cardView" + i, "");
             cv = gson.fromJson(json, CardView.class);
             mCardViewList.add(cv);
+        }
+    }
+
+    public void loadSettings(){
+        if(preferences.contains("ena")){
+            settings.setAutomaticMode(preferences.getBoolean("automaticMode", true));
+            settings.setEna(preferences.getInt("ena", 0));
+            settings.setDva(preferences.getInt("dva", 0));
+            settings.setTri(preferences.getInt("tri", 0));
+            settings.setSoloEna(preferences.getInt("soloEna", 0));
+            settings.setSoloDva(preferences.getInt("soloDva", 0));
+            settings.setSoloTri(preferences.getInt("soloTri", 0));
+            settings.setSoloBrez(preferences.getInt("soloBrez", 0));
+            settings.setTrula(preferences.getInt("trula", 0));
+            settings.setNapovedanaTrula(preferences.getInt("napovedanaTrula", 0));
+            settings.setKralji(preferences.getInt("kralji", 0));
+            settings.setNapovedaniKralji(preferences.getInt("napovedaniKralji", 0));
+            settings.setSpicka(preferences.getInt("spicka", 0));
+            settings.setNapovedanaSpicka(preferences.getInt("napovedanaSpicka", 0));
+            settings.setKralj(preferences.getInt("kralj", 0));
+            settings.setNapovedanKralj(preferences.getInt("napovedanKralj", 0));
         }
     }
 

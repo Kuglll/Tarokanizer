@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,6 +26,9 @@ public class SettingsActivity extends AppCompatActivity {
     static Intent startSettingsActivity(Context ctx){
         return new Intent(ctx, SettingsActivity.class);
     }
+
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
 
     Toolbar toolbar;
     Settings settings;
@@ -59,6 +63,7 @@ public class SettingsActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        preferences = getSharedPreferences(MainActivity.SHARED_PREFERENCES, MODE_PRIVATE);
         settings = Settings.getInstance();
         changed = false;
 
@@ -69,6 +74,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void initViews(){
         swtch = findViewById(R.id.switchButton);
+        if(settings.isAutomaticMode()) swtch.setChecked(true);
+        else swtch.setChecked(false);
+
         saveButton = findViewById(R.id.saveButton);
 
         ena = findViewById(R.id.enaEdit);
@@ -414,7 +422,35 @@ public class SettingsActivity extends AppCompatActivity {
             settings.setNapovedanKralj(Integer.parseInt(napovedanKralj.getText().toString()));
         }
 
+        storeToSp();
+
         Log.d("Settings", "Settings stored!");
+    }
+
+    public void storeToSp(){
+        editor = preferences.edit();
+
+        editor.putBoolean("automaticMode", settings.isAutomaticMode());
+
+        editor.putInt("ena", settings.getEna());
+        editor.putInt("dva", settings.getDva());
+        editor.putInt("tri", settings.getTri());
+        editor.putInt("soloEna", settings.getSoloEna());
+        editor.putInt("soloDva", settings.getSoloDva());
+        editor.putInt("soloTri", settings.getSoloTri());
+        editor.putInt("soloBrez", settings.getSoloBrez());
+        editor.putInt("trula", settings.getTrula());
+        editor.putInt("napovedanaTrula", settings.getNapovedanaTrula());
+        editor.putInt("kralji", settings.getKralji());
+        editor.putInt("napovedaniKralji", settings.getNapovedaniKralji());
+        editor.putInt("spicka", settings.getSpicka());
+        editor.putInt("napovedanaSpicka", settings.getNapovedanaSpicka());
+        editor.putInt("kralj", settings.getKralj());
+        editor.putInt("napovedanKralj", settings.getNapovedanKralj());
+
+        editor.apply();
+
+        Log.d("Settings", "Settings stored to SP!");
     }
 
     public void getData(){
