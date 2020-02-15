@@ -44,6 +44,7 @@ public class Scoreboard extends AppCompatActivity {
     CardView cardView;
     private Toolbar toolbar;
     private Button buttonNew;
+    private Button buttonSettings;
 
     ArrayList<Player> players;
 
@@ -88,6 +89,8 @@ public class Scoreboard extends AppCompatActivity {
         linearLayoutSum = findViewById(R.id.sum);
 
         buttonNew = findViewById(R.id.button_new);
+        buttonSettings = findViewById(R.id.button_settings);
+        buttonSettings.setVisibility(View.GONE);
     }
 
     public void initializeOnClickListeners(){
@@ -752,7 +755,6 @@ public class Scoreboard extends AppCompatActivity {
 
 //TODO: first time setup - quick tutorial
 
-//TODO: settings screen
 //TODO: delete whole round (1 row)
 
 //TEST: pressing back button and closing app from recycler view

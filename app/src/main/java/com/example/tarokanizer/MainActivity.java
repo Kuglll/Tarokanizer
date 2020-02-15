@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
     private Adapter mAdapter; //Adapters provide a binding from an app-specific data set to views that are displayed within a RecyclerView
     private RecyclerView.LayoutManager mLayoutManager;
     private Button buttonNew;
+    private Button buttonSettings;
     private Toolbar toolbar;
 
     @Override
@@ -40,12 +41,15 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
 
         mCardViewList = new ArrayList<>();
 
-        //preferences = getApplicationContext().getSharedPreferences("mPreferences", MODE_PRIVATE);
         preferences = getPreferences(MODE_PRIVATE);
         loadCardViewList();
 
         BuildRecyclerView();
 
+        initViews();
+    }
+
+    public void initViews(){
         buttonNew = findViewById(R.id.button_new);
         buttonNew.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +59,14 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
                 dialog.show(getSupportFragmentManager(), "dialog");
             }
         });
+        buttonSettings = findViewById(R.id.button_settings);
+        buttonSettings.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                startActivity(SettingsActivity.startSettingsActivity(MainActivity.this));
+            }
+        });
+
     }
 
     public void loadCardViewList(){
