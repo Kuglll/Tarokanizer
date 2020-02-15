@@ -32,7 +32,6 @@
             android:padding="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="30"
             android:background="@drawable/border_settings"
             android:textColor="@color/brightGray"
             android:inputType="number"
@@ -41,16 +40,16 @@
             app:layout_constraintTop_toBottomOf="@id/enaText"/>
 
         <TextView
-            android:id="@+id/dvaText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dva:"
-            android:textSize="20sp"
-            android:textColor="@color/red"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@id/enaEdit"
-            app:layout_constraintStart_toStartOf="parent"/>
+        android:id="@+id/dvaText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dva:"
+        android:textSize="20sp"
+        android:textColor="@color/red"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/enaEdit"
+        app:layout_constraintStart_toStartOf="parent"/>
 
         <EditText
             android:id="@+id/dvaEdit"
@@ -60,7 +59,6 @@
             android:padding="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="20"
             android:background="@drawable/border_settings"
             android:textColor="@color/brightGray"
             android:inputType="number"
@@ -68,6 +66,356 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dvaText"/>
 
+        <TextView
+            android:id="@+id/triText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tri:"
+            android:textSize="20sp"
+            android:textColor="@color/red"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/dvaEdit"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <EditText
+            android:id="@+id/triEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="35sp"
+            android:padding="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/border_settings"
+            android:textColor="@color/brightGray"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/triText"/>
+
+        <TextView
+            android:id="@+id/soloEnaText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Solo ena:"
+            android:textSize="20sp"
+            android:textColor="@color/red"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/triEdit"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <EditText
+            android:id="@+id/soloEnaEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="35sp"
+            android:padding="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/border_settings"
+            android:textColor="@color/brightGray"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/soloEnaText"/>
+
+        <TextView
+            android:id="@+id/soloDveText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Solo dve:"
+            android:textSize="20sp"
+            android:textColor="@color/red"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/soloEnaEdit"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <EditText
+            android:id="@+id/soloDveEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="35sp"
+            android:padding="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/border_settings"
+            android:textColor="@color/brightGray"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/soloDveText"/>
+
+        <TextView
+            android:id="@+id/soloTriText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Solo tri:"
+            android:textSize="20sp"
+            android:textColor="@color/red"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/soloDveEdit"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <EditText
+            android:id="@+id/soloTriEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="35sp"
+            android:padding="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/border_settings"
+            android:textColor="@color/brightGray"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/soloTriText"/>
+
+        <TextView
+            android:id="@+id/soloBrezText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Solo brez:"
+            android:textSize="20sp"
+            android:textColor="@color/red"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/soloTriEdit"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <EditText
+            android:id="@+id/soloBrezEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="35sp"
+            android:padding="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/border_settings"
+            android:textColor="@color/brightGray"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/soloBrezText"/>
+
+        <TextView
+            android:id="@+id/trulaText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trula:"
+            android:textSize="20sp"
+            android:textColor="@color/red"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/soloBrezEdit"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <EditText
+            android:id="@+id/trulaEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="35sp"
+            android:padding="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/border_settings"
+            android:textColor="@color/brightGray"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trulaText"/>
+
+        <TextView
+        android:id="@+id/napovedanaTrulaText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Napovedana trula:"
+        android:textSize="20sp"
+        android:textColor="@color/red"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/trulaEdit"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+        <EditText
+            android:id="@+id/napovedanaTrulaEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="35sp"
+            android:padding="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/border_settings"
+            android:textColor="@color/brightGray"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/napovedanaTrulaText"/>
+
+        <TextView
+            android:id="@+id/kraljiText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kralji:"
+            android:textSize="20sp"
+            android:textColor="@color/red"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/napovedanaTrulaEdit"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <EditText
+            android:id="@+id/KraljiEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="35sp"
+            android:padding="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/border_settings"
+            android:textColor="@color/brightGray"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/kraljiText"/>
+
+        <TextView
+            android:id="@+id/napovedaniKraljiText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Napovedani kralji:"
+            android:textSize="20sp"
+            android:textColor="@color/red"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/KraljiEdit"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <EditText
+            android:id="@+id/napovedaniKraljiEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="35sp"
+            android:padding="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/border_settings"
+            android:textColor="@color/brightGray"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/napovedaniKraljiText"/>
+
+        <TextView
+            android:id="@+id/spickaText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Špička:"
+            android:textSize="20sp"
+            android:textColor="@color/red"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/napovedaniKraljiEdit"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <EditText
+            android:id="@+id/spickaEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="35sp"
+            android:padding="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/border_settings"
+            android:textColor="@color/brightGray"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spickaText"/>
+
+        <TextView
+            android:id="@+id/napovedanaSpickaText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Napovedana špička:"
+            android:textSize="20sp"
+            android:textColor="@color/red"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/spickaEdit"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <EditText
+            android:id="@+id/napovedanaSpickaEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="35sp"
+            android:padding="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/border_settings"
+            android:textColor="@color/brightGray"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/napovedanaSpickaText"/>
+
+        <TextView
+            android:id="@+id/kraljText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kralj zadnja runda:"
+            android:textSize="20sp"
+            android:textColor="@color/red"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/napovedanaSpickaEdit"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <EditText
+            android:id="@+id/kraljEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="35sp"
+            android:padding="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/border_settings"
+            android:textColor="@color/brightGray"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/kraljText"/>
+
+        <TextView
+            android:id="@+id/napovedanKraljText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Napovedan kralj zadnja runda:"
+            android:textSize="20sp"
+            android:textColor="@color/red"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/kraljEdit"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <EditText
+            android:id="@+id/napovedanKraljEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="35sp"
+            android:padding="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/border_settings"
+            android:textColor="@color/brightGray"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/napovedanKraljText"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
