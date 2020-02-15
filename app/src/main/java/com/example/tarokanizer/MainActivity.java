@@ -3,6 +3,7 @@ package com.example.tarokanizer;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -138,7 +139,13 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
 
     public void onPause() {
         super.onPause();
+        storeSettings();
         storeCardViewList();
+    }
+
+    public void storeSettings(){
+        //TODO: Store settings to SP
+        Log.d("SETTINGS", "SETTINGS SAVED!");
     }
 
     public void storeCardViewList(){

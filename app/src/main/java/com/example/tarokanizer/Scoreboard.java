@@ -74,7 +74,7 @@ public class Scoreboard extends AppCompatActivity {
         setContentView(R.layout.activity_scoreboard);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        settings = new Settings();
+        settings = Settings.getInstance();
 
         initViews();
 

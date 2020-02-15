@@ -36,6 +36,16 @@ public class Settings {
     int kralj = 10;
     int napovedanKralj = 20;
 
+    private static Settings settings = null;
+
+    private Settings(){} //Singleton
+
+    public static Settings getInstance(){
+        if (settings == null) settings = new Settings();
+
+        return settings;
+    }
+
     public int getEna() {
         return ena;
     }
