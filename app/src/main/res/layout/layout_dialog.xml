@@ -7,7 +7,7 @@
         android:id="@+id/edit_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="title" />
+        android:hint="Naslov" />
 
     <Spinner
         android:id="@+id/edit_numberOfPlayers"
@@ -26,7 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/edit_title"
         android:layout_marginTop="56dp"
+        android:layout_marginStart="4dp"
         android:textSize="18dp"
-        android:text="Number of players:" />
+        android:text="Število igralcev:" />
     
 </RelativeLayout>

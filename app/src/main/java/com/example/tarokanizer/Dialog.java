@@ -103,24 +103,24 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
 
 
         builder.setView(view)
-                .setTitle("New game")
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                .setTitle("Nova igra")
+                .setPositiveButton("USTVARI", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Send the positive button event back to the host activity
                         String title = editTextTitle.getText().toString();
                         if(title.length() > 15)
                         {
-                            Toast.makeText(context, "Title must not exceed 15 letters!" , Toast.LENGTH_SHORT ).show();
+                            Toast.makeText(context, "Naslov ne sme biti daljši od 15 znakov!" , Toast.LENGTH_SHORT ).show();
                         }else {
                             if (!title.equals("")) {
                                 CreatePlayerNamesDialog(numberOfPlayers);
                             } else {
-                                Toast.makeText(getActivity(), "Missing game title! Better luck next time.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), "Naslov igre ne sme biti prazen!", Toast.LENGTH_LONG).show();
                             }
                         }
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Prekliči", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Send the negative button event back to the host activity
                         getDialog().dismiss();
@@ -150,13 +150,13 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
 
 
         builder.setView(view);
-        builder.setTitle("Player " + (numberOfPlayers+1-i));
-        builder.setPositiveButton("Next", new DialogInterface.OnClickListener() {
+        builder.setTitle("Igralec " + (numberOfPlayers+1-i));
+        builder.setPositiveButton("Naprej", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // Send the positive button event back to the host activity
                 String name = t.getText().toString();
                 if(name.length() > 15) {
-                    Toast.makeText(context, "Player name must not exceed 15 letters!" , Toast.LENGTH_SHORT ).show();
+                    Toast.makeText(context, "Ime igralca ne sme biti daljše od 15 znakov!" , Toast.LENGTH_SHORT ).show();
                 }else{
                 players.add(new Player(name,numberOfPlayers-i));
 
@@ -172,7 +172,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
                 }
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Prekliči", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // Send the negative button event back to the host activity
                 mPlayers = 0;
