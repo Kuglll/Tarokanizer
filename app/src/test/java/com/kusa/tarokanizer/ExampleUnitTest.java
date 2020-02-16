@@ -1,4 +1,4 @@
-package com.example.tarokanizer;
+package com.kusa.tarokanizer;
 
 import org.junit.Test;
 

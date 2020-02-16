@@ -1,21 +1,20 @@
-package com.example.tarokanizer;
+package com.kusa.tarokanizer;
 
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tarokanizer.data_classes.CardView;
-import com.example.tarokanizer.data_classes.Player;
-import com.example.tarokanizer.data_classes.Settings;
+import com.kusa.tarokanizer.data_classes.CardView;
+import com.kusa.tarokanizer.data_classes.Player;
+import com.kusa.tarokanizer.data_classes.Settings;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;

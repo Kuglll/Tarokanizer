@@ -1,4 +1,4 @@
-package com.example.tarokanizer;
+package com.kusa.tarokanizer;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -24,10 +23,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tarokanizer.data_classes.CardView;
-import com.example.tarokanizer.data_classes.Player;
-import com.example.tarokanizer.data_classes.Round;
-import com.example.tarokanizer.data_classes.Settings;
+import com.kusa.tarokanizer.data_classes.CardView;
+import com.kusa.tarokanizer.data_classes.Settings;
+import com.kusa.tarokanizer.data_classes.Player;
+import com.kusa.tarokanizer.data_classes.Round;
 
 import java.util.ArrayList;
 import java.util.Arrays;

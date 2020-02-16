@@ -1,4 +1,4 @@
-package com.example.tarokanizer;
+package com.kusa.tarokanizer;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,8 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tarokanizer.data_classes.CardView;
-import com.example.tarokanizer.data_classes.Settings;
+import com.kusa.tarokanizer.data_classes.CardView;
+import com.kusa.tarokanizer.data_classes.Settings;
 
 import java.util.ArrayList;
 

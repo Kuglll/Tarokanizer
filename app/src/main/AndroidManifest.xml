@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tarokanizer">
+    package="com.kusa.tarokanizer">
 
     <application
         android:allowBackup="true"
@@ -9,10 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SettingsActivity"></activity>
-        <activity android:name=".Scoreboard" />
-        <activity android:name=".ScoreboardDefault" />
-        <activity android:name=".MainActivity">
+        <activity android:name="com.kusa.tarokanizer.SettingsActivity"></activity>
+        <activity android:name="com.kusa.tarokanizer.Scoreboard" />
+        <activity android:name="com.kusa.tarokanizer.ScoreboardDefault" />
+        <activity android:name="com.kusa.tarokanizer.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

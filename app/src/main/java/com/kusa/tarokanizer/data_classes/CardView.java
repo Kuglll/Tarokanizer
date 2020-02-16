@@ -1,4 +1,4 @@
-package com.example.tarokanizer.data_classes;
+package com.kusa.tarokanizer.data_classes;
 
 import java.util.ArrayList;
 
