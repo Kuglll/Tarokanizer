@@ -1,14 +1,22 @@
 package com.example.tarokanizer;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.TextViewCompat;
+
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -17,6 +25,8 @@ import android.widget.Toast;
 
 import com.example.tarokanizer.data_classes.CardView;
 import com.example.tarokanizer.data_classes.Player;
+import com.example.tarokanizer.data_classes.Round;
+import com.example.tarokanizer.data_classes.Settings;
 
 import java.util.ArrayList;
 
@@ -28,6 +38,9 @@ public class ScoreboardDefault extends AppCompatActivity {
     LinearLayout linearLayoutSum;
     LinearLayout ll;
     CardView cardView;
+    private Toolbar toolbar;
+    Button buttonNew;
+
 
     ArrayList<Player> players;
 
@@ -43,17 +56,140 @@ public class ScoreboardDefault extends AppCompatActivity {
     String mScore;
     int position;
 
+    Settings settings;
+
+    Round round;
+    ArrayList<Round> rounds;
+
+    int [] pointsPerPlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scoreboard);
 
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        settings = Settings.getInstance();
+
+        initViews();
+        initOnClickListeners();
+        initialize();
+    }
+
+    public void initViews(){
         linearLayoutPlayers = findViewById(R.id.names);
         linearLayoutRadlci = findViewById(R.id.radlci);
         linearLayoutScore = findViewById(R.id.score);
         linearLayoutSum = findViewById(R.id.sum);
 
-        initialize();
+        buttonNew = findViewById(R.id.button_new);
+        Button buttonSettings = findViewById(R.id.button_settings);
+        buttonSettings.setVisibility(View.GONE);
+    }
+
+    public void initOnClickListeners(){
+        buttonNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addRound();
+            }
+        });
+    }
+
+    public void addRound(){
+        round = new Round();
+        round.setAutomaticMode(false);
+        pointsPerPlayer = new int[players.size()];
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Vnesi točke za igralce!");
+        final EditText[] fields = new EditText[players.size()];
+
+        ScrollView scroll = new ScrollView(this);
+
+        LinearLayout layout = new LinearLayout(this);
+        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(parms);
+        layout.setGravity(Gravity.CLIP_VERTICAL);
+        layout.setPadding(2, 2, 2, 2);
+
+        for(int i=0; i<players.size(); i++) {
+            TextView text = new TextView(this);
+            text.setText(players.get(i).getName());
+            text.setPadding(40, 40, 40, 40);
+            text.setGravity(Gravity.CENTER);
+            text.setTextSize(20);
+
+            EditText editext = new EditText(this);
+            editext.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+
+            fields[i] = editext;
+            layout.addView(text);
+            layout.addView(editext);
+        }
+
+        scroll.addView(layout);
+        builder.setView(scroll);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String input;
+                try {
+                    for(int k=0; k<fields.length; k++){
+                        input = fields[k].getText().toString();
+                        if(input.equals("")) input = "0";
+
+                        int score = Integer.parseInt(input);
+                        pointsPerPlayer[k] = score;
+                    }
+                    updateUi(pointsPerPlayer);
+                }catch (Exception e){
+                    Toast.makeText(ScoreboardDefault.this, "Vnos je bil napačen!", Toast.LENGTH_LONG).show();
+                    dialog.cancel();
+                }
+            }
+        });
+        builder.setNegativeButton("PREKLIČI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog dlg = builder.show();
+        dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+    }
+
+    public void updateUi(int [] pointsPerPlayer){
+        for(int i=0; i<players.size(); i++) {
+            //create textview with score
+            TextView tv = createTextViewScore(Integer.toString(pointsPerPlayer[i]));
+            //add score visually
+            scores.get(i).addView(tv);
+            //add score to store
+            mScores.get(i).add(Integer.toString(pointsPerPlayer[i]));
+
+            //updating sum in the cardview
+            mSums[i] += pointsPerPlayer[i];
+
+            //get current textview and override with new sum
+            tv = sums.get(i);
+            tv.setText("" + mSums[i]);
+        }
+
+        //scroll down everytime a result is added
+        (findViewById(R.id.scrollViewInScoreBoard)).post(new Runnable() {
+            public void run() {
+                ((ScrollView) findViewById(R.id.scrollViewInScoreBoard)).fullScroll(View.FOCUS_DOWN);
+            }
+        });
+
+        round.setPointPerPlayer(pointsPerPlayer);
+        rounds.add(round);
     }
 
     public void initialize(){
@@ -64,6 +200,7 @@ public class ScoreboardDefault extends AppCompatActivity {
 
         players = cardView.getPlayers();
         mScores = cardView.getScore();
+        rounds = cardView.getRounds();
         mSums = cardView.getmSums();
         mRadlci = cardView.getRadlci();
 
@@ -90,10 +227,26 @@ public class ScoreboardDefault extends AppCompatActivity {
 
     public void loadScores(){
         TextView tv;
-        for(int i=0; i<players.size(); i++){
-            for(int k=0; k<mScores.get(i).size(); k++) {
-                tv = createTextViewScore(0, mScores.get(i).get(k));
-                scores.get(i).addView(tv);
+        for(int i=0; i<rounds.size(); i++){
+            //klop or manual mode
+            if (rounds.get(i).getIdGame() == 3 || !rounds.get(i).isAutomaticMode()) {
+                int[] ppp = rounds.get(i).getPointPerPlayer();
+                for (int k = 0; k < ppp.length; k++) {
+                    tv = createTextViewScore(Integer.toString(ppp[k]));
+                    scores.get(k).addView(tv);
+                }
+
+            } else { //everything else
+                String points = Integer.toString(rounds.get(i).getPoints());
+                for (int k = 0; k < players.size(); k++) {
+                    if (players.get(k).getId() == rounds.get(i).getIdPlayer() ||
+                            players.get(k).getId() == rounds.get(i).getIdRufanPlayer()) {
+                        tv = createTextViewScore(points);
+                    } else {
+                        tv = createTextViewScore("0");
+                    }
+                    scores.get(k).addView(tv);
+                }
             }
         }
     }
@@ -120,7 +273,7 @@ public class ScoreboardDefault extends AppCompatActivity {
         textView.setId(id);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36);
         textView.setText(player);
-        textView.setTextColor(ContextCompat.getColor(ScoreboardDefault.this, R.color.colorAccent));
+        textView.setTextColor(ContextCompat.getColor(ScoreboardDefault.this, R.color.brightGray));
         textView.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
@@ -188,18 +341,12 @@ public class ScoreboardDefault extends AppCompatActivity {
         ll.setGravity(Gravity.CENTER_HORIZONTAL);
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setBackgroundResource(R.drawable.border);
-        ll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddScoreDialog(view, null); //If not null that means we clicked the textview, if null we clicked linearlayout. They use different views!
-            }
-        });
 
         scores.add(ll);
         return ll;
     }
 
-    public TextView createTextViewScore(int id, String score){
+    public TextView createTextViewScore(String score){
         final TextView textView = new TextView(this);
         textView.setText(score);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
@@ -207,32 +354,8 @@ public class ScoreboardDefault extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
-        textView.setTextColor(ContextCompat.getColor(ScoreboardDefault.this, R.color.colorAccent));
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddScoreDialog(view, textView);
-            }
-        });
-        textView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Dialog dialog = new Dialog(ScoreboardDefault.this);
-                if(dialog.DeleteScoreDialog(ScoreboardDefault.this, textView)){
-                    textView.setVisibility(View.GONE);
-                    int score = Integer.parseInt(textView.getText().toString());
-                    view = (View)view.getParent();
-                    TextView tv = createTextViewScore(view.getId(), mScore);
+        textView.setTextColor(ContextCompat.getColor(ScoreboardDefault.this, R.color.brightGray));
 
-                    //updating sum at the end
-                    mSums[view.getId()] += score * -1;
-                    tv = sums.get(view.getId());
-                    tv.setText("" + mSums[view.getId()]);
-                }
-
-                return true;
-            }
-        });
 
         return textView;
     }
@@ -241,7 +364,7 @@ public class ScoreboardDefault extends AppCompatActivity {
         TextView textView = new TextView(this);
         textView.setText("0");
         textView.setId(id);
-        textView.setTextColor(ContextCompat.getColor(ScoreboardDefault.this, R.color.colorAccent));
+        textView.setTextColor(ContextCompat.getColor(ScoreboardDefault.this, R.color.brightGray));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
         textView.setTypeface(Typeface.DEFAULT_BOLD);
         textView.setLayoutParams(new LinearLayout.LayoutParams(
@@ -254,36 +377,5 @@ public class ScoreboardDefault extends AppCompatActivity {
         return textView;
     }
 
-    public void AddScoreDialog(View view, TextView textView){
-        Dialog scoreDialog = new Dialog(ScoreboardDefault.this);
-        java.lang.Integer score = scoreDialog.ScoreDialog(view, ScoreboardDefault.this);
-        if(score != null) mScore = Integer.toString(score);
-        if(mScore != null) {
-            if(mScore.trim().isEmpty()){
-                Toast.makeText(ScoreboardDefault.this,"Invalid Score", Toast.LENGTH_LONG).show(); }
-            else {
-                if (textView != null) {
-                    view = (View) view.getParent();
-                }
-                TextView tv = createTextViewScore(view.getId(), mScore);
-                scores.get(view.getId()).addView(tv);
-                mScores.get(view.getId()).add(mScore);
-
-                //updating sum at the end
-                mSums[view.getId()] += score;
-                tv = sums.get(view.getId());
-                tv.setText("" + mSums[view.getId()]);
-            }
-        }
-        score = null;
-        mScore = null;
-
-        //scroll down everytime a result is added
-        (findViewById(R.id.scrollViewInScoreBoard)).post(new Runnable() {
-            public void run() {
-                ((ScrollView) findViewById(R.id.scrollViewInScoreBoard)).fullScroll(View.FOCUS_DOWN);
-            }
-        });
-    }
 
 }

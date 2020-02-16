@@ -2,22 +2,33 @@ package com.example.tarokanizer.data_classes;
 
 public class Round {
 
-    int idGame; //which game was played
-    int idPlayer;
-    int idRufanPlayer;
-    int points;
-    boolean razlikaPozitivna;
-    boolean won;
+    private boolean automaticMode;
 
-    int [] pointPerPlayer;
+    private int idGame; //which game was played
+    private int idPlayer;
+    private int idRufanPlayer;
+    private int points;
+    private boolean razlikaPozitivna;
+    private boolean won;
 
-    public Round(int numberOfPlayers){
+    private int [] pointPerPlayer;
+
+    public Round(){
+        automaticMode = true;
         idGame = -1;
         idPlayer = -1;
         idRufanPlayer = -1;
         points = 0;
         won = false;
         razlikaPozitivna = false;
+    }
+
+    public boolean isAutomaticMode() {
+        return automaticMode;
+    }
+
+    public void setAutomaticMode(boolean automaticMode) {
+        this.automaticMode = automaticMode;
     }
 
     public int getIdGame() {

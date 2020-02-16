@@ -104,7 +104,7 @@ public class Scoreboard extends AppCompatActivity {
 
     public void displayWhatGameWasPlayed(){
         // create new round
-        round = new Round(players.size());
+        round = new Round();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
         final String [] games = {"Ena", "Dva", "Tri", "Klop", "Berac", "Pikolo", "Solo ena", "Solo dva", "Solo tri", "Solo brez", "Valat", "Barvni valat"};
@@ -608,14 +608,14 @@ public class Scoreboard extends AppCompatActivity {
     public void loadRounds(){
         TextView tv;
         for(int i=0; i<rounds.size(); i++) {
-            if(rounds.get(i).getIdGame() == 3){
-                int [] ppp = rounds.get(i).getPointPerPlayer();
-                for(int k=0; k<ppp.length; k++){
+            //klop or manual mode
+            if (rounds.get(i).getIdGame() == 3 || !rounds.get(i).isAutomaticMode()) {
+                int[] ppp = rounds.get(i).getPointPerPlayer();
+                for (int k = 0; k < ppp.length; k++) {
                     tv = createTextViewScore(Integer.toString(ppp[k]));
                     scores.get(k).addView(tv);
                 }
-
-            } else {
+            } else { //everything else
                 String points = Integer.toString(rounds.get(i).getPoints());
                 for (int k = 0; k < players.size(); k++) {
                     if (players.get(k).getId() == rounds.get(i).getIdPlayer() ||
