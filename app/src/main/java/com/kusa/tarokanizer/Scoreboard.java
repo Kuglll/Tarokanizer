@@ -575,7 +575,8 @@ public class Scoreboard extends AppCompatActivity {
         Intent intent = getIntent();
 
         position = intent.getIntExtra("position", -1);
-        cardView = MainActivity.getCardViewList().get(position);
+
+        cardView = MainActivity.Companion.getCardViewList().get(position);
 
         players = cardView.getPlayers();
         mScores = cardView.getScore();
