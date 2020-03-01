@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.kusa.tarokanizer.data_classes.Settings;
 
+import static com.kusa.tarokanizer.MainActivityKt.SHARED_PREFERENCES;
+
 public class SettingsActivity extends AppCompatActivity {
 
     static Intent startSettingsActivity(Context ctx){
@@ -63,7 +65,7 @@ public class SettingsActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        preferences = getSharedPreferences(MainActivity.SHARED_PREFERENCES, MODE_PRIVATE);
+        preferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
         settings = Settings.getInstance();
         changed = false;
 
