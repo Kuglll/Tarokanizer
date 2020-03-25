@@ -411,7 +411,7 @@ public class Scoreboard extends AppCompatActivity {
 
     public void displayDodatki(){
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
-        final String [] addons = {"Trula", "Napovedana Trula", "Kralji", "Napovedani Kralji", "Špička", "Napovedana Špička", "Kralj Zadnja Runda ", "Napovedan Kralj Zadnja Runda"};
+        final String [] addons = {"Trula", "Napovedana Trula", "Kralji", "Napovedani Kralji", "Pagat", "Pagat Ultimo", "Kralj Zadnja Runda ", "Kralj Ultimo"};
         final boolean [] check = {false, false, false, false, false, false, false, false};
         builder.setTitle("Kaj si pobral?")
                 .setMultiChoiceItems(addons, check, new DialogInterface.OnMultiChoiceClickListener() {
@@ -456,7 +456,7 @@ public class Scoreboard extends AppCompatActivity {
 
     public void displayKontraDodatki(){
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
-        final String [] addons = {"Trula", "Napovedana Trula", "Kralji", "Napovedani Kralji", "Špička", "Napovedana Špička", "Kralj Zadnja Runda ", "Napovedan Kralj Zadnja Runda"};
+        final String [] addons = {"Trula", "Napovedana Trula", "Kralji", "Napovedani Kralji", "Pagat", "Pagat Ultimo", "Kralj Zadnja Runda ", "Kralj Ultimo"};
         final boolean [] check = {false, false, false, false, false, false, false, false};
         builder.setTitle("Kaj je pobrala nasprotna ekipa?")
                 .setMultiChoiceItems(addons, check, new DialogInterface.OnMultiChoiceClickListener() {
@@ -534,7 +534,7 @@ public class Scoreboard extends AppCompatActivity {
                 tv.setText("" + mSums[i]);
             }else{ // add blank score so every game is its own row
                 //create textview with score
-                TextView tv = createTextViewScore("0");
+                TextView tv = createTextViewScore("/");
                 //add score visually
                 scores.get(i).addView(tv);
                 //add score to store
@@ -622,7 +622,7 @@ public class Scoreboard extends AppCompatActivity {
                             players.get(k).getId() == rounds.get(i).getIdRufanPlayer()) {
                         tv = createTextViewScore(points);
                     } else {
-                        tv = createTextViewScore("0");
+                        tv = createTextViewScore("/");
                     }
                     scores.get(k).addView(tv);
                 }
