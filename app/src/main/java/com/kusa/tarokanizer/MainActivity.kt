@@ -19,8 +19,6 @@ const val SHARED_PREFERENCES = "SHARED_PREFERENCES"
 
 class MainActivity : AppCompatActivity(), Dialog.DialogListener{
 
-
-
     lateinit var preferences: SharedPreferences
     lateinit var editor: SharedPreferences.Editor
 

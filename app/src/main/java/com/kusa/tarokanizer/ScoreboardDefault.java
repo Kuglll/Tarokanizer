@@ -141,7 +141,7 @@ public class ScoreboardDefault extends AppCompatActivity {
                 try {
                     for(int k=0; k<fields.length; k++){
                         input = fields[k].getText().toString();
-                        if(input.equals("")) input = "0";
+                        if(input.equals("")) input = "/";
 
                         int score = Integer.parseInt(input);
                         pointsPerPlayer[k] = score;
@@ -243,7 +243,7 @@ public class ScoreboardDefault extends AppCompatActivity {
                             players.get(k).getId() == rounds.get(i).getIdRufanPlayer()) {
                         tv = createTextViewScore(points);
                     } else {
-                        tv = createTextViewScore("0");
+                        tv = createTextViewScore("/");
                     }
                     scores.get(k).addView(tv);
                 }
