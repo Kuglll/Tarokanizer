@@ -612,7 +612,7 @@ public class Scoreboard extends AppCompatActivity {
                     } else {
                         tv = ComponentFactory.Companion.createTextViewScore("/");
                     }
-                    LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
+                    LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(k);
                     ll.addView(tv);
                 }
             }
