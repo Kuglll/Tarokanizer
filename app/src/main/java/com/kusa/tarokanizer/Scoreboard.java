@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.TextViewCompat;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -63,6 +65,15 @@ public class Scoreboard extends AppCompatActivity {
 
     //klop variable
     int [] pointsPerPlayer;
+
+    // because there is no lambda expressions in java 7
+    Function1 function1 = new Function1<Integer, Unit>() {
+        @Override
+        public Unit invoke(Integer integer) {
+            deleteRound(integer);
+            return null;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -281,7 +292,7 @@ public class Scoreboard extends AppCompatActivity {
                 pointsPerPlayer[i] = pointsPerPlayer[i] * 2;
             }
             LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
-            ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(pointsPerPlayer[i])));
+            ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(pointsPerPlayer[i]), function1));
             //add score to store
             mScores.get(i).add(Integer.toString(pointsPerPlayer[i]));
 
@@ -518,7 +529,7 @@ public class Scoreboard extends AppCompatActivity {
                 players.get(i).getId() == round.getIdRufanPlayer()){
 
                 LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
-                ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(round.getPoints())));
+                ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(round.getPoints()), function1));
                 //add score to store
                 mScores.get(i).add(Integer.toString(round.getPoints()));
 
@@ -530,7 +541,7 @@ public class Scoreboard extends AppCompatActivity {
                 tv.setText("" + mSums[i]);
             }else{ // add blank score so every game is its own row
                 LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
-                ll.addView(ComponentFactory.Companion.createTextViewScore("/"));
+                ll.addView(ComponentFactory.Companion.createTextViewScore("/", function1));
 
                 //add score to store
                 mScores.get(i).add("0");
@@ -600,7 +611,7 @@ public class Scoreboard extends AppCompatActivity {
                 int[] ppp = rounds.get(i).getPointPerPlayer();
                 for (int k = 0; k < ppp.length; k++) {
                     LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
-                    ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(ppp[k])));
+                    ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(ppp[k]), function1));
                 }
             } else { //everything else
                 String points = Integer.toString(rounds.get(i).getPoints());
@@ -608,9 +619,9 @@ public class Scoreboard extends AppCompatActivity {
                     TextView tv;
                     if (players.get(k).getId() == rounds.get(i).getIdPlayer() ||
                             players.get(k).getId() == rounds.get(i).getIdRufanPlayer()) {
-                        tv = ComponentFactory.Companion.createTextViewScore(points);
+                        tv = ComponentFactory.Companion.createTextViewScore(points, function1);
                     } else {
-                        tv = ComponentFactory.Companion.createTextViewScore("/");
+                        tv = ComponentFactory.Companion.createTextViewScore("/", function1);
                     }
                     LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(k);
                     ll.addView(tv);
@@ -619,9 +630,55 @@ public class Scoreboard extends AppCompatActivity {
         }
     }
 
+    public void deleteRound(final int index){
+        AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
+        builder.setTitle("Ali želite izbrisati rundo?");
+
+        builder.setPositiveButton("DA", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                repairDataAfterRoundDeletion(rounds.get(index));
+                rounds.remove(index);
+                cleanRounds();
+                loadRounds();
+                loadRadlci();
+                loadSums();
+            }
+        });
+
+        builder.setNegativeButton("NE", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void repairDataAfterRoundDeletion(Round round){
+        //radlci correction
+        /*if(Arrays.asList("3","4","5").contains(Integer.toString(round.getIdGame()))){
+            for(int i=0; i<checked.length; i++){
+                if(checked[i] || round.getIdPlayer() == i){
+                    //updating number of radlci for player
+                    mRadlci[i] = mRadlci[i] + 1;
+                    updateRadlciLayout(i, mRadlci);
+                }
+            }
+        }*/
+
+        //sums correction
+
+    }
+
+    public void cleanRounds(){
+        for(int i=0; i<players.size(); i++){
+            LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
+            ll.removeAllViews();
+        }
+    }
+
     public void loadRadlci(){
         for(int i=0; i<players.size(); i++){
             LinearLayout ll = (LinearLayout) linearLayoutRadlci.getChildAt(i);
+            ll.removeAllViews();
             for(int k=0; k<mRadlci[i]; k++){
                 ll.addView(ComponentFactory.Companion.createRadlc());
             }

@@ -68,7 +68,7 @@ class ComponentFactory{
             return ll
         }
 
-        fun createTextViewScore(score: String?): TextView? {
+        fun createTextViewScore(score: String?, onClick: (Int) -> Unit): TextView? {
             val context = TarockanizerApp.instance
             val textView = TextView(context)
             textView.text = score
@@ -79,7 +79,8 @@ class ComponentFactory{
             textView.gravity = Gravity.CENTER_HORIZONTAL
             textView.setTextColor(ContextCompat.getColor(context, R.color.brightGray))
             textView.setOnClickListener {
-                //TODO: delete round
+                val ll = it.parent as LinearLayout
+                onClick(ll.indexOfChild(it))
             }
             return textView
         }

@@ -451,8 +451,6 @@ public class SettingsActivity extends AppCompatActivity {
         editor.putInt("napovedanKralj", settings.getNapovedanKralj());
 
         editor.apply();
-
-        Log.d("Settings", "Settings stored to SP!");
     }
 
     public void getData(){
