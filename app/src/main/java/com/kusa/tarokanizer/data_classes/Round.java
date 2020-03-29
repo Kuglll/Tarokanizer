@@ -11,6 +11,7 @@ public class Round {
     private boolean razlikaPozitivna;
     private boolean won;
 
+    private boolean[] checked;
     private int [] pointPerPlayer;
 
     public Round(){
@@ -89,5 +90,13 @@ public class Round {
 
     public void setPointPerPlayer(int[] pointPerPlayer) {
         this.pointPerPlayer = pointPerPlayer;
+    }
+
+    public boolean[] getChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean[] checked) {
+        this.checked = checked;
     }
 }

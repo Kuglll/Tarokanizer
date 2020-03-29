@@ -1,38 +1,33 @@
 package com.kusa.tarokanizer;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.core.widget.TextViewCompat;
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
-
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kusa.tarokanizer.data_classes.CardView;
-import com.kusa.tarokanizer.data_classes.Settings;
 import com.kusa.tarokanizer.data_classes.Player;
 import com.kusa.tarokanizer.data_classes.Round;
+import com.kusa.tarokanizer.data_classes.Settings;
 import com.kusa.tarokanizer.utils.ComponentFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 import static java.lang.Math.abs;
 
@@ -305,6 +300,7 @@ public class Scoreboard extends AppCompatActivity {
         }
 
         round.setPointPerPlayer(pointsPerPlayer);
+        round.setChecked(checked);
 
         //scroll down everytime a result is added
         (findViewById(R.id.scrollViewInScoreBoard)).post(new Runnable() {
@@ -319,13 +315,13 @@ public class Scoreboard extends AppCompatActivity {
             if(checked[i]){
                 //updating number of radlci for player
                 mRadlci[i] = mRadlci[i] + 1;
-                updateRadlciLayout(i, mRadlci);
+                loadRadlci();
             }
         }
     }
 
     public void displayWhoWonDialog(final boolean [] checked){
-        String items [] = {"Da", "Ne"};
+        String[] items = {"Da", "Ne"};
         final AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
         builder.setTitle("Ali je igralec zmagal?")
                 .setItems(items, new DialogInterface.OnClickListener() {
@@ -506,6 +502,8 @@ public class Scoreboard extends AppCompatActivity {
     }
 
     void finalizeScore(boolean [] checked){
+        round.setChecked(checked);
+
         //if difference < 0, multiply score with -1
         if(!round.isRazlikaPozitivna()) round.setPoints(round.getPoints()*-1);
 
@@ -521,7 +519,7 @@ public class Scoreboard extends AppCompatActivity {
         // remove radlc and update ui
         if(round.isWon() && mRadlci[round.getIdPlayer()] > 0){
             mRadlci[round.getIdPlayer()]--;
-            updateRadlciLayout(round.getIdPlayer(), mRadlci);
+            loadRadlci();
         }
 
         for(int i = 0; i<players.size(); i++){
@@ -563,17 +561,9 @@ public class Scoreboard extends AppCompatActivity {
                 if(checked[i] || round.getIdPlayer() == i){
                     //updating number of radlci for player
                     mRadlci[i] = mRadlci[i] + 1;
-                    updateRadlciLayout(i, mRadlci);
+                    loadRadlci();
                 }
             }
-        }
-    }
-
-    public void updateRadlciLayout(int id, int [] mRadlci){
-        LinearLayout ll = (LinearLayout) linearLayoutRadlci.getChildAt(id);
-        ll.removeAllViews();
-        for (int k = 0; k < mRadlci[id]; k++) { //adding number of current radlci
-            ll.addView(ComponentFactory.Companion.createRadlc());
         }
     }
 
@@ -654,15 +644,13 @@ public class Scoreboard extends AppCompatActivity {
 
     public void repairDataAfterRoundDeletion(Round round){
         //radlci correction
-        /*if(Arrays.asList("3","4","5").contains(Integer.toString(round.getIdGame()))){
-            for(int i=0; i<checked.length; i++){
-                if(checked[i] || round.getIdPlayer() == i){
-                    //updating number of radlci for player
-                    mRadlci[i] = mRadlci[i] + 1;
-                    updateRadlciLayout(i, mRadlci);
+        if (Arrays.asList("3", "4", "5").contains(Integer.toString(round.getIdGame()))) {
+            for (int i = 0; i < round.getChecked().length; i++) {
+                if (round.getChecked()[i] || round.getIdPlayer() == i) {
+                    mRadlci[i] = mRadlci[i] - 1;
                 }
             }
-        }*/
+        }
 
         //sums correction
 
