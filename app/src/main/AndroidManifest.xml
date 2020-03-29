@@ -10,10 +10,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.kusa.tarokanizer.SettingsActivity"></activity>
-        <activity android:name="com.kusa.tarokanizer.Scoreboard" />
-        <activity android:name="com.kusa.tarokanizer.ScoreboardDefault" />
-        <activity android:name="com.kusa.tarokanizer.MainActivity">
+        <activity android:name="com.kusa.tarokanizer.SettingsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.kusa.tarokanizer.Scoreboard"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.kusa.tarokanizer.ScoreboardDefault"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.kusa.tarokanizer.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
