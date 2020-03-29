@@ -596,25 +596,13 @@ public class Scoreboard extends AppCompatActivity {
 
     public void loadRounds(){
         for(int i=0; i<rounds.size(); i++) {
-            //klop or manual mode
-            if (rounds.get(i).getIdGame() == 3 || !rounds.get(i).isAutomaticMode()) {
-                int[] ppp = rounds.get(i).getPointPerPlayer();
-                for (int k = 0; k < ppp.length; k++) {
-                    LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
+            int[] ppp = rounds.get(i).getPointPerPlayer();
+            for (int k = 0; k < ppp.length; k++) {
+                LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(k);
+                if (ppp[k] == 0) {
+                    ll.addView(ComponentFactory.Companion.createTextViewScore("/", function1));
+                } else {
                     ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(ppp[k]), function1));
-                }
-            } else { //everything else
-                String points = Integer.toString(rounds.get(i).getPoints());
-                for (int k = 0; k < players.size(); k++) {
-                    TextView tv;
-                    if (players.get(k).getId() == rounds.get(i).getIdPlayer() ||
-                            players.get(k).getId() == rounds.get(i).getIdRufanPlayer()) {
-                        tv = ComponentFactory.Companion.createTextViewScore(points, function1);
-                    } else {
-                        tv = ComponentFactory.Companion.createTextViewScore("/", function1);
-                    }
-                    LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(k);
-                    ll.addView(tv);
                 }
             }
         }
