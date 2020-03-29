@@ -58,9 +58,6 @@ public class Scoreboard extends AppCompatActivity {
     Round round;
     ArrayList<Round> rounds;
 
-    //klop variable
-    int [] pointsPerPlayer;
-
     // because there is no lambda expressions in java 7
     Function1 function1 = new Function1<Integer, Unit>() {
         @Override
@@ -195,7 +192,6 @@ public class Scoreboard extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 //klop
                 if(round.getIdGame() == 3){
-                    pointsPerPlayer = new int[players.size()];
                     getPointsForPlayers(checked);
                 }else{
                     displayWhoWonDialog(checked);
@@ -213,6 +209,7 @@ public class Scoreboard extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Vnesi točke za igralce!");
         final EditText [] fields = new EditText[players.size()];
+        final int[] pointsPerPlayer = new int[players.size()];
 
         ScrollView scroll = new ScrollView(this);
 
@@ -249,11 +246,10 @@ public class Scoreboard extends AppCompatActivity {
         builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String input;
                 try {
                     for(int k=0; k<checked.length; k++){
                         if(checked[k]){
-                            input = fields[k].getText().toString();
+                            String input = fields[k].getText().toString();
                             if(input.equals("")) input = "0";
 
                             int score = Integer.parseInt(input);
@@ -262,12 +258,11 @@ public class Scoreboard extends AppCompatActivity {
                             pointsPerPlayer[k] = 0;
                         }
                     }
-
+                    finalizeScoreForKlop(checked, pointsPerPlayer);
                 }catch (Exception e){
                     Toast.makeText(Scoreboard.this, "Vnos je bil napačen!", Toast.LENGTH_LONG).show();
                     dialog.cancel();
                 }
-                finalizeScoreForKlop(checked);
             }
         });
         builder.setNegativeButton("PREKLIČI", new DialogInterface.OnClickListener() {
@@ -281,7 +276,7 @@ public class Scoreboard extends AppCompatActivity {
         dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
-    public void finalizeScoreForKlop(boolean [] checked){
+    public void finalizeScoreForKlop(boolean[] checked, int[] pointsPerPlayer) {
         for(int i=0; i<players.size(); i++) {
             if (mRadlci[i] > 0) {
                 pointsPerPlayer[i] = pointsPerPlayer[i] * 2;
@@ -522,9 +517,12 @@ public class Scoreboard extends AppCompatActivity {
             loadRadlci();
         }
 
+        int[] pointsPerPlayer = new int[players.size()];
+
         for(int i = 0; i<players.size(); i++){
             if(players.get(i).getId() == round.getIdPlayer() ||
                 players.get(i).getId() == round.getIdRufanPlayer()){
+                pointsPerPlayer[i] = round.getPoints();
 
                 LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
                 ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(round.getPoints()), function1));
@@ -538,6 +536,7 @@ public class Scoreboard extends AppCompatActivity {
                 TextView tv = (TextView) linearLayoutSum.getChildAt(i);
                 tv.setText("" + mSums[i]);
             }else{ // add blank score so every game is its own row
+                pointsPerPlayer[i] = 0;
                 LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
                 ll.addView(ComponentFactory.Companion.createTextViewScore("/", function1));
 
@@ -553,6 +552,7 @@ public class Scoreboard extends AppCompatActivity {
             }
         });
 
+        round.setPointPerPlayer(pointsPerPlayer);
         rounds.add(round);
 
         //add radlc if the game is correct
@@ -631,8 +631,6 @@ public class Scoreboard extends AppCompatActivity {
                 rounds.remove(index);
                 cleanRounds();
                 loadRounds();
-                loadRadlci();
-                loadSums();
             }
         });
 
@@ -651,9 +649,13 @@ public class Scoreboard extends AppCompatActivity {
                 }
             }
         }
+        loadRadlci();
 
         //sums correction
-
+        for (int i = 0; i < players.size(); i++) {
+            mSums[i] -= round.getPointPerPlayer()[i];
+        }
+        loadSums();
     }
 
     public void cleanRounds(){
