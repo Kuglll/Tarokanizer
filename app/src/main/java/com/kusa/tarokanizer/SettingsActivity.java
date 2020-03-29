@@ -1,9 +1,5 @@
 package com.kusa.tarokanizer;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +16,10 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.kusa.tarokanizer.data_classes.Settings;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import static com.kusa.tarokanizer.MainActivityKt.SHARED_PREFERENCES;
 
@@ -451,6 +451,8 @@ public class SettingsActivity extends AppCompatActivity {
         editor.putInt("napovedanKralj", settings.getNapovedanKralj());
 
         editor.apply();
+
+        onBackPressed();
     }
 
     public void getData(){
