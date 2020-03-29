@@ -68,7 +68,7 @@ class ComponentFactory{
             return ll
         }
 
-        fun createTextViewScore(score: String?, onClick: (Int) -> Unit): TextView? {
+        fun createTextViewScore(score: String?, onClick: (Int) -> Unit, played: Boolean): TextView? {
             val context = TarockanizerApp.instance
             val textView = TextView(context)
             textView.text = score
@@ -82,6 +82,9 @@ class ComponentFactory{
                 val ll = it.parent as LinearLayout
                 onClick(ll.indexOfChild(it))
             }
+            if (played) {
+                textView.setBackgroundResource(R.color.greenTransparent)
+            }
             return textView
         }
 
@@ -92,7 +95,7 @@ class ComponentFactory{
             textView.id = id
             textView.setTextColor(ContextCompat.getColor(context, R.color.brightGray))
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30f)
-            textView.setTypeface(Typeface.DEFAULT_BOLD)
+            textView.typeface = Typeface.DEFAULT_BOLD
             textView.layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT, 1f)

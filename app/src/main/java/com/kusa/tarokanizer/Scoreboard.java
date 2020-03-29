@@ -279,7 +279,7 @@ public class Scoreboard extends AppCompatActivity {
                 pointsPerPlayer[i] = pointsPerPlayer[i] * 2;
             }
             LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
-            ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(pointsPerPlayer[i]), function1));
+            ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(pointsPerPlayer[i]), function1, false));
 
             //updating sum in the cardview
             mSums[i] += pointsPerPlayer[i];
@@ -520,7 +520,11 @@ public class Scoreboard extends AppCompatActivity {
                 pointsPerPlayer[i] = round.getPoints();
 
                 LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
-                ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(round.getPoints()), function1));
+                if (players.get(i).getId() == round.getIdPlayer()) {
+                    ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(round.getPoints()), function1, true));
+                } else {
+                    ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(round.getPoints()), function1, false));
+                }
 
                 //updating sum in the cardview
                 mSums[i] += round.getPoints();
@@ -531,7 +535,7 @@ public class Scoreboard extends AppCompatActivity {
             }else{ // add blank score so every game is its own row
                 pointsPerPlayer[i] = 0;
                 LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
-                ll.addView(ComponentFactory.Companion.createTextViewScore("/", function1));
+                ll.addView(ComponentFactory.Companion.createTextViewScore("/", function1, false));
             }
         }
 
@@ -589,9 +593,13 @@ public class Scoreboard extends AppCompatActivity {
             for (int k = 0; k < ppp.length; k++) {
                 LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(k);
                 if (ppp[k] == 0) {
-                    ll.addView(ComponentFactory.Companion.createTextViewScore("/", function1));
+                    ll.addView(ComponentFactory.Companion.createTextViewScore("/", function1, false));
                 } else {
-                    ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(ppp[k]), function1));
+                    if (players.get(k).getId() == rounds.get(i).getIdPlayer()) {
+                        ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(ppp[k]), function1, true));
+                    } else {
+                        ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(ppp[k]), function1, false));
+                    }
                 }
             }
         }

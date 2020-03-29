@@ -5,4 +5,5 @@
     <color name="colorAccent">#ff654f</color>
     <color name="red">#ff654f</color>
     <color name ="brightGray">#EEEEEE</color>
+    <color name="greenTransparent">#66d0ff9b</color>
 </resources>
