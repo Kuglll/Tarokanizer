@@ -44,13 +44,10 @@ public class Scoreboard extends AppCompatActivity {
 
     ArrayList<Player> players;
 
-    ArrayList<ArrayList<String>> mScores;
-
     int[] mSums = {0,0,0,0,0,0,0,0};
 
     int[] mRadlci;
 
-    String mScore;
     int position;
 
     Settings settings;
@@ -283,8 +280,6 @@ public class Scoreboard extends AppCompatActivity {
             }
             LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
             ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(pointsPerPlayer[i]), function1));
-            //add score to store
-            mScores.get(i).add(Integer.toString(pointsPerPlayer[i]));
 
             //updating sum in the cardview
             mSums[i] += pointsPerPlayer[i];
@@ -526,8 +521,6 @@ public class Scoreboard extends AppCompatActivity {
 
                 LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
                 ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(round.getPoints()), function1));
-                //add score to store
-                mScores.get(i).add(Integer.toString(round.getPoints()));
 
                 //updating sum in the cardview
                 mSums[i] += round.getPoints();
@@ -539,9 +532,6 @@ public class Scoreboard extends AppCompatActivity {
                 pointsPerPlayer[i] = 0;
                 LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
                 ll.addView(ComponentFactory.Companion.createTextViewScore("/", function1));
-
-                //add score to store
-                mScores.get(i).add("0");
             }
         }
 
@@ -575,7 +565,6 @@ public class Scoreboard extends AppCompatActivity {
         cardView = MainActivity.Companion.getCardViewList().get(position);
 
         players = cardView.getPlayers();
-        mScores = cardView.getScore();
         rounds = cardView.getRounds();
         mSums = cardView.getmSums();
         mRadlci = cardView.getRadlci();

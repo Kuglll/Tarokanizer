@@ -44,7 +44,6 @@ public class ScoreboardDefault extends AppCompatActivity {
     ArrayList<Player> players;
 
     ArrayList<LinearLayout> scores = new ArrayList<>();
-    ArrayList<ArrayList<String>> mScores;
 
     ArrayList<TextView> sums = new ArrayList<>();
     int[] mSums = {0, 0, 0, 0, 0, 0, 0, 0};
@@ -52,7 +51,6 @@ public class ScoreboardDefault extends AppCompatActivity {
     ArrayList<LinearLayout> radlci = new ArrayList<>();
     int[] mRadlci;
 
-    String mScore;
     int position;
 
     Settings settings;
@@ -171,8 +169,6 @@ public class ScoreboardDefault extends AppCompatActivity {
             TextView tv = createTextViewScore(Integer.toString(pointsPerPlayer[i]));
             //add score visually
             scores.get(i).addView(tv);
-            //add score to store
-            mScores.get(i).add(Integer.toString(pointsPerPlayer[i]));
 
             //updating sum in the cardview
             mSums[i] += pointsPerPlayer[i];
@@ -200,7 +196,6 @@ public class ScoreboardDefault extends AppCompatActivity {
         cardView = MainActivity.Companion.getCardViewList().get(position);
 
         players = cardView.getPlayers();
-        mScores = cardView.getScore();
         rounds = cardView.getRounds();
         mSums = cardView.getmSums();
         mRadlci = cardView.getRadlci();

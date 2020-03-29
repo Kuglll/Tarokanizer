@@ -36,10 +36,6 @@ public class CardView {
         return rounds;
     }
 
-    public ArrayList<ArrayList<String>> getScore() {
-        return mScore;
-    }
-
     public int[] getRadlci() {
         return mRadlci;
     }
