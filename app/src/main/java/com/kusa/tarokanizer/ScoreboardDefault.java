@@ -130,7 +130,7 @@ public class ScoreboardDefault extends AppCompatActivity {
                     for (int k = 0; k < fields.length; k++) {
                         input = fields[k].getText().toString();
                         if (input.equals("")) {
-                            input = "/";
+                            input = "0";
                         }
 
                         int score = Integer.parseInt(input);
@@ -157,7 +157,12 @@ public class ScoreboardDefault extends AppCompatActivity {
     public void updateUi(int[] pointsPerPlayer) {
         for (int i = 0; i < players.size(); i++) {
             //create textview with score
-            TextView tv = createTextViewScore(Integer.toString(pointsPerPlayer[i]));
+            TextView tv;
+            if (pointsPerPlayer[i] == 0) {
+                tv = createTextViewScore("/");
+            } else {
+                tv = createTextViewScore(Integer.toString(pointsPerPlayer[i]));
+            }
             //add score visually
             LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
             ll.addView(tv);
@@ -216,26 +221,15 @@ public class ScoreboardDefault extends AppCompatActivity {
     public void loadScores() {
         TextView tv;
         for (int i = 0; i < rounds.size(); i++) {
-            //klop or manual mode
-            if (rounds.get(i).getIdGame() == 3 || !rounds.get(i).isAutomaticMode()) {
-                int[] ppp = rounds.get(i).getPointPerPlayer();
-                for (int k = 0; k < ppp.length; k++) {
+            int[] ppp = rounds.get(i).getPointPerPlayer();
+            for (int k = 0; k < ppp.length; k++) {
+                if (ppp[k] == 0) {
+                    tv = createTextViewScore("/");
+                } else {
                     tv = createTextViewScore(Integer.toString(ppp[k]));
-                    LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(k);
-                    ll.addView(tv);
                 }
-            } else { //everything else
-                String points = Integer.toString(rounds.get(i).getPoints());
-                for (int k = 0; k < players.size(); k++) {
-                    if (players.get(k).getId() == rounds.get(i).getIdPlayer() ||
-                        players.get(k).getId() == rounds.get(i).getIdRufanPlayer()) {
-                        tv = createTextViewScore(points);
-                    } else {
-                        tv = createTextViewScore("/");
-                    }
-                    LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
-                    ll.addView(tv);
-                }
+                LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(k);
+                ll.addView(tv);
             }
         }
     }
