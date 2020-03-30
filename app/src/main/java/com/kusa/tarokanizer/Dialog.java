@@ -12,6 +12,7 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -21,14 +22,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
-import androidx.recyclerview.widget.RecyclerView;
-import android.view.WindowManager.LayoutParams;
-
 import com.kusa.tarokanizer.data_classes.Player;
 
 import java.util.ArrayList;
+
+import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class Dialog extends DialogFragment implements AdapterView.OnItemSelectedListener {
 
@@ -39,18 +38,63 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
     private int numberOfPlayers;
     private Context context;
     private int mPlayers;
-    private Integer mScore;
     private Integer mRadlc;
-    private boolean resultValue;
-    private boolean mPositive = true;
-    private boolean mDestroy = false;
 
     public Dialog(Context context){
         this.context = context;
     }
 
-    public interface DialogListener{
-        public void onDialogPositiveClick(String title, ArrayList<Player> players);
+    public java.lang.Integer RadlcDialog() {
+        final Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message mesg) {
+                throw new RuntimeException();
+            }
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        final AlertDialog dialog;
+
+        View view = LayoutInflater.from(context).inflate(R.layout.radlci_layout, null);
+        final TextView plusText = view.findViewById(R.id.add_radlc);
+        final TextView minusText = view.findViewById(R.id.remove_radlc);
+        final ImageView closeRadlcWindow = view.findViewById(R.id.image_delete_radlc_window);
+
+        builder.setView(view);
+
+        dialog = builder.create();
+        dialog.show();
+
+        plusText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRadlc = 1;
+                dialog.cancel();
+                handler.sendMessage(handler.obtainMessage());
+            }
+        });
+        minusText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRadlc = -1;
+                dialog.cancel();
+                handler.sendMessage(handler.obtainMessage());
+            }
+        });
+        closeRadlcWindow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRadlc = 0;
+                dialog.cancel();
+                handler.sendMessage(handler.obtainMessage());
+            }
+        });
+
+        try {
+            Looper.loop();
+        } catch (RuntimeException e) {
+        }
+
+        return mRadlc;
     }
 
     @Override
@@ -179,175 +223,8 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
 
     }
 
-    public java.lang.Integer ScoreDialog (View view, final Context cont){
+    public interface DialogListener {
 
-        final Handler handler = new Handler()
-        {
-            @Override
-            public void handleMessage(Message mesg)
-            {
-                throw new RuntimeException();
-            }
-        };
-        final CharSequence[] items = {"+", "-"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(cont);
-        AlertDialog dialog;
-
-        view = LayoutInflater.from(cont).inflate(R.layout.player_names, null);
-        RelativeLayout l = view.findViewById(R.id.playerNames);
-
-        final EditText t = new EditText(cont);
-        t.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        t.setInputType(InputType.TYPE_CLASS_NUMBER); //numbers only
-        t.setTextColor(Color.BLACK);
-        l.addView(t);
-
-        builder.setView(view);
-        builder.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int item) {
-               if(item == 1){mPositive = false;}
-               else{mPositive = true;}
-            }
-        });
-        builder.setTitle("Score");
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // Send the positive button event back to the host activity
-                mScore = Integer.parseInt(t.getText().toString());
-                handler.sendMessage(handler.obtainMessage());
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // Send the negative button event back to the host activity
-                Dialog.this.notify();
-                mScore = null;
-                handler.sendMessage(handler.obtainMessage());
-            }
-        });
-
-        //this part makes sure that the keyboard pops up at the start of the dialog
-        dialog = builder.create();
-        dialog.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        dialog.show();
-
-        try{ Looper.loop(); }
-        catch(RuntimeException e){}
-
-        if(!mPositive){mScore *= -1;}
-
-        return mScore;
+        void onDialogPositiveClick(String title, ArrayList<Player> players);
     }
-
-    public java.lang.Integer RadlcDialog (View view, final Context cont){
-
-        final Handler handler = new Handler()
-        {
-            @Override
-            public void handleMessage(Message mesg)
-            {
-                throw new RuntimeException();
-            }
-        };
-        AlertDialog.Builder builder = new AlertDialog.Builder(cont);
-        final AlertDialog dialog;
-
-        view = LayoutInflater.from(cont).inflate(R.layout.radlci_layout, null);
-        RelativeLayout l = view.findViewById(R.id.radlcLayout);
-        final TextView plusText = view.findViewById(R.id.add_radlc);
-        final TextView minusText = view.findViewById(R.id.remove_radlc);
-        final ImageView closeRadlcWindow = view.findViewById(R.id.image_delete_radlc_window);
-
-        builder.setView(view);
-
-        dialog = builder.create();
-        dialog.show();
-
-        plusText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mRadlc = 1;
-                dialog.cancel();
-                handler.sendMessage(handler.obtainMessage());
-            }
-        });
-        minusText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mRadlc = -1;
-                dialog.cancel();
-                handler.sendMessage(handler.obtainMessage());
-            }
-        });
-        closeRadlcWindow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mRadlc = 0;
-                dialog.cancel();
-                handler.sendMessage(handler.obtainMessage());
-            }
-        });
-
-        try{ Looper.loop(); }
-        catch(RuntimeException e){}
-
-        return mRadlc;
-    }
-
-    public boolean DeleteScoreDialog (final Context cont, final TextView textView){
-        final Handler handler = new Handler()
-        {
-            @Override
-            public void handleMessage(Message mesg)
-            {
-                throw new RuntimeException();
-            }
-        };
-        View view = LayoutInflater.from(context).inflate(R.layout.score_deletion, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(cont);
-        final AlertDialog dialog;
-        RelativeLayout l = view.findViewById(R.id.scoreDeletion);
-        TextView t = view.findViewById(R.id.remove_score_tv);
-        t.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
-        CharSequence text = textView.getText();
-        t.setText(text);
-
-        if(t.getParent() != null){
-            ((ViewGroup)t.getParent()).removeView(t);
-        }
-
-        l.addView(t);
-        builder.setView(view);
-        builder.setTitle("Delete Score: ");
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // Send the positive button event back to the host activity
-                //mScore = Integer.parseInt(t.getText().toString());
-                mDestroy = true;
-                handler.sendMessage(handler.obtainMessage());
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                boolean destroy = false;
-                // Send the negative button event back to the host activity
-                Dialog.this.notify();
-                //mScore = null;
-                mDestroy = false;
-                handler.sendMessage(handler.obtainMessage());
-            }
-        });
-
-        dialog = builder.create();
-        dialog.show();
-
-
-        try{ Looper.loop(); }
-        catch(RuntimeException e){}
-        return  mDestroy;
-    }
-
-
-
 }
