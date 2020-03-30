@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.kusa.tarokanizer.data_classes.CardView;
 import com.kusa.tarokanizer.data_classes.Player;
 import com.kusa.tarokanizer.data_classes.Round;
-import com.kusa.tarokanizer.data_classes.Settings;
 
 import java.util.ArrayList;
 
@@ -43,17 +42,10 @@ public class ScoreboardDefault extends AppCompatActivity {
 
     ArrayList<Player> players;
 
-    ArrayList<LinearLayout> scores = new ArrayList<>();
-
-    ArrayList<TextView> sums = new ArrayList<>();
     int[] mSums = {0, 0, 0, 0, 0, 0, 0, 0};
-
-    ArrayList<LinearLayout> radlci = new ArrayList<>();
     int[] mRadlci;
 
     int position;
-
-    Settings settings;
 
     Round round;
     ArrayList<Round> rounds;
@@ -67,7 +59,6 @@ public class ScoreboardDefault extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        settings = Settings.getInstance();
 
         initViews();
         initOnClickListeners();
@@ -168,13 +159,14 @@ public class ScoreboardDefault extends AppCompatActivity {
             //create textview with score
             TextView tv = createTextViewScore(Integer.toString(pointsPerPlayer[i]));
             //add score visually
-            scores.get(i).addView(tv);
+            LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
+            ll.addView(tv);
 
             //updating sum in the cardview
             mSums[i] += pointsPerPlayer[i];
 
             //get current textview and override with new sum
-            tv = sums.get(i);
+            tv = (TextView) linearLayoutSum.getChildAt(i);
             tv.setText("" + mSums[i]);
         }
 
@@ -229,7 +221,8 @@ public class ScoreboardDefault extends AppCompatActivity {
                 int[] ppp = rounds.get(i).getPointPerPlayer();
                 for (int k = 0; k < ppp.length; k++) {
                     tv = createTextViewScore(Integer.toString(ppp[k]));
-                    scores.get(k).addView(tv);
+                    LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(k);
+                    ll.addView(tv);
                 }
             } else { //everything else
                 String points = Integer.toString(rounds.get(i).getPoints());
@@ -240,7 +233,8 @@ public class ScoreboardDefault extends AppCompatActivity {
                     } else {
                         tv = createTextViewScore("/");
                     }
-                    scores.get(k).addView(tv);
+                    LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
+                    ll.addView(tv);
                 }
             }
         }
@@ -248,7 +242,7 @@ public class ScoreboardDefault extends AppCompatActivity {
 
     public void loadRadlci() {
         for (int i = 0; i < players.size(); i++) {
-            LinearLayout ll = radlci.get(i);
+            LinearLayout ll = (LinearLayout) linearLayoutRadlci.getChildAt(i);
             for (int k = 0; k < mRadlci[i]; k++) {
                 ll.addView(createRadlc());
             }
@@ -257,7 +251,7 @@ public class ScoreboardDefault extends AppCompatActivity {
 
     public void loadSums() {
         for (int i = 0; i < players.size(); i++) {
-            TextView tv = sums.get(i);
+            TextView tv = (TextView) linearLayoutSum.getChildAt(i);
             tv.setText("" + mSums[i]);
         }
     }
@@ -293,8 +287,8 @@ public class ScoreboardDefault extends AppCompatActivity {
         Integer a;
         a = mRadlci[view.getId()];
         if (a != null || a != 0) {
-            radlci.get(view.getId()).removeAllViews();
-            LinearLayout ll = radlci.get(view.getId());
+            LinearLayout ll = (LinearLayout) linearLayoutRadlci.getChildAt(view.getId());
+            ll.removeAllViews();
             for (int i = 0; i < a; i++) {
                 ll.addView(createRadlc());
             }
@@ -316,7 +310,6 @@ public class ScoreboardDefault extends AppCompatActivity {
                 AddRadlcOnClick(view, scoreDialog);
             }
         });
-        radlci.add(ll);
         return ll;
     }
 
@@ -339,7 +332,6 @@ public class ScoreboardDefault extends AppCompatActivity {
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setBackgroundResource(R.drawable.border);
 
-        scores.add(ll);
         return ll;
     }
 
@@ -369,7 +361,6 @@ public class ScoreboardDefault extends AppCompatActivity {
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
         textView.setBackgroundResource(R.drawable.border2);
 
-        sums.add(textView);
         return textView;
     }
 }
