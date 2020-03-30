@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -384,6 +385,7 @@ public class Scoreboard extends AppCompatActivity {
                     else round.setRazlikaPozitivna(true);
 
                     round.setPoints(abs(score) + tocke);
+                    Log.d("Points before addons", Integer.toString(round.getPoints()));
                     displayDodatki();
                 }catch (Exception e){
                     Toast.makeText(Scoreboard.this, "Vnos je bil napačen!", Toast.LENGTH_LONG).show();
@@ -420,14 +422,30 @@ public class Scoreboard extends AppCompatActivity {
                 for(int k=0; k<check.length; k++) {
                     if(check[k]){
                         switch (k){
-                            case 0: tmp = settings.getTrula(); break;
-                            case 1: tmp = settings.getNapovedanaTrula(); break;
-                            case 2: tmp = settings.getKralji(); break;
-                            case 3: tmp = settings.getNapovedaniKralji(); break;
-                            case 4: tmp = settings.getSpicka(); break;
-                            case 5: tmp = settings.getNapovedanaSpicka(); break;
-                            case 6: tmp = settings.getKralj(); break;
-                            case 7: tmp = settings.getNapovedanKralj(); break;
+                            case 0:
+                                tmp += settings.getTrula();
+                                break;
+                            case 1:
+                                tmp += settings.getNapovedanaTrula();
+                                break;
+                            case 2:
+                                tmp += settings.getKralji();
+                                break;
+                            case 3:
+                                tmp += settings.getNapovedaniKralji();
+                                break;
+                            case 4:
+                                tmp += settings.getSpicka();
+                                break;
+                            case 5:
+                                tmp += settings.getNapovedanaSpicka();
+                                break;
+                            case 6:
+                                tmp += settings.getKralj();
+                                break;
+                            case 7:
+                                tmp += settings.getNapovedanKralj();
+                                break;
                         }
                     }
                 }
@@ -436,6 +454,7 @@ public class Scoreboard extends AppCompatActivity {
                 }else{
                     round.addPoints(-tmp);
                 }
+                Log.d("Points after addons", Integer.toString(round.getPoints()));
                 displayKontraDodatki();
             }
         });
