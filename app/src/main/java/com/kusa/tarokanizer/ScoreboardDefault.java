@@ -2,7 +2,6 @@ package com.kusa.tarokanizer;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.TypedValue;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -20,14 +18,16 @@ import android.widget.Toast;
 import com.kusa.tarokanizer.data_classes.CardView;
 import com.kusa.tarokanizer.data_classes.Player;
 import com.kusa.tarokanizer.data_classes.Round;
+import com.kusa.tarokanizer.utils.ComponentFactory;
 
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.core.widget.TextViewCompat;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 public class ScoreboardDefault extends AppCompatActivity {
 
@@ -35,7 +35,6 @@ public class ScoreboardDefault extends AppCompatActivity {
     LinearLayout linearLayoutRadlci;
     LinearLayout linearLayoutScore;
     LinearLayout linearLayoutSum;
-    LinearLayout ll;
     CardView cardView;
     private Toolbar toolbar;
     Button buttonNew;
@@ -51,6 +50,23 @@ public class ScoreboardDefault extends AppCompatActivity {
     ArrayList<Round> rounds;
 
     int[] pointsPerPlayer;
+
+    // because there is no lambda expressions in java 7
+    Function1 function1 = new Function1<Integer, Unit>() {
+        @Override
+        public Unit invoke(Integer integer) {
+            deleteRound(integer);
+            return null;
+        }
+    };
+
+    Function1 function2 = new Function1<Integer, Unit>() {
+        @Override
+        public Unit invoke(Integer integer) {
+            addRadlcOnClick(integer);
+            return null;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,9 +175,9 @@ public class ScoreboardDefault extends AppCompatActivity {
             //create textview with score
             TextView tv;
             if (pointsPerPlayer[i] == 0) {
-                tv = createTextViewScore("/");
+                tv = ComponentFactory.Companion.createTextViewScore("/", function1, false);
             } else {
-                tv = createTextViewScore(Integer.toString(pointsPerPlayer[i]));
+                tv = ComponentFactory.Companion.createTextViewScore(Integer.toString(pointsPerPlayer[i]), function1, false);
             }
             //add score visually
             LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
@@ -186,6 +202,26 @@ public class ScoreboardDefault extends AppCompatActivity {
         rounds.add(round);
     }
 
+    public void deleteRound(final int index) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ScoreboardDefault.this);
+        builder.setTitle("Ali želite izbrisati rundo?");
+
+        builder.setPositiveButton("DA", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                repairDataAfterRoundDeletion(rounds.get(index));
+                rounds.remove(index);
+                cleanRounds();
+                loadRounds();
+            }
+        });
+
+        builder.setNegativeButton("NE", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     public void initialize() {
         Intent intent = getIntent();
 
@@ -198,35 +234,35 @@ public class ScoreboardDefault extends AppCompatActivity {
         mRadlci = cardView.getRadlci();
 
         for (int i = 0; i < players.size(); i++) {
-            TextView tv = createTextViewPlayer(players.get(i).getName(), i);
+            TextView tv = ComponentFactory.Companion.createTextViewPlayer(players.get(i).getName(), false, function2);
             TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(tv, 1, 200, 1,
                 TypedValue.COMPLEX_UNIT_DIP);
             linearLayoutPlayers.addView(tv);
 
-            LinearLayout ll = createScoreLayout(i);
+            LinearLayout ll = ComponentFactory.Companion.createScoreLayout(i);
             linearLayoutScore.addView(ll);
 
-            tv = createTextViewSum(i);
+            tv = ComponentFactory.Companion.createTextViewSum(i);
             linearLayoutSum.addView(tv);
 
-            ll = createPlayersRadlcLayout(i);
+            ll = ComponentFactory.Companion.createPlayersRadlcLayout(i);
             linearLayoutRadlci.addView(ll);
         }
 
-        loadScores();
+        loadRounds();
         loadRadlci();
         loadSums();
     }
 
-    public void loadScores() {
+    public void loadRounds() {
         TextView tv;
         for (int i = 0; i < rounds.size(); i++) {
             int[] ppp = rounds.get(i).getPointPerPlayer();
             for (int k = 0; k < ppp.length; k++) {
                 if (ppp[k] == 0) {
-                    tv = createTextViewScore("/");
+                    tv = ComponentFactory.Companion.createTextViewScore("/", function1, false);
                 } else {
-                    tv = createTextViewScore(Integer.toString(ppp[k]));
+                    tv = ComponentFactory.Companion.createTextViewScore(Integer.toString(ppp[k]), function1, false);
                 }
                 LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(k);
                 ll.addView(tv);
@@ -234,11 +270,18 @@ public class ScoreboardDefault extends AppCompatActivity {
         }
     }
 
+    public void cleanRounds() {
+        for (int i = 0; i < players.size(); i++) {
+            LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
+            ll.removeAllViews();
+        }
+    }
+
     public void loadRadlci() {
         for (int i = 0; i < players.size(); i++) {
             LinearLayout ll = (LinearLayout) linearLayoutRadlci.getChildAt(i);
             for (int k = 0; k < mRadlci[i]; k++) {
-                ll.addView(createRadlc());
+                ll.addView(ComponentFactory.Companion.createRadlc());
             }
         }
     }
@@ -250,111 +293,28 @@ public class ScoreboardDefault extends AppCompatActivity {
         }
     }
 
-    public TextView createTextViewPlayer(String player, int id) {
-        //params = params are set here rather than in xml in layout
-        TextView textView = new TextView(this);
-        textView.setId(id);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36);
-        textView.setText(player);
-        textView.setTextColor(ContextCompat.getColor(ScoreboardDefault.this, R.color.brightGray));
-        textView.setLayoutParams(new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-        textView.setGravity(Gravity.CENTER);
-        textView.setBackgroundResource(R.drawable.border);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Dialog scoreDialog = new Dialog(ScoreboardDefault.this);
-                AddRadlcOnClick(view, scoreDialog);
-            }
-        });
-
-        return textView;
+    public void repairDataAfterRoundDeletion(Round round) {
+        //sums correction
+        for (int i = 0; i < players.size(); i++) {
+            mSums[i] -= round.getPointPerPlayer()[i];
+        }
+        loadSums();
     }
 
-    public void AddRadlcOnClick(View view, Dialog scoreDialog) {
-        mRadlci[view.getId()] += scoreDialog.RadlcDialog(view, ScoreboardDefault.this);
-        if (mRadlci[view.getId()] < 0) {
-            mRadlci[view.getId()] = 0;
+    public void addRadlcOnClick(int id) {
+        Dialog scoreDialog = new Dialog(ScoreboardDefault.this);
+        mRadlci[id] += scoreDialog.RadlcDialog();
+        if (mRadlci[id] < 0) {
+            mRadlci[id] = 0;
         }
         Integer a;
-        a = mRadlci[view.getId()];
+        a = mRadlci[id];
         if (a != null || a != 0) {
-            LinearLayout ll = (LinearLayout) linearLayoutRadlci.getChildAt(view.getId());
+            LinearLayout ll = (LinearLayout) linearLayoutRadlci.getChildAt(id);
             ll.removeAllViews();
             for (int i = 0; i < a; i++) {
-                ll.addView(createRadlc());
+                ll.addView(ComponentFactory.Companion.createRadlc());
             }
         }
-    }
-
-    public LinearLayout createPlayersRadlcLayout(int i) {
-        LinearLayout ll = new LinearLayout(this);
-        ll.setId(i);
-        ll.setLayoutParams(new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            50, 1f));
-        ll.setGravity(Gravity.CENTER_HORIZONTAL);
-        ll.setBackgroundResource(R.drawable.border);
-        ll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Dialog scoreDialog = new Dialog(ScoreboardDefault.this);
-                AddRadlcOnClick(view, scoreDialog);
-            }
-        });
-        return ll;
-    }
-
-    public ImageView createRadlc() {
-        ImageView radlc = new ImageView(this);
-        radlc.setLayoutParams(new LinearLayout.LayoutParams(40, 40));
-        radlc.setPadding(5, 10, 5, 0);
-        radlc.setImageResource(R.color.colorAccent);
-
-        return radlc;
-    }
-
-    public LinearLayout createScoreLayout(int id) {
-        ll = new LinearLayout(this);
-        ll.setId(id);
-        ll.setLayoutParams(new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT, 1f));
-        ll.setGravity(Gravity.CENTER_HORIZONTAL);
-        ll.setOrientation(LinearLayout.VERTICAL);
-        ll.setBackgroundResource(R.drawable.border);
-
-        return ll;
-    }
-
-    public TextView createTextViewScore(String score) {
-        final TextView textView = new TextView(this);
-        textView.setText(score);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
-        textView.setLayoutParams(new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT));
-        textView.setGravity(Gravity.CENTER_HORIZONTAL);
-        textView.setTextColor(ContextCompat.getColor(ScoreboardDefault.this, R.color.brightGray));
-
-        return textView;
-    }
-
-    public TextView createTextViewSum(int id) {
-        TextView textView = new TextView(this);
-        textView.setText("0");
-        textView.setId(id);
-        textView.setTextColor(ContextCompat.getColor(ScoreboardDefault.this, R.color.brightGray));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
-        textView.setTypeface(Typeface.DEFAULT_BOLD);
-        textView.setLayoutParams(new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT, 1f));
-        textView.setGravity(Gravity.CENTER_HORIZONTAL);
-        textView.setBackgroundResource(R.drawable.border2);
-
-        return textView;
     }
 }

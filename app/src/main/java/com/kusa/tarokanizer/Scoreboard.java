@@ -574,7 +574,7 @@ public class Scoreboard extends AppCompatActivity {
         mRadlci = cardView.getRadlci();
 
         for(int i=0; i<players.size(); i++) {
-            TextView tv = ComponentFactory.Companion.createTextViewPlayer(players.get(i).getName(), i);
+            TextView tv = ComponentFactory.Companion.createTextViewPlayer(players.get(i).getName(), true, null);
             linearLayoutPlayers.addView(tv);
 
             linearLayoutScore.addView(ComponentFactory.Companion.createScoreLayout(i));

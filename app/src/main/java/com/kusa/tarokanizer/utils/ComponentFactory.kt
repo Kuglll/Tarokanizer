@@ -16,12 +16,12 @@ class ComponentFactory{
 
         fun createTextViewPlayer(
             player: String?,
-            id: Int
+            automatic: Boolean,
+            onClick: ((Int) -> Unit)?
         ): TextView? {
             val context = TarockanizerApp.instance
 
             val textView = TextView(context)
-            textView.id = id
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36f)
             textView.text = player
             textView.setTextColor(ContextCompat.getColor(context, R.color.brightGray))
@@ -30,6 +30,12 @@ class ComponentFactory{
                 LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
             textView.gravity = Gravity.CENTER
             textView.setBackgroundResource(R.drawable.border)
+            if (!automatic) {
+                textView.setOnClickListener {
+                    val ll = it.parent as LinearLayout
+                    onClick!!(ll.indexOfChild(it))
+                }
+            }
             return textView
         }
 
