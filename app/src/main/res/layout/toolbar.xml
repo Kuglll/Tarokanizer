@@ -8,9 +8,8 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-
     <Button
-        android:id="@+id/button_new"
+        android:id="@+id/addButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
@@ -19,7 +18,7 @@
         android:background="@drawable/ic_add"/>
 
     <Button
-        android:id="@+id/button_settings"
+        android:id="@+id/settingsButton"
         android:layout_width="38dp"
         android:layout_height="38dp"
         android:layout_marginEnd="8dp"

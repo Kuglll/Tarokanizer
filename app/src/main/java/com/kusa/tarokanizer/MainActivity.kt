@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -14,6 +13,8 @@ import com.google.gson.Gson
 import com.kusa.tarokanizer.data_classes.CardView
 import com.kusa.tarokanizer.data_classes.Player
 import com.kusa.tarokanizer.data_classes.Settings
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 const val SHARED_PREFERENCES = "SHARED_PREFERENCES"
 
@@ -22,7 +23,6 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
     lateinit var preferences: SharedPreferences
     lateinit var editor: SharedPreferences.Editor
 
-    lateinit var mRecyclerView: RecyclerView
     lateinit var mAdapter: Adapter
     lateinit var mLayoutManager: RecyclerView.LayoutManager
 
@@ -57,16 +57,14 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
     }
 
     fun initViews() {
-        val buttonNew: Button = findViewById(R.id.button_new)
-        buttonNew.setOnClickListener(object : View.OnClickListener {
+        addButton.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
                 //creates a dialog that runs in another thread (class Dialog)
                 val dialog = Dialog(this@MainActivity)
                 dialog.show(supportFragmentManager, "dialog")
             }
         })
-        val buttonSettings: Button = findViewById(R.id.button_settings)
-        buttonSettings.setOnClickListener(object : View.OnClickListener {
+        settingsButton.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
                 startActivity(SettingsActivity.startSettingsActivity(this@MainActivity))
             }
@@ -87,34 +85,33 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
 
     fun loadSettings() {
         if (preferences.contains("ena")) {
-            settings.setAutomaticMode(preferences.getBoolean("automaticMode", true))
-            settings.setEna(preferences.getInt("ena", 0))
-            settings.setDva(preferences.getInt("dva", 0))
-            settings.setTri(preferences.getInt("tri", 0))
-            settings.setSoloEna(preferences.getInt("soloEna", 0))
-            settings.setSoloDva(preferences.getInt("soloDva", 0))
-            settings.setSoloTri(preferences.getInt("soloTri", 0))
-            settings.setSoloBrez(preferences.getInt("soloBrez", 0))
-            settings.setTrula(preferences.getInt("trula", 0))
-            settings.setNapovedanaTrula(preferences.getInt("napovedanaTrula", 0))
-            settings.setKralji(preferences.getInt("kralji", 0))
-            settings.setNapovedaniKralji(preferences.getInt("napovedaniKralji", 0))
-            settings.setSpicka(preferences.getInt("spicka", 0))
-            settings.setNapovedanaSpicka(preferences.getInt("napovedanaSpicka", 0))
-            settings.setKralj(preferences.getInt("kralj", 0))
-            settings.setNapovedanKralj(preferences.getInt("napovedanKralj", 0))
+            settings.isAutomaticMode = preferences.getBoolean("automaticMode", true)
+            settings.ena = preferences.getInt("ena", 0)
+            settings.dva = preferences.getInt("dva", 0)
+            settings.tri = preferences.getInt("tri", 0)
+            settings.soloEna = preferences.getInt("soloEna", 0)
+            settings.soloDva = preferences.getInt("soloDva", 0)
+            settings.soloTri = preferences.getInt("soloTri", 0)
+            settings.soloBrez = preferences.getInt("soloBrez", 0)
+            settings.trula = preferences.getInt("trula", 0)
+            settings.napovedanaTrula = preferences.getInt("napovedanaTrula", 0)
+            settings.kralji = preferences.getInt("kralji", 0)
+            settings.napovedaniKralji = preferences.getInt("napovedaniKralji", 0)
+            settings.spicka = preferences.getInt("spicka", 0)
+            settings.napovedanaSpicka = preferences.getInt("napovedanaSpicka", 0)
+            settings.kralj = preferences.getInt("kralj", 0)
+            settings.napovedanKralj = preferences.getInt("napovedanKralj", 0)
         }
     }
 
     fun BuildRecyclerView() {
 
-        mRecyclerView = findViewById(R.id.recyclerView)
-        mRecyclerView.setHasFixedSize(true) //increases performance
+        recyclerView.setHasFixedSize(true) //increases performance
         mLayoutManager = LinearLayoutManager(this)
         mAdapter = Adapter(this, mCardViewList)
 
-        mRecyclerView.setLayoutManager(mLayoutManager)
-        mRecyclerView.setAdapter(mAdapter)
+        recyclerView.layoutManager = mLayoutManager
+        recyclerView.adapter = mAdapter
 
         mAdapter.setOnCardBoardClickListener { position ->
             //deleting the cardboard
@@ -163,7 +160,7 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
 
         for (cv in mCardViewList) {
             val json = gson.toJson(cv)
-            editor!!.putString("cardView$i", json)
+            editor.putString("cardView$i", json)
             i++
         }
         editor.putInt("numberOfCardViews", i)

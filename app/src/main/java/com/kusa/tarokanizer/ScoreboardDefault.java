@@ -87,8 +87,8 @@ public class ScoreboardDefault extends AppCompatActivity {
         linearLayoutScore = findViewById(R.id.score);
         linearLayoutSum = findViewById(R.id.sum);
 
-        buttonNew = findViewById(R.id.button_new);
-        Button buttonSettings = findViewById(R.id.button_settings);
+        buttonNew = findViewById(R.id.addButton);
+        Button buttonSettings = findViewById(R.id.settingsButton);
         buttonSettings.setVisibility(View.GONE);
     }
 

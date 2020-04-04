@@ -7,8 +7,6 @@
     android:background="@color/brightGray"
     tools:context="com.kusa.tarokanizer.MainActivity">
 
-
-
     <include
         android:id = "@+id/toolbar"
         layout="@layout/toolbar" />
@@ -26,7 +24,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintVertical_bias="0.0" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
