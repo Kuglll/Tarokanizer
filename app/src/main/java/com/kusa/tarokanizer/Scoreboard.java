@@ -113,7 +113,8 @@ public class Scoreboard extends AppCompatActivity {
         round = new Round();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
-        final String [] games = {"Ena", "Dva", "Tri", "Klop", "Berac", "Pikolo", "Solo ena", "Solo dva", "Solo tri", "Solo brez", "Valat", "Barvni valat"};
+        final String[] games = {"Ena", "Dva", "Tri", "Klop", "Berac", "Pikolo", "Solo ena", "Solo dva", "Solo tri", "Solo brez", "Valat",
+            "Napovedan valat", "Barvni valat", "Mond fang", "Renons"};
         builder.setTitle("Katera igra je bila igrana?")
                 .setItems(games, new DialogInterface.OnClickListener() {
                     @Override
@@ -133,13 +134,20 @@ public class Scoreboard extends AppCompatActivity {
                             case 8: displayWhoPlayedDialog(settings.getSoloTri()); round.setIdGame(8); break;
                             case 9: displayWhoPlayedDialog(settings.getSoloBrez()); round.setIdGame(9); break;
                             case 10:
-                                System.out.println(games[10] + "was selected");
                                 round.setIdGame(10);
                                 break; //TODO: implement valat
                             case 11:
-                                System.out.println(games[11] + "was selected");
                                 round.setIdGame(11);
-                                break; //TODO: implement barvni valat
+                                break; //TODO: implement napovedan valat
+                            case 12:
+                                round.setIdGame(12);
+                                break; //TODO: implement Barvni valat
+                            case 13:
+                                round.setIdGame(13);
+                                break; //TODO: implement Mond Fang
+                            case 14:
+                                round.setIdGame(14);
+                                break; //TODO: implement Renons
                         }
                     }
                 });
@@ -745,7 +753,13 @@ public class Scoreboard extends AppCompatActivity {
             case 10:
                 return "Valat";
             case 11:
+                return "Napovedan valat";
+            case 12:
                 return "Barvni valat";
+            case 13:
+                return "Mond fang";
+            case 14:
+                return "Renons";
             default:
                 return null;
         }
