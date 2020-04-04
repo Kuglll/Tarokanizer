@@ -41,6 +41,7 @@ public class Scoreboard extends AppCompatActivity {
     private Toolbar toolbar;
     private Button buttonNew;
     private Button buttonSettings;
+    Button backButton;
 
     ArrayList<Player> players;
 
@@ -69,7 +70,6 @@ public class Scoreboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scoreboard);
         toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         settings = Settings.getInstance();
 
         initViews();
@@ -84,6 +84,10 @@ public class Scoreboard extends AppCompatActivity {
         linearLayoutScore = findViewById(R.id.score);
         linearLayoutSum = findViewById(R.id.sum);
 
+        TextView tv = findViewById(R.id.toolbarTitle);
+        tv.setText("Tarokanizer");
+
+        backButton = findViewById(R.id.backButton);
         buttonNew = findViewById(R.id.addButton);
         buttonSettings = findViewById(R.id.settingsButton);
         buttonSettings.setVisibility(View.GONE);
@@ -94,6 +98,12 @@ public class Scoreboard extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 displayWhatGameWasPlayed();
+            }
+        });
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }
@@ -129,7 +139,7 @@ public class Scoreboard extends AppCompatActivity {
                             case 11:
                                 System.out.println(games[11] + "was selected");
                                 round.setIdGame(11);
-                                break; //TODO: implement barvni
+                                break; //TODO: implement barvni valat
                         }
                     }
                 });

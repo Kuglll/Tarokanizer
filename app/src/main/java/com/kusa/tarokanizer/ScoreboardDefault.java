@@ -38,6 +38,7 @@ public class ScoreboardDefault extends AppCompatActivity {
     CardView cardView;
     private Toolbar toolbar;
     Button buttonNew;
+    Button backButton;
 
     ArrayList<Player> players;
 
@@ -74,7 +75,6 @@ public class ScoreboardDefault extends AppCompatActivity {
         setContentView(R.layout.activity_scoreboard);
 
         toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         initViews();
         initOnClickListeners();
@@ -87,6 +87,10 @@ public class ScoreboardDefault extends AppCompatActivity {
         linearLayoutScore = findViewById(R.id.score);
         linearLayoutSum = findViewById(R.id.sum);
 
+        TextView tv = findViewById(R.id.toolbarTitle);
+        tv.setText("Tarokanizer");
+
+        backButton = findViewById(R.id.backButton);
         buttonNew = findViewById(R.id.addButton);
         Button buttonSettings = findViewById(R.id.settingsButton);
         buttonSettings.setVisibility(View.GONE);
@@ -97,6 +101,12 @@ public class ScoreboardDefault extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 addRound();
+            }
+        });
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }

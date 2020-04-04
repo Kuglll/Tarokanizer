@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
                 startActivity(SettingsActivity.startSettingsActivity(this@MainActivity))
             }
         })
-
+        backButton.visibility = View.GONE
     }
 
     fun loadCardViewList() {
