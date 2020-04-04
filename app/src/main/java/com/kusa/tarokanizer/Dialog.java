@@ -183,6 +183,7 @@ public class Dialog extends DialogFragment implements AdapterView.OnItemSelected
         t.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         t.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         t.setTextColor(Color.BLACK);
+        t.requestFocus();
         l.addView(t);
 
 
