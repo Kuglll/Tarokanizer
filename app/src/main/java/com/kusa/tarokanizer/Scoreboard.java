@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -280,7 +279,11 @@ public class Scoreboard extends AppCompatActivity {
                 pointsPerPlayer[i] = pointsPerPlayer[i] * 2;
             }
             LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
-            ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(pointsPerPlayer[i]), function1, false));
+            if (pointsPerPlayer[i] != 0) {
+                ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(pointsPerPlayer[i]), function1, false));
+            } else {
+                ll.addView(ComponentFactory.Companion.createTextViewScore("/", function1, false));
+            }
 
             //updating sum in the cardview
             mSums[i] += pointsPerPlayer[i];
@@ -385,7 +388,6 @@ public class Scoreboard extends AppCompatActivity {
                     else round.setRazlikaPozitivna(true);
 
                     round.setPoints(abs(score) + tocke);
-                    Log.d("Points before addons", Integer.toString(round.getPoints()));
                     displayDodatki();
                 }catch (Exception e){
                     Toast.makeText(Scoreboard.this, "Vnos je bil napačen!", Toast.LENGTH_LONG).show();
@@ -454,7 +456,6 @@ public class Scoreboard extends AppCompatActivity {
                 }else{
                     round.addPoints(-tmp);
                 }
-                Log.d("Points after addons", Integer.toString(round.getPoints()));
                 displayKontraDodatki();
             }
         });
@@ -626,9 +627,38 @@ public class Scoreboard extends AppCompatActivity {
 
     public void deleteRound(final int index){
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
-        builder.setTitle("Ali želite izbrisati rundo?");
+        builder.setTitle("Runda številka " + (index + 1));
 
-        builder.setPositiveButton("DA", new DialogInterface.OnClickListener() {
+        LinearLayout layout = new LinearLayout(this);
+        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(parms);
+        layout.setPadding(2, 2, 2, 2);
+
+        if (rounds.get(index).isAutomaticMode()) {
+            TextView text = new TextView(this);
+            text.setText("Igra: " + resolveGameId(rounds.get(index).getIdGame()));
+            text.setPadding(64, 8, 0, 0);
+            layout.addView(text);
+
+            if (rounds.get(index).getIdPlayer() != -1) {
+                text = new TextView(this);
+                text.setText("Kdo je igral: " + players.get(rounds.get(index).getIdPlayer()).getName());
+                text.setPadding(64, 8, 0, 0);
+                layout.addView(text);
+            }
+
+            if (rounds.get(index).getIdRufanPlayer() != -1) {
+                text = new TextView(this);
+                text.setText("Kdo je bil rufan: " + players.get(rounds.get(index).getIdRufanPlayer()).getName());
+                text.setPadding(64, 8, 0, 0);
+                layout.addView(text);
+            }
+        }
+        builder.setView(layout);
+
+        builder.setPositiveButton("IZBRIŠI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 repairDataAfterRoundDeletion(rounds.get(index));
@@ -638,10 +668,42 @@ public class Scoreboard extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton("NE", null);
+        builder.setNegativeButton("PREKLIČI", null);
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public String resolveGameId(int id) {
+
+        switch (id) {
+            case 0:
+                return "Ena";
+            case 2:
+                return "Tri";
+            case 1:
+                return "Dva";
+            case 3:
+                return "Klop";
+            case 4:
+                return "Berač";
+            case 5:
+                return "Pikolo";
+            case 6:
+                return "Solo ena";
+            case 7:
+                return "Solo dva";
+            case 8:
+                return "Solo tri";
+            case 9:
+                return "Solo brez";
+            case 10:
+                return "Valat";
+            case 11:
+                return "Barvni valat";
+            default:
+                return null;
+        }
     }
 
     public void repairDataAfterRoundDeletion(Round round){
