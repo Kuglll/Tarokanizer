@@ -122,8 +122,14 @@ public class Scoreboard extends AppCompatActivity {
                             case 7: displayWhoPlayedDialog(settings.getSoloDva());  round.setIdGame(7); break;
                             case 8: displayWhoPlayedDialog(settings.getSoloTri()); round.setIdGame(8); break;
                             case 9: displayWhoPlayedDialog(settings.getSoloBrez()); round.setIdGame(9); break;
-                            case 10: System.out.println(games[10]+ "was selected"); round.setIdGame(10); break;
-                            case 11: System.out.println(games[11]+ "was selected"); round.setIdGame(11); break;
+                            case 10:
+                                System.out.println(games[10] + "was selected");
+                                round.setIdGame(10);
+                                break; //TODO: implement valat
+                            case 11:
+                                System.out.println(games[11] + "was selected");
+                                round.setIdGame(11);
+                                break; //TODO: implement barvni
                         }
                     }
                 });
@@ -196,6 +202,18 @@ public class Scoreboard extends AppCompatActivity {
             }
         });
 
+        builder.setNeutralButton("PRESKOČI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //klop
+                if (round.getIdGame() == 3) {
+                    getPointsForPlayers(checked);
+                } else {
+                    displayWhoWonDialog(checked);
+                }
+            }
+        });
+
         builder.setNegativeButton("PREKLIČI", null);
 
         AlertDialog dialog = builder.create();
@@ -205,10 +223,13 @@ public class Scoreboard extends AppCompatActivity {
     public void getPointsForPlayers(final boolean [] checked){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Vnesi točke za igralce!");
+
         final EditText [] fields = new EditText[players.size()];
         final int[] pointsPerPlayer = new int[players.size()];
 
         ScrollView scroll = new ScrollView(this);
+
+        //TODO: subtittle "Pusti prazno za 0"
 
         LinearLayout layout = new LinearLayout(this);
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -352,7 +373,7 @@ public class Scoreboard extends AppCompatActivity {
                     }
                 });
 
-        builder.setPositiveButton("Naprej", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("PRESKOČI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 pointsDialog(tocke);
@@ -460,6 +481,13 @@ public class Scoreboard extends AppCompatActivity {
             }
         });
 
+        builder.setNeutralButton("PRESKOČI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                displayKontraDodatki();
+            }
+        });
+
         builder.setNegativeButton("PREKLIČI", null);
 
         AlertDialog dialog = builder.create();
@@ -501,6 +529,13 @@ public class Scoreboard extends AppCompatActivity {
                 }else{
                     round.addPoints(-tmp);
                 }
+                finalizeScore(new boolean[0]);
+            }
+        });
+
+        builder.setNeutralButton("PRESKOČI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
                 finalizeScore(new boolean[0]);
             }
         });
