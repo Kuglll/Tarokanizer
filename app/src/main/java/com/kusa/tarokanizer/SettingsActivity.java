@@ -37,6 +37,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     Switch swtch;
     Button saveButton;
+    Button backButton;
 
     EditText ena;
     EditText dva;
@@ -62,9 +63,6 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         preferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
         settings = Settings.getInstance();
         changed = false;
@@ -79,6 +77,7 @@ public class SettingsActivity extends AppCompatActivity {
         if(settings.isAutomaticMode()) swtch.setChecked(true);
         else swtch.setChecked(false);
 
+        backButton = findViewById(R.id.backButton);
         saveButton = findViewById(R.id.saveButton);
 
         ena = findViewById(R.id.enaEdit);
@@ -100,6 +99,13 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void initOnClickListeners(){
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
         saveButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
