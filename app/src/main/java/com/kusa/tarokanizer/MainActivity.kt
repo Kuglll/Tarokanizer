@@ -93,6 +93,14 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
             settings.soloDva = preferences.getInt("soloDva", 0)
             settings.soloTri = preferences.getInt("soloTri", 0)
             settings.soloBrez = preferences.getInt("soloBrez", 0)
+
+            settings.beracPikolo = preferences.getInt("beracPikolo", 0)
+            settings.valat = preferences.getInt("valat", 0)
+            settings.napovedanValat = preferences.getInt("napovedanValat", 0)
+            settings.barvniValat = preferences.getInt("barvniValat", 0)
+            settings.mondFang = preferences.getInt("mondFang", 0)
+            settings.renons = preferences.getInt("renons", 0)
+
             settings.trula = preferences.getInt("trula", 0)
             settings.napovedanaTrula = preferences.getInt("napovedanaTrula", 0)
             settings.kralji = preferences.getInt("kralji", 0)
