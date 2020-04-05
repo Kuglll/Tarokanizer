@@ -143,11 +143,13 @@ public class Scoreboard extends AppCompatActivity {
                                 round.setIdGame(12);
                                 break; //TODO: implement Napovedan barvni valat - solo (need to set idPlayer, PPP)
                             case 13:
+                                displayWhoPlayedDialog(0);
                                 round.setIdGame(13);
-                                break; //TODO: implement Mond Fang - solo (need to set idPlayer, PPP)
+                                break;
                             case 14:
+                                displayWhoPlayedDialog(0);
                                 round.setIdGame(14);
-                                break; //TODO: implement Renons - solo (need to set idPlayer, PPP)
+                                break;
                         }
                     }
                 });
@@ -164,15 +166,34 @@ public class Scoreboard extends AppCompatActivity {
             mPlayers[i] = players.get(i).getName();
         }
 
+        String dialogTitle;
+        if (round.getIdGame() == 13) {
+            dialogTitle = "Kdo je izgubil monda?";
+        } else if (round.getIdGame() == 14) {
+            dialogTitle = "Kdo se je zatalal?";
+        } else {
+            dialogTitle = "Kdo je igral?";
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
-        builder.setTitle("Kdo je igral?")
+        builder.setTitle(dialogTitle)
                 .setItems(mPlayers, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         round.setIdPlayer(which);
 
-                        //berac ali pikolo
-                        if(round.getIdGame() == 4 || round.getIdGame() == 5){
+                        if (round.getIdGame() == 13) {
+                            //mond
+                            round.setPoints(-settings.getMondFang());
+                            round.setRazlikaPozitivna(true);
+                            finalizeScoreForMond();
+                        } else if (round.getIdGame() == 14) {
+                            //renons
+                            round.setPoints(-settings.getRenons());
+                            round.setRazlikaPozitivna(true);
+                            finalizeScore(new boolean[0]);
+                        } else if (round.getIdGame() == 4 || round.getIdGame() == 5) {
+                            //berac ali pikolo
                             displayWhoPlayedAswell();
                         }else {
                             // if there is less or equal than 3 player, no one was rufed
@@ -189,6 +210,40 @@ public class Scoreboard extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public void finalizeScoreForMond() {
+        int[] pointsPerPlayer = new int[players.size()];
+
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).getId() == round.getIdPlayer()) {
+                pointsPerPlayer[i] = round.getPoints();
+
+                LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
+                ll.addView(ComponentFactory.Companion.createTextViewScore(Integer.toString(round.getPoints()), function1, true));
+
+                //updating sum in the cardview
+                mSums[i] += round.getPoints();
+
+                //get current textview and override with new sum
+                TextView tv = (TextView) linearLayoutSum.getChildAt(i);
+                tv.setText("" + mSums[i]);
+            } else { // add blank score so every game is its own row
+                pointsPerPlayer[i] = 0;
+                LinearLayout ll = (LinearLayout) linearLayoutScore.getChildAt(i);
+                ll.addView(ComponentFactory.Companion.createTextViewScore("/", function1, false));
+            }
+        }
+
+        //scroll down everytime a result is added
+        (findViewById(R.id.scrollViewInScoreBoard)).post(new Runnable() {
+            public void run() {
+                ((ScrollView) findViewById(R.id.scrollViewInScoreBoard)).fullScroll(View.FOCUS_DOWN);
+            }
+        });
+
+        round.setPointPerPlayer(pointsPerPlayer);
+        rounds.add(round);
     }
 
     public void displayWhoPlayedAswell(){
