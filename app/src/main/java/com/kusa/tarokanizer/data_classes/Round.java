@@ -10,6 +10,7 @@ public class Round {
     private int points;
     private boolean razlikaPozitivna;
     private boolean won;
+    private int kontra;
 
     private boolean[] checked;
     private int [] pointPerPlayer;
@@ -22,6 +23,7 @@ public class Round {
         points = 0;
         won = false;
         razlikaPozitivna = false;
+        kontra = -1;
     }
 
     public boolean isAutomaticMode() {
@@ -98,5 +100,13 @@ public class Round {
 
     public void setChecked(boolean[] checked) {
         this.checked = checked;
+    }
+
+    public int getKontra() {
+        return kontra;
+    }
+
+    public void setKontra(int kontra) {
+        this.kontra = kontra;
     }
 }

@@ -655,6 +655,47 @@ public class Scoreboard extends AppCompatActivity {
         dialog.show();
     }
 
+    public void checkForKontra() {
+        String[] kontras = {"Kontra", "Rekontra", "Subkontra", "Mordkontra"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
+        builder.setTitle("Ali je bila izrečena kakšna kontra?")
+            .setItems(kontras, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case 0:
+                            round.setPoints(round.getPoints() * 2);
+                            round.setKontra(0);
+                            break;
+                        case 1:
+                            round.setPoints(round.getPoints() * 4);
+                            round.setKontra(1);
+                            break;
+                        case 2:
+                            round.setPoints(round.getPoints() * 8);
+                            round.setKontra(2);
+                            break;
+                        case 3:
+                            round.setPoints(round.getPoints() * 16);
+                            round.setKontra(3);
+                            break;
+                    }
+                }
+            });
+
+        builder.setPositiveButton("PRESKOČI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+
+        builder.setNegativeButton("PREKLIČI", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     void finalizeScore(boolean [] checked){
         round.setChecked(checked);
 
@@ -665,6 +706,8 @@ public class Scoreboard extends AppCompatActivity {
         if(mRadlci[round.getIdPlayer()] > 0){
             round.setPoints(round.getPoints()*2);
         }
+
+        checkForKontra();
 
         // win status
         if(round.getPoints() < 0) round.setWon(false);
