@@ -448,7 +448,7 @@ public class Scoreboard extends AppCompatActivity {
                             }
                             round.setRazlikaPozitivna(true);
                         }
-                        finalizeScore(checked);
+                        checkForKontra();
                     }
                 });
 
@@ -638,14 +638,14 @@ public class Scoreboard extends AppCompatActivity {
                 }else{
                     round.addPoints(-tmp);
                 }
-                finalizeScore(new boolean[0]);
+                checkForKontra();
             }
         });
 
         builder.setNeutralButton("PRESKOČI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                finalizeScore(new boolean[0]);
+                checkForKontra();
             }
         });
 
@@ -681,12 +681,14 @@ public class Scoreboard extends AppCompatActivity {
                             round.setKontra(3);
                             break;
                     }
+                    finalizeScore(new boolean[0]);
                 }
             });
 
         builder.setPositiveButton("PRESKOČI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                finalizeScore(new boolean[0]);
             }
         });
 
@@ -706,8 +708,6 @@ public class Scoreboard extends AppCompatActivity {
         if(mRadlci[round.getIdPlayer()] > 0){
             round.setPoints(round.getPoints()*2);
         }
-
-        checkForKontra();
 
         // win status
         if(round.getPoints() < 0) round.setWon(false);
@@ -839,6 +839,30 @@ public class Scoreboard extends AppCompatActivity {
             if (rounds.get(index).getIdRufanPlayer() != -1) {
                 text = new TextView(this);
                 text.setText("Kdo je bil rufan: " + players.get(rounds.get(index).getIdRufanPlayer()).getName());
+                text.setPadding(64, 8, 0, 0);
+                layout.addView(text);
+            }
+
+            if (rounds.get(index).getKontra() != -1) {
+                text = new TextView(this);
+                String kontra;
+                switch (rounds.get(index).getKontra()) {
+                    case 0:
+                        kontra = "Kontra";
+                        break;
+                    case 1:
+                        kontra = "Rekontra";
+                        break;
+                    case 2:
+                        kontra = "Subkontra";
+                        break;
+                    case 3:
+                        kontra = "Mordkontra";
+                        break;
+                    default:
+                        kontra = "";
+                }
+                text.setText("Kontra: " + kontra);
                 text.setPadding(64, 8, 0, 0);
                 layout.addView(text);
             }
