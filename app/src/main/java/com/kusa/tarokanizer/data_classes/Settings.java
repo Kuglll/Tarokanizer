@@ -2,7 +2,7 @@ package com.kusa.tarokanizer.data_classes;
 
 public class Settings {
 
-    //klop 70, berac 70, pikolo 70 - radlci
+    //klop, berac 70, pikolo 70 - radlci
     //ena 30, dva 20, tri 10
     //solo tri 40, solo dva 50, solo ena 60, solo brez 80
 
@@ -24,10 +24,66 @@ public class Settings {
     int dva = 20;
     int tri = 10;
 
+    int beracPikolo = 70;
+
     int soloEna = 60;
     int soloDva = 50;
     int soloTri = 40;
     int soloBrez = 80;
+
+    int valat = 250;
+    int napovedanValat = 500;
+    int barvniValat = 125;
+    int mondFang = 15;
+    int renons = 70;
+
+    public int getBeracPikolo() {
+        return beracPikolo;
+    }
+
+    public void setBeracPikolo(int beracPikolo) {
+        this.beracPikolo = beracPikolo;
+    }
+
+    public int getValat() {
+        return valat;
+    }
+
+    public void setValat(int valat) {
+        this.valat = valat;
+    }
+
+    public int getNapovedanValat() {
+        return napovedanValat;
+    }
+
+    public void setNapovedanValat(int napovedanValat) {
+        this.napovedanValat = napovedanValat;
+    }
+
+    public int getBarvniValat() {
+        return barvniValat;
+    }
+
+    public void setBarvniValat(int barvniValat) {
+        this.barvniValat = barvniValat;
+    }
+
+    public int getMondFang() {
+        return mondFang;
+    }
+
+    public void setMondFang(int mondFang) {
+        this.mondFang = mondFang;
+    }
+
+    public int getRenons() {
+        return renons;
+    }
+
+    public void setRenons(int renons) {
+        this.renons = renons;
+    }
 
     //addons
     int trula = 10;

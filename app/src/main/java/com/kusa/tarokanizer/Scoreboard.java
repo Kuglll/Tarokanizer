@@ -114,7 +114,7 @@ public class Scoreboard extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
         final String[] games = {"Ena", "Dva", "Tri", "Klop", "Berac", "Pikolo", "Solo ena", "Solo dva", "Solo tri", "Solo brez", "Valat",
-            "Napovedan valat", "Barvni valat", "Mond fang", "Renons"};
+            "Napovedani valat", "Napovedani barvni valat", "Mond fang", "Renons"};
         builder.setTitle("Katera igra je bila igrana?")
                 .setItems(games, new DialogInterface.OnClickListener() {
                     @Override
@@ -135,19 +135,19 @@ public class Scoreboard extends AppCompatActivity {
                             case 9: displayWhoPlayedDialog(settings.getSoloBrez()); round.setIdGame(9); break;
                             case 10:
                                 round.setIdGame(10);
-                                break; //TODO: implement valat
+                                break; //TODO: implement valat - ruf (need to set idPlayer, idRufanPlayer, PPP)
                             case 11:
                                 round.setIdGame(11);
-                                break; //TODO: implement napovedan valat
+                                break; //TODO: implement napovedan valat - ruf (need to set idPlayer, idRufanPlayer, PPP)
                             case 12:
                                 round.setIdGame(12);
-                                break; //TODO: implement Barvni valat
+                                break; //TODO: implement Napovedan barvni valat - solo (need to set idPlayer, PPP)
                             case 13:
                                 round.setIdGame(13);
-                                break; //TODO: implement Mond Fang
+                                break; //TODO: implement Mond Fang - solo (need to set idPlayer, PPP)
                             case 14:
                                 round.setIdGame(14);
-                                break; //TODO: implement Renons
+                                break; //TODO: implement Renons - solo (need to set idPlayer, PPP)
                         }
                     }
                 });
@@ -361,8 +361,12 @@ public class Scoreboard extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
-                            case 0: round.setPoints(70); break;
-                            case 1: round.setPoints(-70); break;
+                            case 0:
+                                round.setPoints(settings.getBeracPikolo());
+                                break;
+                            case 1:
+                                round.setPoints(-settings.getBeracPikolo());
+                                break;
                         }
                         round.setRazlikaPozitivna(true);
                         finalizeScore(checked);
@@ -753,9 +757,9 @@ public class Scoreboard extends AppCompatActivity {
             case 10:
                 return "Valat";
             case 11:
-                return "Napovedan valat";
+                return "Napovedani valat";
             case 12:
-                return "Barvni valat";
+                return "Napovedani barvni valat";
             case 13:
                 return "Mond fang";
             case 14:
