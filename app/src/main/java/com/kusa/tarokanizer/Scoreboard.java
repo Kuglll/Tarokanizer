@@ -20,7 +20,6 @@ import com.kusa.tarokanizer.data_classes.Player;
 import com.kusa.tarokanizer.data_classes.Round;
 import com.kusa.tarokanizer.data_classes.Settings;
 import com.kusa.tarokanizer.utils.ComponentFactory;
-import com.kusa.tarokanizer.utils.DialogFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -258,6 +257,8 @@ public class Scoreboard extends Activity {
 
         round.setPointPerPlayer(pointsPerPlayer);
         rounds.add(round);
+
+        checkForObvezenKlop();
     }
 
     public void displayWhoPlayedAswell(){
@@ -284,18 +285,6 @@ public class Scoreboard extends Activity {
                 if(round.getIdGame() == 3){
                     getPointsForPlayers(checked);
                 }else{
-                    displayWhoWonDialog(checked);
-                }
-            }
-        });
-
-        builder.setNeutralButton("PRESKOČI", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //klop
-                if (round.getIdGame() == 3) {
-                    getPointsForPlayers(checked);
-                } else {
                     displayWhoWonDialog(checked);
                 }
             }
@@ -453,7 +442,7 @@ public class Scoreboard extends Activity {
                             }
                             round.setRazlikaPozitivna(true);
                         }
-                        checkForKontra();
+                        checkForKontra(checked);
                     }
                 });
 
@@ -643,14 +632,14 @@ public class Scoreboard extends Activity {
                 }else{
                     round.addPoints(-tmp);
                 }
-                checkForKontra();
+                checkForKontra(new boolean[0]);
             }
         });
 
         builder.setNeutralButton("PRESKOČI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                checkForKontra();
+                checkForKontra(new boolean[0]);
             }
         });
 
@@ -660,7 +649,7 @@ public class Scoreboard extends Activity {
         dialog.show();
     }
 
-    public void checkForKontra() {
+    public void checkForKontra(final boolean[] checked) {
         String[] kontras = {"Kontra", "Rekontra", "Subkontra", "Mordkontra"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
@@ -686,14 +675,14 @@ public class Scoreboard extends Activity {
                             round.setKontra(3);
                             break;
                     }
-                    finalizeScore(new boolean[0]);
+                    finalizeScore(checked);
                 }
             });
 
         builder.setPositiveButton("PRESKOČI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                finalizeScore(new boolean[0]);
+                finalizeScore(checked);
             }
         });
 
@@ -778,7 +767,9 @@ public class Scoreboard extends Activity {
     public void checkForObvezenKlop() {
         for (int i = 0; i < players.size(); i++) {
             if (mSums[i] == 0) {
-                DialogFactory.Companion.displayObvezenKlopDialog(this);
+                //TODO: FIX
+                //DialogFactory.Companion.displayObvezenKlopDialog(this);
+                break;
             }
         }
     }
