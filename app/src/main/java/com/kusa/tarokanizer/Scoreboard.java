@@ -1,5 +1,6 @@
 package com.kusa.tarokanizer;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,19 +20,19 @@ import com.kusa.tarokanizer.data_classes.Player;
 import com.kusa.tarokanizer.data_classes.Round;
 import com.kusa.tarokanizer.data_classes.Settings;
 import com.kusa.tarokanizer.utils.ComponentFactory;
+import com.kusa.tarokanizer.utils.DialogFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
 import static java.lang.Math.abs;
 
-public class Scoreboard extends AppCompatActivity {
+public class Scoreboard extends Activity {
 
     LinearLayout linearLayoutPlayers;
     LinearLayout linearLayoutRadlci;
@@ -360,11 +361,11 @@ public class Scoreboard extends AppCompatActivity {
                             pointsPerPlayer[k] = 0;
                         }
                     }
-                    finalizeScoreForKlop(checked, pointsPerPlayer);
                 }catch (Exception e){
                     Toast.makeText(Scoreboard.this, "Vnos je bil napačen!", Toast.LENGTH_LONG).show();
                     dialog.cancel();
                 }
+                finalizeScoreForKlop(checked, pointsPerPlayer);
             }
         });
         builder.setNegativeButton("PREKLIČI", new DialogInterface.OnClickListener() {
@@ -417,6 +418,8 @@ public class Scoreboard extends AppCompatActivity {
                 loadRadlci();
             }
         }
+
+        checkForObvezenKlop();
     }
 
     public void displayWhoWonDialog(final boolean [] checked){
@@ -764,6 +767,16 @@ public class Scoreboard extends AppCompatActivity {
                     mRadlci[i] = mRadlci[i] + 1;
                     loadRadlci();
                 }
+            }
+        }
+
+        checkForObvezenKlop();
+    }
+
+    public void checkForObvezenKlop() {
+        for (int i = 0; i < players.size(); i++) {
+            if (mSums[i] == 0) {
+                DialogFactory.Companion.displayObvezenKlopDialog(this);
             }
         }
     }
