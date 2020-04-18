@@ -88,8 +88,12 @@ class ComponentFactory{
                 val ll = it.parent as LinearLayout
                 onClick(ll.indexOfChild(it))
             }
-            if (played) {
-                textView.setBackgroundResource(R.color.greenTransparent)
+            score?.let {
+                if (played && Integer.parseInt(it) >= 0) {
+                    textView.setBackgroundResource(R.color.greenTransparent)
+                } else if (played && Integer.parseInt(it) < 0) {
+                    textView.setBackgroundResource(R.color.redTransparent)
+                }
             }
             return textView
         }
