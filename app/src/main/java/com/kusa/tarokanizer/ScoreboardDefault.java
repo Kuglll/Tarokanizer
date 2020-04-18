@@ -94,6 +94,8 @@ public class ScoreboardDefault extends AppCompatActivity {
         buttonNew = findViewById(R.id.addButton);
         Button buttonSettings = findViewById(R.id.settingsButton);
         buttonSettings.setVisibility(View.GONE);
+        buttonSettings = findViewById(R.id.finishButton);
+        buttonSettings.setVisibility(View.GONE);
     }
 
     public void initOnClickListeners() {

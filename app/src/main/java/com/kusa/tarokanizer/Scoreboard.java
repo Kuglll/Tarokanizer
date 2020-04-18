@@ -42,6 +42,7 @@ public class Scoreboard extends Activity {
     private Toolbar toolbar;
     private Button buttonNew;
     private Button buttonSettings;
+    private Button buttonFinish;
     Button backButton;
 
     ArrayList<Player> players;
@@ -90,6 +91,7 @@ public class Scoreboard extends Activity {
 
         backButton = findViewById(R.id.backButton);
         buttonNew = findViewById(R.id.addButton);
+        buttonFinish = findViewById(R.id.finishButton);
         buttonSettings = findViewById(R.id.settingsButton);
         buttonSettings.setVisibility(View.GONE);
     }

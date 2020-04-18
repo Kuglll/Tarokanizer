@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
             }
         })
         backButton.visibility = View.GONE
+        finishButton.visibility = View.GONE
     }
 
     fun loadCardViewList() {
