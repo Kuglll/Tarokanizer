@@ -20,6 +20,7 @@ import com.kusa.tarokanizer.data_classes.Player;
 import com.kusa.tarokanizer.data_classes.Round;
 import com.kusa.tarokanizer.data_classes.Settings;
 import com.kusa.tarokanizer.utils.ComponentFactory;
+import com.kusa.tarokanizer.utils.DialogFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -194,17 +195,17 @@ public class Scoreboard extends Activity {
                         } else if (round.getIdGame() == 12) {
                             //barvni valat
                             round.setPoints(tocke);
-                            displayWhoWonDialog(new boolean[0]);
+                            displayWhoWonDialog(createChecked());
                         } else if (round.getIdGame() == 13) {
                             //mond
                             round.setPoints(tocke);
                             round.setRazlikaPozitivna(true);
-                            finalizeScoreForMond();
+                            finalizeScoreForMond(createChecked());
                         } else if (round.getIdGame() == 14) {
                             //renons
                             round.setPoints(tocke);
                             round.setRazlikaPozitivna(true);
-                            finalizeScore(new boolean[0]);
+                            finalizeScore(createChecked());
                         } else if (round.getIdGame() == 4 || round.getIdGame() == 5) {
                             //berac ali pikolo
                             displayWhoPlayedAswell();
@@ -225,7 +226,7 @@ public class Scoreboard extends Activity {
         dialog.show();
     }
 
-    public void finalizeScoreForMond() {
+    public void finalizeScoreForMond(boolean[] checked) {
         int[] pointsPerPlayer = new int[players.size()];
 
         for (int i = 0; i < players.size(); i++) {
@@ -258,7 +259,7 @@ public class Scoreboard extends Activity {
         round.setPointPerPlayer(pointsPerPlayer);
         rounds.add(round);
 
-        checkForObvezenKlop();
+        checkForObvezenKlop(checked);
     }
 
     public void displayWhoPlayedAswell(){
@@ -285,6 +286,9 @@ public class Scoreboard extends Activity {
                 if(round.getIdGame() == 3){
                     getPointsForPlayers(checked);
                 }else{
+                    if (round.getIdGame() == 4 || round.getIdGame() == 5) {
+                        checked[round.getIdPlayer()] = true;
+                    }
                     displayWhoWonDialog(checked);
                 }
             }
@@ -410,7 +414,7 @@ public class Scoreboard extends Activity {
             }
         }
 
-        checkForObvezenKlop();
+        checkForObvezenKlop(checked);
     }
 
     public void displayWhoWonDialog(final boolean [] checked){
@@ -465,7 +469,7 @@ public class Scoreboard extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         round.setIdRufanPlayer(which);
                         if (round.getIdGame() == 10 || round.getIdGame() == 11) {
-                            displayWhoWonDialog(new boolean[0]);
+                            displayWhoWonDialog(createChecked());
                         } else {
                             pointsDialog(tocke);
                         }
@@ -476,7 +480,7 @@ public class Scoreboard extends Activity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (round.getIdGame() == 10 || round.getIdGame() == 11) {
-                    displayWhoWonDialog(new boolean[0]);
+                    displayWhoWonDialog(createChecked());
                 } else {
                     pointsDialog(tocke);
                 }
@@ -495,6 +499,8 @@ public class Scoreboard extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Kakšna je bila razlika?");
 
+        //TODO: hint: če je igralec izgubil brez razlike vnesi -0
+
         final EditText editext = new EditText(this);
         editext.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
         builder.setView(editext);
@@ -506,12 +512,23 @@ public class Scoreboard extends Activity {
                 try {
                     input = (editext.getText().toString());
                     if(input.equals("")) input = "0";
-
-                    int score = Integer.parseInt(input);
-                    if(score < 0) round.setRazlikaPozitivna(false);
-                    else round.setRazlikaPozitivna(true);
-
-                    round.setPoints(abs(score) + tocke);
+                    if (input.equals("-0")) {
+                        round.setRazlikaPozitivna(false);
+                        round.setPoints(tocke);
+                    } else {
+                        int score = Integer.parseInt(input);
+                        if (score % 5 != 0) {
+                            Toast.makeText(Scoreboard.this, "Razlika je bila napačna! Deljiva mora biti s 5!", Toast.LENGTH_LONG).show();
+                            dialog.cancel();
+                            return;
+                        }
+                        if (score < 0) {
+                            round.setRazlikaPozitivna(false);
+                        } else {
+                            round.setRazlikaPozitivna(true);
+                        }
+                        round.setPoints(abs(score) + tocke);
+                    }
                     displayDodatki();
                 }catch (Exception e){
                     Toast.makeText(Scoreboard.this, "Vnos je bil napačen!", Toast.LENGTH_LONG).show();
@@ -616,14 +633,30 @@ public class Scoreboard extends Activity {
                 for(int k=0; k<check.length; k++) {
                     if(check[k]){
                         switch (k){
-                            case 0: tmp = -settings.getTrula(); break;
-                            case 1: tmp = -settings.getNapovedanaTrula(); break;
-                            case 2: tmp = -settings.getKralji(); break;
-                            case 3: tmp = -settings.getNapovedaniKralji(); break;
-                            case 4: tmp = -settings.getSpicka(); break;
-                            case 5: tmp = -settings.getNapovedanaSpicka(); break;
-                            case 6: tmp = -settings.getKralj(); break;
-                            case 7: tmp = -settings.getNapovedanKralj(); break;
+                            case 0:
+                                tmp -= settings.getTrula();
+                                break;
+                            case 1:
+                                tmp -= settings.getNapovedanaTrula();
+                                break;
+                            case 2:
+                                tmp -= settings.getKralji();
+                                break;
+                            case 3:
+                                tmp -= settings.getNapovedaniKralji();
+                                break;
+                            case 4:
+                                tmp -= settings.getSpicka();
+                                break;
+                            case 5:
+                                tmp -= settings.getNapovedanaSpicka();
+                                break;
+                            case 6:
+                                tmp -= settings.getKralj();
+                                break;
+                            case 7:
+                                tmp -= settings.getNapovedanKralj();
+                                break;
                         }
                     }
                 }
@@ -632,14 +665,14 @@ public class Scoreboard extends Activity {
                 }else{
                     round.addPoints(-tmp);
                 }
-                checkForKontra(new boolean[0]);
+                checkForKontra(createChecked());
             }
         });
 
         builder.setNeutralButton("PRESKOČI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                checkForKontra(new boolean[0]);
+                checkForKontra(createChecked());
             }
         });
 
@@ -647,6 +680,16 @@ public class Scoreboard extends Activity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public boolean[] createChecked() {
+        boolean[] checked = new boolean[players.size()];
+
+        for (int i = 0; i < players.size(); i++) {
+            checked[i] = round.getIdPlayer() == i || round.getIdRufanPlayer() == i;
+        }
+
+        return checked;
     }
 
     public void checkForKontra(final boolean[] checked) {
@@ -761,14 +804,13 @@ public class Scoreboard extends Activity {
             }
         }
 
-        checkForObvezenKlop();
+        checkForObvezenKlop(checked);
     }
 
-    public void checkForObvezenKlop() {
+    public void checkForObvezenKlop(boolean[] checked) {
         for (int i = 0; i < players.size(); i++) {
-            if (mSums[i] == 0) {
-                //TODO: FIX
-                //DialogFactory.Companion.displayObvezenKlopDialog(this);
+            if (mSums[i] == 0 && checked[i] && round.getIdGame() != 3 && round.getIdGame() != 4 && round.getIdGame() != 5) {
+                DialogFactory.Companion.displayObvezenKlopDialog(this);
                 break;
             }
         }
@@ -848,6 +890,8 @@ public class Scoreboard extends Activity {
                 text.setPadding(64, 8, 0, 0);
                 layout.addView(text);
             }
+
+            //TODO: add kdo je bil udeležen klop, berac, pikolo
 
             if (rounds.get(index).getKontra() != -1) {
                 text = new TextView(this);
