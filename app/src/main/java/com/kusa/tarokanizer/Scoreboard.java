@@ -891,7 +891,22 @@ public class Scoreboard extends Activity {
                 layout.addView(text);
             }
 
-            //TODO: add kdo je bil udeležen klop, berac, pikolo
+            if (rounds.get(index).getIdGame() == 3 ||
+                rounds.get(index).getIdGame() == 4 ||
+                rounds.get(index).getIdGame() == 5) {
+                boolean[] checked = rounds.get(index).getChecked();
+                text = new TextView(this);
+                text.setPadding(64, 8, 0, 0);
+                StringBuilder whoPlayedAswell = new StringBuilder("Kdo je bil udeležen: ");
+                for (int i = 0; i < checked.length; i++) {
+                    if (checked[i] && rounds.get(index).getIdPlayer() != i) {
+                        whoPlayedAswell.append(players.get(i).getName() + ", ");
+                    }
+                }
+                whoPlayedAswell.setLength(whoPlayedAswell.length() - 2);
+                text.setText(whoPlayedAswell);
+                layout.addView(text);
+            }
 
             if (rounds.get(index).getKontra() != -1) {
                 text = new TextView(this);
