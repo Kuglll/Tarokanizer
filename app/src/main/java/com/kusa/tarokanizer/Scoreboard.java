@@ -1199,4 +1199,3 @@ public class Scoreboard extends Activity {
     }
 
 }
-//TODO: first time setup - quick tutorial

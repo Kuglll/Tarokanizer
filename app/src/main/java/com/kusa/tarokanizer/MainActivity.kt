@@ -39,6 +39,10 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (firstStart()) {
+            displayOnboarding()
+        }
+
         setContentView(R.layout.activity_main)
 
         toolbar = findViewById(R.id.toolbar)
@@ -54,6 +58,15 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
         BuildRecyclerView()
 
         initViews()
+    }
+
+    fun displayOnboarding() {
+        //TODO: Display onboarding
+    }
+
+    fun firstStart(): Boolean {
+        //TODO: check if app is started for the first time - store 1 boolean to sp
+        return false
     }
 
     fun initViews() {
@@ -127,8 +140,8 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
         mAdapter.setOnCardBoardClickListener { position ->
             //deleting the cardboard
             val deleteDialog = AlertDialog.Builder(this@MainActivity)
-                    .setTitle("Delete Game")
-                    .setMessage("Do you want to delete selected game?")
+                .setTitle("Izbris igre")
+                .setMessage("Ali res želite izbrisati igro?")
                     .setPositiveButton("Yes", null)
                     .setNegativeButton("No", null)
                     .show()
