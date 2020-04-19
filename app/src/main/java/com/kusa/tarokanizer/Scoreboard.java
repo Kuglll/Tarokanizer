@@ -152,8 +152,7 @@ public class Scoreboard extends Activity {
 
     public void finishGame(){
         for (int i = 0; i < players.size(); i++) {
-            //TODO: expose radlci value to settings
-            mSums[i] = mSums[i] - mRadlci[i] * 100;
+            mSums[i] = mSums[i] + mRadlci[i] * settings.getRadlc();
             mRadlci[i] = 0;
         }
         loadSums();

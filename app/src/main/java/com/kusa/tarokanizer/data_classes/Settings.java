@@ -37,53 +37,7 @@ public class Settings {
     int mondFang = 15;
     int renons = 70;
 
-    public int getBeracPikolo() {
-        return beracPikolo;
-    }
-
-    public void setBeracPikolo(int beracPikolo) {
-        this.beracPikolo = beracPikolo;
-    }
-
-    public int getValat() {
-        return valat;
-    }
-
-    public void setValat(int valat) {
-        this.valat = valat;
-    }
-
-    public int getNapovedanValat() {
-        return napovedanValat;
-    }
-
-    public void setNapovedanValat(int napovedanValat) {
-        this.napovedanValat = napovedanValat;
-    }
-
-    public int getBarvniValat() {
-        return barvniValat;
-    }
-
-    public void setBarvniValat(int barvniValat) {
-        this.barvniValat = barvniValat;
-    }
-
-    public int getMondFang() {
-        return mondFang;
-    }
-
-    public void setMondFang(int mondFang) {
-        this.mondFang = mondFang;
-    }
-
-    public int getRenons() {
-        return renons;
-    }
-
-    public void setRenons(int renons) {
-        this.renons = renons;
-    }
+    int radlc = -100;
 
     //addons
     int trula = 10;
@@ -231,5 +185,61 @@ public class Settings {
 
     public void setNapovedanKralj(int napovedanKralj) {
         this.napovedanKralj = napovedanKralj;
+    }
+
+    public int getBeracPikolo() {
+        return beracPikolo;
+    }
+
+    public void setBeracPikolo(int beracPikolo) {
+        this.beracPikolo = beracPikolo;
+    }
+
+    public int getValat() {
+        return valat;
+    }
+
+    public void setValat(int valat) {
+        this.valat = valat;
+    }
+
+    public int getNapovedanValat() {
+        return napovedanValat;
+    }
+
+    public void setNapovedanValat(int napovedanValat) {
+        this.napovedanValat = napovedanValat;
+    }
+
+    public int getBarvniValat() {
+        return barvniValat;
+    }
+
+    public void setBarvniValat(int barvniValat) {
+        this.barvniValat = barvniValat;
+    }
+
+    public int getMondFang() {
+        return mondFang;
+    }
+
+    public void setMondFang(int mondFang) {
+        this.mondFang = mondFang;
+    }
+
+    public int getRenons() {
+        return renons;
+    }
+
+    public void setRenons(int renons) {
+        this.renons = renons;
+    }
+
+    public int getRadlc() {
+        return radlc;
+    }
+
+    public void setRadlc(int radlc) {
+        this.radlc = radlc;
     }
 }

@@ -110,6 +110,8 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
             settings.napovedanaSpicka = preferences.getInt("napovedanaSpicka", 0)
             settings.kralj = preferences.getInt("kralj", 0)
             settings.napovedanKralj = preferences.getInt("napovedanKralj", 0)
+
+            settings.radlc = preferences.getInt("radlc", 0)
         }
     }
 

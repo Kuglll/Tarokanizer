@@ -60,6 +60,8 @@ public class SettingsActivity extends AppCompatActivity {
     EditText kralj;
     EditText napovedanKralj;
 
+    EditText radlci;
+
     boolean changed;
 
     @Override
@@ -107,6 +109,8 @@ public class SettingsActivity extends AppCompatActivity {
         napovedanaSpicka = findViewById(R.id.napovedanaSpickaEdit);
         kralj = findViewById(R.id.kraljEdit);
         napovedanKralj = findViewById(R.id.napovedanKraljEdit);
+
+        radlci = findViewById(R.id.radlcEdit);
     }
 
     public void initOnClickListeners(){
@@ -161,6 +165,8 @@ public class SettingsActivity extends AppCompatActivity {
         addTextChangeListener(napovedanaSpicka);
         addTextChangeListener(kralj);
         addTextChangeListener(napovedanKralj);
+
+        addTextChangeListener(radlci);
     }
 
     public void addTextChangeListener(EditText et) {
@@ -248,6 +254,9 @@ public class SettingsActivity extends AppCompatActivity {
         if(!napovedanKralj.getText().toString().equals("")){
             settings.setNapovedanKralj(Integer.parseInt(napovedanKralj.getText().toString()));
         }
+        if(!radlci.getText().toString().equals("")){
+            settings.setRadlc(Integer.parseInt(radlci.getText().toString()));
+        }
 
         storeToSp();
     }
@@ -281,6 +290,8 @@ public class SettingsActivity extends AppCompatActivity {
         editor.putInt("kralj", settings.getKralj());
         editor.putInt("napovedanKralj", settings.getNapovedanKralj());
 
+        editor.putInt("radlc", settings.getRadlc());
+
         editor.apply();
 
         onBackPressed();
@@ -310,6 +321,8 @@ public class SettingsActivity extends AppCompatActivity {
         napovedanaSpicka.setText(Integer.toString(settings.getNapovedanaSpicka()));
         kralj.setText(Integer.toString(settings.getKralj()));
         napovedanKralj.setText(Integer.toString(settings.getNapovedanKralj()));
+
+        radlci.setText(Integer.toString(settings.getRadlc()));
     }
 
     @Override
