@@ -388,6 +388,9 @@ public class Scoreboard extends Activity {
             mPlayers[i] = players.get(i).getName();
             checked[i] = false;
         }
+        if(round.getIdGame() == 4 || round.getIdGame() == 5){
+            checked[round.getIdPlayer()] = true;
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
         builder.setTitle("Kdo je bil udeležen v igri?")
@@ -619,7 +622,7 @@ public class Scoreboard extends Activity {
 
     public void pointsDialog(final int tocke){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        
+
         LinearLayout layout = new LinearLayout(this);
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT);
