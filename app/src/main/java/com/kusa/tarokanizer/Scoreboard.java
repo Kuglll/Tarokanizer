@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -152,7 +151,73 @@ public class Scoreboard extends Activity {
     }
 
     public void finishGame(){
-        Log.d("finish", "game");
+        for (int i = 0; i < players.size(); i++) {
+            //TODO: expose radlci value to settings
+            mSums[i] = mSums[i] - mRadlci[i] * 100;
+            mRadlci[i] = 0;
+        }
+        loadSums();
+        loadRadlci();
+        findWinner();
+    }
+
+    public void findWinner() {
+        ArrayList<String> winners = new ArrayList<>();
+        int max = mSums[0];
+        for (int i = 0; i < players.size(); i++) {
+            if (mSums[i] > max) {
+                max = mSums[i];
+                winners.clear();
+                winners.add(players.get(i).getName());
+            } else if (mSums[i] == max) {
+                winners.add(players.get(i).getName());
+            }
+        }
+        displayWinnerDialog(winners, max);
+    }
+
+    public void displayWinnerDialog(ArrayList<String> winners, int points) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Imamo zmagovalca!");
+        StringBuilder sb = new StringBuilder();
+
+        switch (winners.size()) {
+            case 1:
+                sb.append("Zmagovalec je: ");
+                break;
+            case 2:
+                sb.append("Zmagovalca sta: ");
+                break;
+            default:
+                sb.append("Zmagovalci so: ");
+                break;
+        }
+
+        for (String winner : winners) {
+            sb.append(winner + ", ");
+        }
+
+        sb.setLength(sb.length() - 2);
+
+        LinearLayout layout = new LinearLayout(this);
+        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(0, 0, 0, 64);
+        layout.setLayoutParams(parms);
+
+        TextView tv = new TextView(this);
+        tv.setPadding(64, 8, 0, 0);
+        tv.setText(sb);
+        layout.addView(tv);
+
+        tv = new TextView(this);
+        tv.setPadding(64, 8, 0, 0);
+        tv.setText("S številom točk: " + points);
+        layout.addView(tv);
+
+        dialog.setView(layout);
+        dialog.show();
     }
 
     public void displayWhatGameWasPlayed(){
