@@ -132,6 +132,11 @@ public class ScoreboardDefault extends AppCompatActivity {
         layout.setGravity(Gravity.CLIP_VERTICAL);
         layout.setPadding(2, 2, 2, 2);
 
+        TextView tv = new TextView(this);
+        tv.setPadding(64, 8, 0 , 0);
+        tv.setText("Hint: Pusti prazno za 0");
+        layout.addView(tv);
+
         for (int i = 0; i < players.size(); i++) {
             TextView text = new TextView(this);
             text.setText(players.get(i).getName());

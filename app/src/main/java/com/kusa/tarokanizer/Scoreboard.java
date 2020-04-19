@@ -1,13 +1,17 @@
 package com.kusa.tarokanizer;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.Layout;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -25,6 +29,7 @@ import com.kusa.tarokanizer.utils.DialogFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import androidx.annotation.Dimension;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import kotlin.Unit;
@@ -119,7 +124,6 @@ public class Scoreboard extends Activity {
 
     public void displayFinishGameDialog(){
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Ali želite zaključiti igro?");
 
         LinearLayout layout = new LinearLayout(this);
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -127,8 +131,15 @@ public class Scoreboard extends Activity {
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setLayoutParams(parms);
 
+        TextView title = new TextView(this);
+        title.setPadding(64,48,64,0);
+        title.setText("Ali res želite zaključiti igro?");
+        title.setTextColor(getResources().getColor(R.color.black));
+        title.setTextSize(18);
+        layout.addView(title);
+
         TextView text = new TextView(this);
-        text.setPadding(64, 8, 0,0);
+        text.setPadding(64, 16, 64,0);
         text.setText("To bo samodejno odštelo radlce in razkrilo zmagovalca.");
 
         layout.addView(text);
@@ -417,8 +428,6 @@ public class Scoreboard extends Activity {
 
         ScrollView scroll = new ScrollView(this);
 
-        //TODO: subtittle "Pusti prazno za 0"
-
         LinearLayout layout = new LinearLayout(this);
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                                                             LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -426,6 +435,11 @@ public class Scoreboard extends Activity {
         layout.setLayoutParams(parms);
         layout.setGravity(Gravity.CLIP_VERTICAL);
         layout.setPadding(2, 2, 2, 2);
+
+        TextView tv = new TextView(this);
+        tv.setPadding(64, 8, 0 , 0);
+        tv.setText("Hint: Pusti prazno za 0");
+        layout.addView(tv);
 
         for(int i=0; i<players.size(); i++) {
             if(checked[i]) {
@@ -605,13 +619,31 @@ public class Scoreboard extends Activity {
 
     public void pointsDialog(final int tocke){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Kakšna je bila razlika?");
+        
+        LinearLayout layout = new LinearLayout(this);
+        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(parms);
 
-        //TODO: hint: če je igralec izgubil brez razlike vnesi -0
+        TextView title = new TextView(this);
+        title.setPadding(64,48,64,0);
+        title.setText("Kakšna je bila razlika?");
+        title.setTextColor(getResources().getColor(R.color.black));
+        title.setTextSize(18);
+        layout.addView(title);
+
+        TextView text = new TextView(this);
+        text.setPadding(64, 16, 64,0);
+        text.setText("Hint: če je igralec izgubil brez razlike vnesi -0");
+        layout.addView(text);
 
         final EditText editext = new EditText(this);
         editext.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
-        builder.setView(editext);
+        editext.requestFocus();
+        layout.addView(editext);
+
+        builder.setView(layout);
 
         builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
             @Override
