@@ -1,17 +1,13 @@
 package com.kusa.tarokanizer;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.text.Layout;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -20,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kusa.tarokanizer.data_classes.CardView;
+import com.kusa.tarokanizer.data_classes.Games;
+import com.kusa.tarokanizer.data_classes.Kontras;
 import com.kusa.tarokanizer.data_classes.Player;
 import com.kusa.tarokanizer.data_classes.Round;
 import com.kusa.tarokanizer.data_classes.Settings;
@@ -27,9 +25,7 @@ import com.kusa.tarokanizer.utils.ComponentFactory;
 import com.kusa.tarokanizer.utils.DialogFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import androidx.annotation.Dimension;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import kotlin.Unit;
@@ -243,36 +239,66 @@ public class Scoreboard extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             //display razlika + 30/20/10 + radlci
-                            case 0: displayWhoPlayedDialog(settings.getEna()); round.setIdGame(0); break;
-                            case 1: displayWhoPlayedDialog(settings.getDva()); round.setIdGame(1); break;
-                            case 2: displayWhoPlayedDialog(settings.getTri()); round.setIdGame(2); break;
+                            case 0:
+                                displayWhoPlayedDialog(settings.getEna());
+                                round.setIdGame(Games.ENA);
+                                break;
+                            case 1:
+                                displayWhoPlayedDialog(settings.getDva());
+                                round.setIdGame(Games.DVA);
+                                break;
+                            case 2:
+                                displayWhoPlayedDialog(settings.getTri());
+                                round.setIdGame(Games.TRI);
+                                break;
                             //set number of points for each player + radlci
-                            case 3: displayWhoPlayedAswell(); round.setIdGame(3); break; //klop
-                            case 4: displayWhoPlayedDialog(0); round.setIdGame(4); break; //berac
-                            case 5: displayWhoPlayedDialog(0); round.setIdGame(5); break; //pikolo
+                            case 3:
+                                displayWhoPlayedAswell();
+                                round.setIdGame(Games.KLOP);
+                                break;
+                            case 4:
+                                displayWhoPlayedDialog(0);
+                                round.setIdGame(Games.BERAC);
+                                break;
+                            case 5:
+                                displayWhoPlayedDialog(0);
+                                round.setIdGame(Games.PIKOLO);
+                                break;
                             //display razlika + 60/50/40 + radlci
-                            case 6: displayWhoPlayedDialog(settings.getSoloEna()); round.setIdGame(6); break;
-                            case 7: displayWhoPlayedDialog(settings.getSoloDva());  round.setIdGame(7); break;
-                            case 8: displayWhoPlayedDialog(settings.getSoloTri()); round.setIdGame(8); break;
-                            case 9: displayWhoPlayedDialog(settings.getSoloBrez()); round.setIdGame(9); break;
-                            case 10: //valat
-                                round.setIdGame(10);
+                            case 6:
+                                displayWhoPlayedDialog(settings.getSoloEna());
+                                round.setIdGame(Games.SOLO_ENA);
+                                break;
+                            case 7:
+                                displayWhoPlayedDialog(settings.getSoloDva());
+                                round.setIdGame(Games.SOLO_DVA);
+                                break;
+                            case 8:
+                                displayWhoPlayedDialog(settings.getSoloTri());
+                                round.setIdGame(Games.SOLO_TRI);
+                                break;
+                            case 9:
+                                displayWhoPlayedDialog(settings.getSoloBrez());
+                                round.setIdGame(Games.SOLO_BREZ);
+                                break;
+                            case 10:
+                                round.setIdGame(Games.VALAT);
                                 displayWhoPlayedDialog(settings.getValat());
                                 break;
-                            case 11: // napovedan valat
-                                round.setIdGame(11);
+                            case 11:
+                                round.setIdGame(Games.NAPOVEDAN_VALAT);
                                 displayWhoPlayedDialog(settings.getNapovedanValat());
                                 break;
-                            case 12: //barvni valat
-                                round.setIdGame(12);
+                            case 12:
+                                round.setIdGame(Games.BARVNI_VALAT);
                                 displayWhoPlayedDialog(settings.getBarvniValat());
                                 break;
-                            case 13: //mond fang
-                                round.setIdGame(13);
+                            case 13:
+                                round.setIdGame(Games.MOND_FANG);
                                 displayWhoPlayedDialog(-settings.getMondFang());
                                 break;
                             case 14: // renons
-                                round.setIdGame(14);
+                                round.setIdGame(Games.RENONS);
                                 displayWhoPlayedDialog(-settings.getRenons());
                                 break;
                         }
@@ -292,9 +318,9 @@ public class Scoreboard extends Activity {
         }
 
         String dialogTitle;
-        if (round.getIdGame() == 13) {
+        if (round.getIdGame() == Games.MOND_FANG) {
             dialogTitle = "Kdo je izgubil monda?";
-        } else if (round.getIdGame() == 14) {
+        } else if (round.getIdGame() == Games.RENONS) {
             dialogTitle = "Kdo se je zatalal?";
         } else {
             dialogTitle = "Kdo je igral?";
@@ -307,26 +333,21 @@ public class Scoreboard extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         round.setIdPlayer(which);
 
-                        if (round.getIdGame() == 10 || round.getIdGame() == 11) {
-                            //valat ali napovedan valat
+                        if (round.getIdGame() == Games.VALAT || round.getIdGame() == Games.NAPOVEDAN_VALAT) {
                             round.setPoints(tocke);
                             displayWhoGotRufed(0);
-                        } else if (round.getIdGame() == 12) {
-                            //barvni valat
+                        } else if (round.getIdGame() == Games.BARVNI_VALAT) {
                             round.setPoints(tocke);
                             displayWhoWonDialog(createChecked());
-                        } else if (round.getIdGame() == 13) {
-                            //mond
+                        } else if (round.getIdGame() == Games.MOND_FANG) {
                             round.setPoints(tocke);
                             round.setRazlikaPozitivna(true);
                             finalizeScoreForMond(createChecked());
-                        } else if (round.getIdGame() == 14) {
-                            //renons
+                        } else if (round.getIdGame() == Games.RENONS) {
                             round.setPoints(tocke);
                             round.setRazlikaPozitivna(true);
                             finalizeScore(createChecked());
-                        } else if (round.getIdGame() == 4 || round.getIdGame() == 5) {
-                            //berac ali pikolo
+                        } else if (round.getIdGame() == Games.BERAC || round.getIdGame() == Games.PIKOLO) {
                             displayWhoPlayedAswell();
                         }else {
                             // if there is less or equal than 3 player, no one was rufed
@@ -388,7 +409,8 @@ public class Scoreboard extends Activity {
             mPlayers[i] = players.get(i).getName();
             checked[i] = false;
         }
-        if(round.getIdGame() == 4 || round.getIdGame() == 5){
+        if (round.getIdGame() == Games.BERAC || round.getIdGame() == Games.PIKOLO) {
+            //better ux - automatic check on dialog
             checked[round.getIdPlayer()] = true;
         }
 
@@ -404,11 +426,10 @@ public class Scoreboard extends Activity {
         builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //klop
-                if(round.getIdGame() == 3){
+                if (round.getIdGame() == Games.KLOP) {
                     getPointsForPlayers(checked);
                 }else{
-                    if (round.getIdGame() == 4 || round.getIdGame() == 5) {
+                    if (round.getIdGame() == Games.BERAC || round.getIdGame() == Games.PIKOLO) {
                         checked[round.getIdPlayer()] = true;
                     }
                     displayWhoWonDialog(checked);
@@ -549,9 +570,9 @@ public class Scoreboard extends Activity {
                 .setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (round.getIdGame() == 10
-                            || round.getIdGame() == 11
-                            || round.getIdGame() == 12) {
+                        if (round.getIdGame() == Games.VALAT
+                            || round.getIdGame() == Games.NAPOVEDAN_VALAT
+                            || round.getIdGame() == Games.BARVNI_VALAT) {
                             switch (which) {
                                 case 0:
                                     round.setRazlikaPozitivna(true);
@@ -593,7 +614,7 @@ public class Scoreboard extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         round.setIdRufanPlayer(which);
-                        if (round.getIdGame() == 10 || round.getIdGame() == 11) {
+                        if (round.getIdGame() == Games.VALAT || round.getIdGame() == Games.NAPOVEDAN_VALAT) {
                             displayWhoWonDialog(createChecked());
                         } else {
                             pointsDialog(tocke);
@@ -604,7 +625,7 @@ public class Scoreboard extends Activity {
         builder.setPositiveButton("PRESKOČI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (round.getIdGame() == 10 || round.getIdGame() == 11) {
+                if (round.getIdGame() == Games.VALAT || round.getIdGame() == Games.NAPOVEDAN_VALAT) {
                     displayWhoWonDialog(createChecked());
                 } else {
                     pointsDialog(tocke);
@@ -836,7 +857,7 @@ public class Scoreboard extends Activity {
     }
 
     public void checkForKontra(final boolean[] checked) {
-        String[] kontras = {"Kontra", "Rekontra", "Subkontra", "Mordkontra"};
+        final String[] kontras = {"Kontra", "Rekontra", "Subkontra", "Mordkontra"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
         builder.setTitle("Ali je bila izrečena kakšna kontra?")
@@ -846,19 +867,19 @@ public class Scoreboard extends Activity {
                     switch (which) {
                         case 0:
                             round.setPoints(round.getPoints() * 2);
-                            round.setKontra(0);
+                            round.setKontra(Kontras.KONTRA);
                             break;
                         case 1:
                             round.setPoints(round.getPoints() * 4);
-                            round.setKontra(1);
+                            round.setKontra(Kontras.REKONTRA);
                             break;
                         case 2:
                             round.setPoints(round.getPoints() * 8);
-                            round.setKontra(2);
+                            round.setKontra(Kontras.SUBKONTRA);
                             break;
                         case 3:
                             round.setPoints(round.getPoints() * 16);
-                            round.setKontra(3);
+                            round.setKontra(Kontras.MORDKONTRA);
                             break;
                     }
                     finalizeScore(checked);
@@ -937,7 +958,7 @@ public class Scoreboard extends Activity {
         rounds.add(round);
 
         //add radlc if the game is correct
-        if(Arrays.asList("3","4","5").contains(Integer.toString(round.getIdGame()))){
+        if (round.getIdGame() == Games.KLOP || round.getIdGame() == Games.BERAC || round.getIdGame() == Games.PIKOLO) {
             for(int i=0; i<checked.length; i++){
                 if(checked[i] || round.getIdPlayer() == i){
                     //updating number of radlci for player
@@ -952,7 +973,11 @@ public class Scoreboard extends Activity {
 
     public void checkForObvezenKlop(boolean[] checked) {
         for (int i = 0; i < players.size(); i++) {
-            if (mSums[i] == 0 && checked[i] && round.getIdGame() != 3 && round.getIdGame() != 4 && round.getIdGame() != 5) {
+            if (mSums[i] == 0 && checked[i]
+                && round.getIdGame() != Games.KLOP
+                && round.getIdGame() != Games.BERAC
+                && round.getIdGame() != Games.PIKOLO
+            ) {
                 DialogFactory.Companion.displayObvezenKlopDialog(this);
                 break;
             }
@@ -1034,9 +1059,9 @@ public class Scoreboard extends Activity {
                 layout.addView(text);
             }
 
-            if (rounds.get(index).getIdGame() == 3 ||
-                rounds.get(index).getIdGame() == 4 ||
-                rounds.get(index).getIdGame() == 5) {
+            if (rounds.get(index).getIdGame() == Games.KLOP ||
+                rounds.get(index).getIdGame() == Games.BERAC ||
+                rounds.get(index).getIdGame() == Games.PIKOLO) {
                 boolean[] checked = rounds.get(index).getChecked();
                 text = new TextView(this);
                 text.setPadding(64, 8, 0, 0);
@@ -1055,16 +1080,16 @@ public class Scoreboard extends Activity {
                 text = new TextView(this);
                 String kontra;
                 switch (rounds.get(index).getKontra()) {
-                    case 0:
+                    case Kontras.KONTRA:
                         kontra = "Kontra";
                         break;
-                    case 1:
+                    case Kontras.REKONTRA:
                         kontra = "Rekontra";
                         break;
-                    case 2:
+                    case Kontras.SUBKONTRA:
                         kontra = "Subkontra";
                         break;
-                    case 3:
+                    case Kontras.MORDKONTRA:
                         kontra = "Mordkontra";
                         break;
                     default:
@@ -1096,35 +1121,35 @@ public class Scoreboard extends Activity {
     public String resolveGameId(int id) {
 
         switch (id) {
-            case 0:
+            case Games.ENA:
                 return "Ena";
-            case 2:
-                return "Tri";
-            case 1:
+            case Games.DVA:
                 return "Dva";
-            case 3:
+            case Games.TRI:
+                return "Tri";
+            case Games.KLOP:
                 return "Klop";
-            case 4:
+            case Games.BERAC:
                 return "Berač";
-            case 5:
+            case Games.PIKOLO:
                 return "Pikolo";
-            case 6:
+            case Games.SOLO_ENA:
                 return "Solo ena";
-            case 7:
+            case Games.SOLO_DVA:
                 return "Solo dva";
-            case 8:
+            case Games.SOLO_TRI:
                 return "Solo tri";
-            case 9:
+            case Games.SOLO_BREZ:
                 return "Solo brez";
-            case 10:
+            case Games.VALAT:
                 return "Valat";
-            case 11:
+            case Games.NAPOVEDAN_VALAT:
                 return "Napovedani valat";
-            case 12:
+            case Games.BARVNI_VALAT:
                 return "Napovedani barvni valat";
-            case 13:
+            case Games.MOND_FANG:
                 return "Mond fang";
-            case 14:
+            case Games.RENONS:
                 return "Renons";
             default:
                 return null;
@@ -1133,7 +1158,7 @@ public class Scoreboard extends Activity {
 
     public void repairDataAfterRoundDeletion(Round round){
         //radlci correction
-        if (Arrays.asList("3", "4", "5").contains(Integer.toString(round.getIdGame()))) {
+        if (round.getIdGame() == Games.KLOP || round.getIdGame() == Games.BERAC || round.getIdGame() == Games.PIKOLO) {
             for (int i = 0; i < round.getChecked().length; i++) {
                 if (round.getChecked()[i] || round.getIdPlayer() == i) {
                     mRadlci[i] = mRadlci[i] - 1;
