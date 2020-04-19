@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -109,6 +110,49 @@ public class Scoreboard extends Activity {
                 onBackPressed();
             }
         });
+        buttonFinish.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                displayFinishGameDialog();
+            }
+        });
+    }
+
+    public void displayFinishGameDialog(){
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Ali želite zaključiti igro?");
+
+        LinearLayout layout = new LinearLayout(this);
+        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(parms);
+
+        TextView text = new TextView(this);
+        text.setPadding(64, 8, 0,0);
+        text.setText("To bo samodejno odštelo radlce in razkrilo zmagovalca.");
+
+        layout.addView(text);
+        dialog.setView(layout);
+
+        dialog.setPositiveButton("DA", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finishGame();
+            }
+        });
+
+        dialog.setNegativeButton("PREKLIČI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        dialog.show();
+    }
+
+    public void finishGame(){
+        Log.d("finish", "game");
     }
 
     public void displayWhatGameWasPlayed(){
