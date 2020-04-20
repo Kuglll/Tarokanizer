@@ -90,6 +90,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                     intent = new Intent(mActivity, ScoreboardDefault.class);
                 }
                 intent.putExtra("position", position);
+                intent.putExtra("title", currentItem.getmTitle());
                 if(!(mActivity == null)) {
                     mActivity.startActivityForResult(intent, INTENT_REQUEST);
                 }

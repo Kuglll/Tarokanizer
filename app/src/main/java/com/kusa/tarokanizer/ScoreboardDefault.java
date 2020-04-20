@@ -84,7 +84,7 @@ public class ScoreboardDefault extends AppCompatActivity {
         linearLayoutSum = findViewById(R.id.sum);
 
         TextView tv = findViewById(R.id.toolbarTitle);
-        tv.setText("Tarokanizer");
+        tv.setText(getIntent().getStringExtra("title"));
 
         backButton = findViewById(R.id.backButton);
         buttonNew = findViewById(R.id.addButton);

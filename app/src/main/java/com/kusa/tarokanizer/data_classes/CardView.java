@@ -24,6 +24,14 @@ public class CardView {
         rounds = new ArrayList<>();
     }
 
+    public String getmTitle() {
+        return mTitle;
+    }
+
+    public void setmTitle(String mTitle) {
+        this.mTitle = mTitle;
+    }
+
     public String getTitle() {
         return mTitle;
     }
