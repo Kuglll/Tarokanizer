@@ -1,6 +1,7 @@
 package com.kusa.tarokanizer
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -20,8 +21,6 @@ const val SHARED_PREFERENCES = "SHARED_PREFERENCES"
 class MainActivity : AppCompatActivity(), Dialog.DialogListener{
 
     lateinit var preferences: SharedPreferences
-    lateinit var editor: SharedPreferences.Editor
-
     lateinit var mAdapter: Adapter
     lateinit var mLayoutManager: RecyclerView.LayoutManager
 
@@ -30,20 +29,17 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
     companion object{
         lateinit var mCardViewList: ArrayList<CardView>
 
-
         fun getCardViewList(): ArrayList<CardView> = mCardViewList
+
+        fun returnMainActivityIntent(ctx: Context): Intent = Intent(ctx, MainActivity::class.java)
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         preferences = getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
-        if (firstStart()) {
-            displayOnboarding()
-        }
 
         setContentView(R.layout.activity_main)
-
         setSupportActionBar(toolbar)
 
         mCardViewList = ArrayList()
@@ -55,20 +51,6 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
         BuildRecyclerView()
 
         initViews()
-    }
-
-    fun displayOnboarding() {
-        val editor = preferences.edit()
-        editor.putBoolean("appStarted", true)
-        editor.apply()
-
-        //TODO: Display onboarding
-    }
-
-    fun firstStart(): Boolean {
-        //TODO: uncomment this
-        //return !preferences.contains("appStarted")
-        return true
     }
 
     fun initViews() {
@@ -180,7 +162,7 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
     }
 
     fun storeCardViewList() {
-        editor = preferences.edit()
+        val editor = preferences.edit()
         val gson = Gson()
         var i = 0
 
