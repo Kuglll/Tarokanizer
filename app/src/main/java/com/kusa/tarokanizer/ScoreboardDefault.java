@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.TextViewCompat;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -36,7 +35,6 @@ public class ScoreboardDefault extends AppCompatActivity {
     LinearLayout linearLayoutScore;
     LinearLayout linearLayoutSum;
     CardView cardView;
-    private Toolbar toolbar;
     Button buttonNew;
     Button backButton;
 
@@ -73,8 +71,6 @@ public class ScoreboardDefault extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scoreboard);
-
-        toolbar = findViewById(R.id.toolbar);
 
         initViews();
         initOnClickListeners();

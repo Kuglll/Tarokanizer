@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -26,7 +25,6 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
     lateinit var mAdapter: Adapter
     lateinit var mLayoutManager: RecyclerView.LayoutManager
 
-    lateinit var toolbar: Toolbar
     lateinit var settings: Settings
 
     companion object{
@@ -39,19 +37,18 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        preferences = getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
         if (firstStart()) {
             displayOnboarding()
         }
 
         setContentView(R.layout.activity_main)
 
-        toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         mCardViewList = ArrayList()
 
         settings = Settings.getInstance()
-        preferences = getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
         loadCardViewList()
         loadSettings()
 
@@ -61,12 +58,17 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
     }
 
     fun displayOnboarding() {
+        val editor = preferences.edit()
+        editor.putBoolean("appStarted", true)
+        editor.apply()
+
         //TODO: Display onboarding
     }
 
     fun firstStart(): Boolean {
-        //TODO: check if app is started for the first time - store 1 boolean to sp
-        return false
+        //TODO: uncomment this
+        //return !preferences.contains("appStarted")
+        return true
     }
 
     fun initViews() {

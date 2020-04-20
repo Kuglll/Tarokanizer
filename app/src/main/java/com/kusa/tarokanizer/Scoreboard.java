@@ -27,7 +27,6 @@ import com.kusa.tarokanizer.utils.DialogFactory;
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
@@ -40,7 +39,6 @@ public class Scoreboard extends Activity {
     LinearLayout linearLayoutScore;
     LinearLayout linearLayoutSum;
     CardView cardView;
-    private Toolbar toolbar;
     private Button buttonNew;
     private Button buttonSettings;
     private Button buttonFinish;
@@ -72,7 +70,6 @@ public class Scoreboard extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scoreboard);
-        toolbar = findViewById(R.id.toolbar);
         settings = Settings.getInstance();
 
         initViews();

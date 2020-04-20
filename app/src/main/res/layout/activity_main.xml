@@ -8,7 +8,6 @@
     tools:context="com.kusa.tarokanizer.MainActivity">
 
     <include
-        android:id = "@+id/toolbar"
         layout="@layout/toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
