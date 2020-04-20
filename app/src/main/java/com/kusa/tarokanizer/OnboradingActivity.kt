@@ -4,6 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.kusa.tarokanizer.onboarding_fragments.OnboardingWelcomeFragment
+import com.kusa.tarokanizer.utils.OnboardingViewPagerAdapter
+import kotlinx.android.synthetic.main.onboarding_activity.*
 
 class OnboradingActivity : AppCompatActivity() {
 
@@ -15,9 +18,11 @@ class OnboradingActivity : AppCompatActivity() {
         preferences = getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
 
         when {
-            firstStart() -> displayOnboarding()
             !firstStart() -> navigateToMainActivity()
         }
+
+        initViewPager()
+        initListeners()
     }
 
     fun firstStart(): Boolean {
@@ -30,11 +35,32 @@ class OnboradingActivity : AppCompatActivity() {
         val editor = preferences.edit()
         editor.putBoolean("appStarted", true)
         editor.apply()
-
-        //TODO: Display onboarding
     }
 
     fun navigateToMainActivity() {
         startActivity(MainActivity.returnMainActivityIntent(this))
+        finish()
+    }
+
+    fun initViewPager() {
+        onboardingViewPager.adapter = OnboardingViewPagerAdapter(supportFragmentManager).apply {
+            addFragment(OnboardingWelcomeFragment())
+            //TODO: add all fragments
+        }
+    }
+
+    fun initListeners() {
+        skipButton.setOnClickListener {
+            navigateToMainActivity()
+        }
+        nextButton.setOnClickListener {
+            onboardingViewPager.adapter?.count?.let { length ->
+                if (onboardingViewPager.currentItem == length - 1) {
+                    navigateToMainActivity()
+                } else {
+                    onboardingViewPager.currentItem++
+                }
+            }
+        }
     }
 }
