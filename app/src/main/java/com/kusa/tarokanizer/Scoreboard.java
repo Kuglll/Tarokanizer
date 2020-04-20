@@ -237,46 +237,46 @@ public class Scoreboard extends Activity {
                         switch (which){
                             //display razlika + 30/20/10 + radlci
                             case 0:
-                                displayWhoPlayedDialog(settings.getEna());
                                 round.setIdGame(Games.ENA);
+                                displayWhoPlayedDialog(settings.getEna());
                                 break;
                             case 1:
-                                displayWhoPlayedDialog(settings.getDva());
                                 round.setIdGame(Games.DVA);
+                                displayWhoPlayedDialog(settings.getDva());
                                 break;
                             case 2:
-                                displayWhoPlayedDialog(settings.getTri());
                                 round.setIdGame(Games.TRI);
+                                displayWhoPlayedDialog(settings.getTri());
                                 break;
                             //set number of points for each player + radlci
                             case 3:
-                                displayWhoPlayedAswell();
                                 round.setIdGame(Games.KLOP);
+                                displayWhoPlayedAswell();
                                 break;
                             case 4:
-                                displayWhoPlayedDialog(0);
                                 round.setIdGame(Games.BERAC);
+                                displayWhoPlayedDialog(0);
                                 break;
                             case 5:
-                                displayWhoPlayedDialog(0);
                                 round.setIdGame(Games.PIKOLO);
+                                displayWhoPlayedDialog(0);
                                 break;
                             //display razlika + 60/50/40 + radlci
                             case 6:
-                                displayWhoPlayedDialog(settings.getSoloEna());
                                 round.setIdGame(Games.SOLO_ENA);
+                                displayWhoPlayedDialog(settings.getSoloEna());
                                 break;
                             case 7:
-                                displayWhoPlayedDialog(settings.getSoloDva());
                                 round.setIdGame(Games.SOLO_DVA);
+                                displayWhoPlayedDialog(settings.getSoloDva());
                                 break;
                             case 8:
-                                displayWhoPlayedDialog(settings.getSoloTri());
                                 round.setIdGame(Games.SOLO_TRI);
+                                displayWhoPlayedDialog(settings.getSoloTri());
                                 break;
                             case 9:
-                                displayWhoPlayedDialog(settings.getSoloBrez());
                                 round.setIdGame(Games.SOLO_BREZ);
+                                displayWhoPlayedDialog(settings.getSoloBrez());
                                 break;
                             case 10:
                                 round.setIdGame(Games.VALAT);
@@ -346,7 +346,14 @@ public class Scoreboard extends Activity {
                             finalizeScore(createChecked());
                         } else if (round.getIdGame() == Games.BERAC || round.getIdGame() == Games.PIKOLO) {
                             displayWhoPlayedAswell();
-                        }else {
+                        } else if (
+                            round.getIdGame() == Games.SOLO_BREZ ||
+                                round.getIdGame() == Games.SOLO_ENA ||
+                                round.getIdGame() == Games.SOLO_DVA ||
+                                round.getIdGame() == Games.SOLO_TRI
+                        ) {
+                            pointsDialog(tocke);
+                        } else {
                             // if there is less or equal than 3 player, no one was rufed
                             if (players.size() <= 3) {
                                 pointsDialog(tocke);
@@ -406,13 +413,26 @@ public class Scoreboard extends Activity {
             mPlayers[i] = players.get(i).getName();
             checked[i] = false;
         }
-        if (round.getIdGame() == Games.BERAC || round.getIdGame() == Games.PIKOLO) {
-            //better ux - automatic check on dialog
-            checked[round.getIdPlayer()] = true;
-        }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
-        builder.setTitle("Kdo je bil udeležen v igri?")
+        //if less than 4 players everyone played along
+        if (players.size() <= 4) {
+            for (int i = 0; i < players.size(); i++) {
+                checked[i] = true;
+            }
+            if (round.getIdGame() == Games.KLOP) {
+                getPointsForPlayers(checked);
+            } else if (round.getIdGame() == Games.BERAC || round.getIdGame() == Games.PIKOLO) {
+                displayWhoWonDialog(checked);
+            }
+        } else {
+
+            if (round.getIdGame() == Games.BERAC || round.getIdGame() == Games.PIKOLO) {
+                //better ux - automatic check on dialog
+                checked[round.getIdPlayer()] = true;
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
+            builder.setTitle("Kdo je bil udeležen v igri?")
                 .setMultiChoiceItems(mPlayers, checked, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i, boolean b) {
@@ -420,24 +440,25 @@ public class Scoreboard extends Activity {
                     }
                 });
 
-        builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (round.getIdGame() == Games.KLOP) {
-                    getPointsForPlayers(checked);
-                }else{
-                    if (round.getIdGame() == Games.BERAC || round.getIdGame() == Games.PIKOLO) {
-                        checked[round.getIdPlayer()] = true;
+            builder.setPositiveButton("NAPREJ", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    if (round.getIdGame() == Games.KLOP) {
+                        getPointsForPlayers(checked);
+                    } else {
+                        if (round.getIdGame() == Games.BERAC || round.getIdGame() == Games.PIKOLO) {
+                            checked[round.getIdPlayer()] = true;
+                        }
+                        displayWhoWonDialog(checked);
                     }
-                    displayWhoWonDialog(checked);
                 }
-            }
-        });
+            });
 
-        builder.setNegativeButton("PREKLIČI", null);
+            builder.setNegativeButton("PREKLIČI", null);
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 
     public void getPointsForPlayers(final boolean [] checked){
