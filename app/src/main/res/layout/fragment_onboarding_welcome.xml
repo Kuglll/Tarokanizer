@@ -12,7 +12,7 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_margin="16dp"
-        android:background="@mipmap/ic_launcher"
+        android:background="@drawable/launcher_icon2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 

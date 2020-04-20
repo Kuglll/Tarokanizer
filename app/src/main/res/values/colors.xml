@@ -3,6 +3,7 @@
     <color name="colorPrimaryDark">#686868</color>
     <color name="colorPrimary">#bcbcbc</color>
     <color name="colorAccent">#ff654f</color>
+    <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="red">#ff654f</color>
     <color name="red_normal">#cd2f25</color>
