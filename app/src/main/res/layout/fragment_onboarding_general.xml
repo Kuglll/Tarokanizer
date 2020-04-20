@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@drawable/background_grey">
+    tools:background="@drawable/onboarding_background">
 
     <TextView
         android:id="@+id/headerTextView"
@@ -35,6 +35,6 @@
         app:layout_constraintTop_toBottomOf="@id/headerTextView"
         app:layout_constraintVertical_bias="1.0"
         app:layout_constraintVertical_chainStyle="spread"
-        tools:background="@drawable/onboardingImage1"/>
+        tools:background="@drawable/onboarding_image1"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

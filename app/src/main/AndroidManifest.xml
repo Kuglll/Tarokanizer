@@ -17,6 +17,7 @@
         <activity android:name="com.kusa.tarokanizer.ScoreboardDefault"
             android:screenOrientation="portrait"/>
         <activity android:name="com.kusa.tarokanizer.MainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".OnboradingActivity"
