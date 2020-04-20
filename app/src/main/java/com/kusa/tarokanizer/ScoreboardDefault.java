@@ -262,7 +262,7 @@ public class ScoreboardDefault extends AppCompatActivity {
             tv = ComponentFactory.Companion.createTextViewSum(i);
             linearLayoutSum.addView(tv);
 
-            ll = ComponentFactory.Companion.createPlayersRadlcLayout(i);
+            ll = ComponentFactory.Companion.createPlayersRadlcLayout(i, false, function2);
             linearLayoutRadlci.addView(ll);
         }
 
@@ -324,8 +324,7 @@ public class ScoreboardDefault extends AppCompatActivity {
         if (mRadlci[id] < 0) {
             mRadlci[id] = 0;
         }
-        Integer a;
-        a = mRadlci[id];
+        Integer a = mRadlci[id];
         if (a != null || a != 0) {
             LinearLayout ll = (LinearLayout) linearLayoutRadlci.getChildAt(id);
             ll.removeAllViews();

@@ -1002,7 +1002,7 @@ public class Scoreboard extends Activity {
 
             linearLayoutScore.addView(ComponentFactory.Companion.createScoreLayout(i));
             linearLayoutSum.addView(ComponentFactory.Companion.createTextViewSum(i));
-            linearLayoutRadlci.addView(ComponentFactory.Companion.createPlayersRadlcLayout(i));
+            linearLayoutRadlci.addView(ComponentFactory.Companion.createPlayersRadlcLayout(i, true, null));
         }
 
         loadRounds();

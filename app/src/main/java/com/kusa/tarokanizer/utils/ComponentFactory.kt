@@ -39,7 +39,11 @@ class ComponentFactory{
             return textView
         }
 
-        fun createPlayersRadlcLayout(i: Int): LinearLayout? {
+        fun createPlayersRadlcLayout(
+            i: Int,
+            automatic: Boolean,
+            onClick: ((Int) -> Unit)?
+        ): LinearLayout? {
             val context = TarockanizerApp.instance
 
             val ll = LinearLayout(context)
@@ -49,6 +53,14 @@ class ComponentFactory{
                 50, 1f)
             ll.gravity = Gravity.CENTER_HORIZONTAL
             ll.setBackgroundResource(R.drawable.border)
+
+            if (!automatic) {
+                ll.setOnClickListener {
+                    val ll = it.parent as LinearLayout
+                    onClick!!(ll.indexOfChild(it))
+                }
+            }
+
             return ll
         }
 
