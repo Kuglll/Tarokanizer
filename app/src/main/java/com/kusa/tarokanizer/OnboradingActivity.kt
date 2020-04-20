@@ -20,7 +20,7 @@ class OnboradingActivity : AppCompatActivity() {
         when {
             !firstStart() -> navigateToMainActivity()
         }
-
+        saveToSharedPrefs()
         initViewPager()
         initListeners()
     }
@@ -31,15 +31,15 @@ class OnboradingActivity : AppCompatActivity() {
         return true
     }
 
-    fun displayOnboarding() {
-        val editor = preferences.edit()
-        editor.putBoolean("appStarted", true)
-        editor.apply()
-    }
-
     fun navigateToMainActivity() {
         startActivity(MainActivity.returnMainActivityIntent(this))
         finish()
+    }
+
+    fun saveToSharedPrefs() {
+        val editor = preferences.edit()
+        editor.putBoolean("appStarted", true)
+        editor.apply()
     }
 
     fun initViewPager() {
