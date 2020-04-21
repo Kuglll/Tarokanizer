@@ -256,6 +256,8 @@ public class ScoreboardDefault extends AppCompatActivity {
             linearLayoutScore.addView(ll);
 
             tv = ComponentFactory.Companion.createTextViewSum(i);
+            TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(tv, 1, 200, 1,
+                TypedValue.COMPLEX_UNIT_DIP);
             linearLayoutSum.addView(tv);
 
             ll = ComponentFactory.Companion.createPlayersRadlcLayout(i, false, function2);

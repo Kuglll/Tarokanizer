@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -27,6 +28,7 @@ import com.kusa.tarokanizer.utils.DialogFactory;
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.widget.TextViewCompat;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
@@ -1016,10 +1018,17 @@ public class Scoreboard extends Activity {
 
         for(int i=0; i<players.size(); i++) {
             TextView tv = ComponentFactory.Companion.createTextViewPlayer(players.get(i).getName(), true, null);
+            TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(tv, 1, 200, 1,
+                TypedValue.COMPLEX_UNIT_DIP);
             linearLayoutPlayers.addView(tv);
 
+
             linearLayoutScore.addView(ComponentFactory.Companion.createScoreLayout(i));
-            linearLayoutSum.addView(ComponentFactory.Companion.createTextViewSum(i));
+
+            tv = ComponentFactory.Companion.createTextViewSum(i);
+            TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(tv, 1, 200, 1,
+                TypedValue.COMPLEX_UNIT_DIP);
+            linearLayoutSum.addView(tv);
             linearLayoutRadlci.addView(ComponentFactory.Companion.createPlayersRadlcLayout(i, true, null));
         }
 
