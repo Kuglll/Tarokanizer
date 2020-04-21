@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.kusa.tarokanizer.R
 import kotlinx.android.synthetic.main.fragment_onboarding_general.*
 
-class OnboardingModesFragment : Fragment() {
+class OnboardingRoundFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_onboarding_general, container, false)
@@ -17,9 +17,8 @@ class OnboardingModesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        headerTextView.text = "Aplikacija ima 2 načina delovanja\n - Avtomatski \n - Ročni \n " +
-            "Med njima lahko kadarkoli preklapljaš v nastavitvah."
-        image.background = resources.getDrawable(R.drawable.onboarding_image1, null)
+        headerTextView.text = "Če se zmotiš pri dodajanju posamezne igre, jo lahko kadarkoli pobrišeš s klikom na njo"
+        image.background = resources.getDrawable(R.drawable.onboarding_image5, null)
 
     }
 
