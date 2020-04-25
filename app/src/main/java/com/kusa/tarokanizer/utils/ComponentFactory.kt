@@ -116,7 +116,7 @@ class ComponentFactory{
             textView.text = "0"
             textView.id = id
             textView.setTextColor(ContextCompat.getColor(context, R.color.brightGray))
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30f)
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25f)
             textView.typeface = Typeface.DEFAULT_BOLD
             textView.layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,

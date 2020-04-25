@@ -1024,11 +1024,7 @@ public class Scoreboard extends Activity {
 
 
             linearLayoutScore.addView(ComponentFactory.Companion.createScoreLayout(i));
-
-            tv = ComponentFactory.Companion.createTextViewSum(i);
-            TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(tv, 1, 200, 1,
-                TypedValue.COMPLEX_UNIT_DIP);
-            linearLayoutSum.addView(tv);
+            linearLayoutSum.addView(ComponentFactory.Companion.createTextViewSum(i));
             linearLayoutRadlci.addView(ComponentFactory.Companion.createPlayersRadlcLayout(i, true, null));
         }
 
