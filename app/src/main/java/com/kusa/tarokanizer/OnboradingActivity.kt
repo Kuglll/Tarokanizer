@@ -31,8 +31,7 @@ class OnboradingActivity : AppCompatActivity() {
     }
 
     fun firstStart(): Boolean {
-        //TODO: uncomment this
-        //return !preferences.contains("appStarted")
+        return !preferences.contains("appStarted")
         return true
     }
 

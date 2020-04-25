@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/constraintLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -21,6 +22,18 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="test 123"/>
 
+    <TextView
+        android:id="@+id/headerTextView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:textColor="@color/brightGray"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerTextView"
+        tools:text="test 123"/>
+
     <ImageView
         android:id="@+id/image"
         android:layout_width="0dp"
@@ -32,7 +45,7 @@
         app:layout_constraintDimensionRatio="w,263:532"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/headerTextView"
+        app:layout_constraintTop_toBottomOf="@id/headerTextView2"
         app:layout_constraintVertical_bias="1.0"
         app:layout_constraintVertical_chainStyle="spread"
         tools:background="@drawable/onboarding_image1"/>
