@@ -55,10 +55,10 @@ public class SettingsActivity extends AppCompatActivity {
     EditText napovedanaTrula;
     EditText kralji;
     EditText napovedaniKralji;
-    EditText spicka;
-    EditText napovedanaSpicka;
-    EditText kralj;
-    EditText napovedanKralj;
+    EditText pagatUltimo;
+    EditText napovedanPagatUltimo;
+    EditText kraljUltimo;
+    EditText napovedanKraljUltimo;
 
     EditText radlci;
 
@@ -105,10 +105,10 @@ public class SettingsActivity extends AppCompatActivity {
         napovedanaTrula = findViewById(R.id.napovedanaTrulaEdit);
         kralji = findViewById(R.id.kraljiEdit);
         napovedaniKralji = findViewById(R.id.napovedaniKraljiEdit);
-        spicka = findViewById(R.id.spickaEdit);
-        napovedanaSpicka = findViewById(R.id.napovedanaSpickaEdit);
-        kralj = findViewById(R.id.kraljEdit);
-        napovedanKralj = findViewById(R.id.napovedanKraljEdit);
+        pagatUltimo = findViewById(R.id.spickaEdit);
+        napovedanPagatUltimo = findViewById(R.id.napovedanaSpickaEdit);
+        kraljUltimo = findViewById(R.id.kraljEdit);
+        napovedanKraljUltimo = findViewById(R.id.napovedanKraljEdit);
 
         radlci = findViewById(R.id.radlcEdit);
     }
@@ -161,10 +161,10 @@ public class SettingsActivity extends AppCompatActivity {
         addTextChangeListener(napovedanaTrula);
         addTextChangeListener(kralji);
         addTextChangeListener(napovedaniKralji);
-        addTextChangeListener(spicka);
-        addTextChangeListener(napovedanaSpicka);
-        addTextChangeListener(kralj);
-        addTextChangeListener(napovedanKralj);
+        addTextChangeListener(pagatUltimo);
+        addTextChangeListener(napovedanPagatUltimo);
+        addTextChangeListener(kraljUltimo);
+        addTextChangeListener(napovedanKraljUltimo);
 
         addTextChangeListener(radlci);
     }
@@ -242,17 +242,17 @@ public class SettingsActivity extends AppCompatActivity {
         if(!napovedaniKralji.getText().toString().equals("")){
             settings.setNapovedaniKralji(Integer.parseInt(napovedaniKralji.getText().toString()));
         }
-        if(!spicka.getText().toString().equals("")){
-            settings.setSpicka(Integer.parseInt(spicka.getText().toString()));
+        if(!pagatUltimo.getText().toString().equals("")){
+            settings.setPagatUltimo(Integer.parseInt(pagatUltimo.getText().toString()));
         }
-        if(!napovedanaSpicka.getText().toString().equals("")){
-            settings.setNapovedanaSpicka(Integer.parseInt(napovedanaSpicka.getText().toString()));
+        if(!napovedanPagatUltimo.getText().toString().equals("")){
+            settings.setNapovedanPagatUltimo(Integer.parseInt(napovedanPagatUltimo.getText().toString()));
         }
-        if(!kralj.getText().toString().equals("")){
-            settings.setKralj(Integer.parseInt(kralj.getText().toString()));
+        if(!kraljUltimo.getText().toString().equals("")){
+            settings.setKraljUltimo(Integer.parseInt(kraljUltimo.getText().toString()));
         }
-        if(!napovedanKralj.getText().toString().equals("")){
-            settings.setNapovedanKralj(Integer.parseInt(napovedanKralj.getText().toString()));
+        if(!napovedanKraljUltimo.getText().toString().equals("")){
+            settings.setNapovedanKraljUltimo(Integer.parseInt(napovedanKraljUltimo.getText().toString()));
         }
         if(!radlci.getText().toString().equals("")){
             settings.setRadlc(Integer.parseInt(radlci.getText().toString()));
@@ -285,10 +285,10 @@ public class SettingsActivity extends AppCompatActivity {
         editor.putInt("napovedanaTrula", settings.getNapovedanaTrula());
         editor.putInt("kralji", settings.getKralji());
         editor.putInt("napovedaniKralji", settings.getNapovedaniKralji());
-        editor.putInt("spicka", settings.getSpicka());
-        editor.putInt("napovedanaSpicka", settings.getNapovedanaSpicka());
-        editor.putInt("kralj", settings.getKralj());
-        editor.putInt("napovedanKralj", settings.getNapovedanKralj());
+        editor.putInt("spicka", settings.getPagatUltimo());
+        editor.putInt("napovedanaSpicka", settings.getNapovedanPagatUltimo());
+        editor.putInt("kralj", settings.getKraljUltimo());
+        editor.putInt("napovedanKralj", settings.getNapovedanKraljUltimo());
 
         editor.putInt("radlc", settings.getRadlc());
 
@@ -317,10 +317,10 @@ public class SettingsActivity extends AppCompatActivity {
         napovedanaTrula.setText(Integer.toString(settings.getNapovedanaTrula()));
         kralji.setText(Integer.toString(settings.getKralji()));
         napovedaniKralji.setText(Integer.toString(settings.getNapovedaniKralji()));
-        spicka.setText(Integer.toString(settings.getSpicka()));
-        napovedanaSpicka.setText(Integer.toString(settings.getNapovedanaSpicka()));
-        kralj.setText(Integer.toString(settings.getKralj()));
-        napovedanKralj.setText(Integer.toString(settings.getNapovedanKralj()));
+        pagatUltimo.setText(Integer.toString(settings.getPagatUltimo()));
+        napovedanPagatUltimo.setText(Integer.toString(settings.getNapovedanPagatUltimo()));
+        kraljUltimo.setText(Integer.toString(settings.getKraljUltimo()));
+        napovedanKraljUltimo.setText(Integer.toString(settings.getNapovedanKraljUltimo()));
 
         radlci.setText(Integer.toString(settings.getRadlc()));
     }

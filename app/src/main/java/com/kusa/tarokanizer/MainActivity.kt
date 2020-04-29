@@ -103,10 +103,10 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
             settings.napovedanaTrula = preferences.getInt("napovedanaTrula", 0)
             settings.kralji = preferences.getInt("kralji", 0)
             settings.napovedaniKralji = preferences.getInt("napovedaniKralji", 0)
-            settings.spicka = preferences.getInt("spicka", 0)
-            settings.napovedanaSpicka = preferences.getInt("napovedanaSpicka", 0)
-            settings.kralj = preferences.getInt("kralj", 0)
-            settings.napovedanKralj = preferences.getInt("napovedanKralj", 0)
+            settings.pagatUltimo = preferences.getInt("spicka", 0)
+            settings.napovedanPagatUltimo = preferences.getInt("napovedanaSpicka", 0)
+            settings.kraljUltimo = preferences.getInt("kralj", 0)
+            settings.napovedanKraljUltimo = preferences.getInt("napovedanKralj", 0)
 
             settings.radlc = preferences.getInt("radlc", 0)
         }
