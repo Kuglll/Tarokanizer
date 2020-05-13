@@ -482,7 +482,7 @@ public class Scoreboard extends Activity {
 
         TextView tv = new TextView(this);
         tv.setPadding(64, 8, 0 , 0);
-        tv.setText("Hint: Pusti prazno za 0");
+        tv.setText("Vrednosti vnesi z minusom. Pusti prazno za 0.");
         layout.addView(tv);
 
         for(int i=0; i<players.size(); i++) {
