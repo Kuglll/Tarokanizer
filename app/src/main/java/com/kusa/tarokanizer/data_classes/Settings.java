@@ -44,10 +44,10 @@ public class Settings {
     int napovedanaTrula = 20;
     int kralji = 10;
     int napovedaniKralji = 20;
-    int spicka = 25;
-    int napovedanaSpicka = 50;
-    int kralj = 10;
-    int napovedanKralj = 20;
+    int pagatUltimo = 25;
+    int napovedanPagatUltimo = 50;
+    int kraljUltimo = 10;
+    int napovedanKraljUltimo = 20;
 
     private static Settings settings = null;
 
@@ -155,36 +155,36 @@ public class Settings {
         this.napovedaniKralji = napovedaniKralji;
     }
 
-    public int getSpicka() {
-        return spicka;
+    public int getPagatUltimo() {
+        return pagatUltimo;
     }
 
-    public void setSpicka(int spicka) {
-        this.spicka = spicka;
+    public void setPagatUltimo(int pagatUltimo) {
+        this.pagatUltimo = pagatUltimo;
     }
 
-    public int getNapovedanaSpicka() {
-        return napovedanaSpicka;
+    public int getNapovedanPagatUltimo() {
+        return napovedanPagatUltimo;
     }
 
-    public void setNapovedanaSpicka(int napovedanaSpicka) {
-        this.napovedanaSpicka = napovedanaSpicka;
+    public void setNapovedanPagatUltimo(int napovedanPagatUltimo) {
+        this.napovedanPagatUltimo = napovedanPagatUltimo;
     }
 
-    public int getKralj() {
-        return kralj;
+    public int getKraljUltimo() {
+        return kraljUltimo;
     }
 
-    public void setKralj(int kralj) {
-        this.kralj = kralj;
+    public void setKraljUltimo(int kraljUltimo) {
+        this.kraljUltimo = kraljUltimo;
     }
 
-    public int getNapovedanKralj() {
-        return napovedanKralj;
+    public int getNapovedanKraljUltimo() {
+        return napovedanKraljUltimo;
     }
 
-    public void setNapovedanKralj(int napovedanKralj) {
-        this.napovedanKralj = napovedanKralj;
+    public void setNapovedanKraljUltimo(int napovedanKraljUltimo) {
+        this.napovedanKraljUltimo = napovedanKraljUltimo;
     }
 
     public int getBeracPikolo() {

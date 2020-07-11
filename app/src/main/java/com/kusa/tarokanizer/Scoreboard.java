@@ -482,7 +482,7 @@ public class Scoreboard extends Activity {
 
         TextView tv = new TextView(this);
         tv.setPadding(64, 8, 0 , 0);
-        tv.setText("Hint: Pusti prazno za 0");
+        tv.setText("Vrednosti vnesi z minusom. Pusti prazno za 0.");
         layout.addView(tv);
 
         for(int i=0; i<players.size(); i++) {
@@ -732,7 +732,8 @@ public class Scoreboard extends Activity {
 
     public void displayDodatki(){
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
-        final String [] addons = {"Trula", "Napovedana Trula", "Kralji", "Napovedani Kralji", "Pagat", "Pagat Ultimo", "Kralj Zadnja Runda ", "Kralj Ultimo"};
+        final String [] addons = {"Trula", "Napovedana Trula", "Kralji", "Napovedani Kralji", "Pagat Ultimo", "Napovedan Pagat Ultimo",
+            "Kralj Ultimo ", "Napovedan Kralj Ultimo"};
         final boolean [] check = {false, false, false, false, false, false, false, false};
         builder.setTitle("Kaj si pobral?")
                 .setMultiChoiceItems(addons, check, new DialogInterface.OnMultiChoiceClickListener() {
@@ -762,16 +763,16 @@ public class Scoreboard extends Activity {
                                 tmp += settings.getNapovedaniKralji();
                                 break;
                             case 4:
-                                tmp += settings.getSpicka();
+                                tmp += settings.getPagatUltimo();
                                 break;
                             case 5:
-                                tmp += settings.getNapovedanaSpicka();
+                                tmp += settings.getNapovedanPagatUltimo();
                                 break;
                             case 6:
-                                tmp += settings.getKralj();
+                                tmp += settings.getKraljUltimo();
                                 break;
                             case 7:
-                                tmp += settings.getNapovedanKralj();
+                                tmp += settings.getNapovedanKraljUltimo();
                                 break;
                         }
                     }
@@ -800,7 +801,8 @@ public class Scoreboard extends Activity {
 
     public void displayKontraDodatki(){
         AlertDialog.Builder builder = new AlertDialog.Builder(Scoreboard.this);
-        final String [] addons = {"Trula", "Napovedana Trula", "Kralji", "Napovedani Kralji", "Pagat", "Pagat Ultimo", "Kralj Zadnja Runda ", "Kralj Ultimo"};
+        final String [] addons = {"Trula", "Napovedana Trula", "Kralji", "Napovedani Kralji", "Pagat Ultimo", "Napovedan Pagat Ultimo",
+            "Kralj Ultimo ", "Napovedan Kralj Ultimo"};
         final boolean [] check = {false, false, false, false, false, false, false, false};
         builder.setTitle("Kaj je pobrala nasprotna ekipa?")
                 .setMultiChoiceItems(addons, check, new DialogInterface.OnMultiChoiceClickListener() {
@@ -830,16 +832,16 @@ public class Scoreboard extends Activity {
                                 tmp -= settings.getNapovedaniKralji();
                                 break;
                             case 4:
-                                tmp -= settings.getSpicka();
+                                tmp -= settings.getPagatUltimo();
                                 break;
                             case 5:
-                                tmp -= settings.getNapovedanaSpicka();
+                                tmp -= settings.getNapovedanPagatUltimo();
                                 break;
                             case 6:
-                                tmp -= settings.getKralj();
+                                tmp -= settings.getKraljUltimo();
                                 break;
                             case 7:
-                                tmp -= settings.getNapovedanKralj();
+                                tmp -= settings.getNapovedanKraljUltimo();
                                 break;
                         }
                     }

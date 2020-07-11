@@ -32,7 +32,6 @@ class OnboradingActivity : AppCompatActivity() {
 
     fun firstStart(): Boolean {
         return !preferences.contains("appStarted")
-        return true
     }
 
     fun navigateToMainActivity() {
