@@ -19,7 +19,7 @@ class OnboardingRoundFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         headerTextView.text = HtmlCompat.fromHtml("<b>Izbris posamezne igre:</b>", HtmlCompat.FROM_HTML_MODE_LEGACY)
-        headerTextView2.text = "Če se zmotiš pri dodajanju posamezne igre, jo pobrišeš tako, da klikneš na njo."
+        headerTextView2.text = "Če se zmotiš pri dodajanju posamezne igre, jo lahko s klikom na njo pobrišeš."
         image.background = resources.getDrawable(R.drawable.onboarding_image5, null)
 
     }
