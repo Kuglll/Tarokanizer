@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tarokanizer</string>
+    <string name="avtomatski_nacin">Automatic mode</string>
+    <string name="ena">One:</string>
+    <string name="dva">Two:</string>
+    <string name="tri">Three:</string>
+    <string name="shrani">SAVE</string>
+    <string name="solo_ena">Solo one:</string>
+    <string name="solo_dve">Solo two:</string>
+    <string name="solo_tri">Solo three:</string>
+    <string name="solo_brez">Solo without:</string>
+    <string name="berac_pikolo">Berač/Pikolo:</string>
+    <string name="valat">Valat:</string>
+    <string name="napovedani_valat">Announced Valat:</string>
+    <string name="napovedani_barvni_valat">Announced barvni valat:</string>
+    <string name="mond_fang">Mond fang:</string>
+    <string name="renons">Renons:</string>
+    <string name="trula">Trula:</string>
+    <string name="napovedana_trula">Announced trula:</string>
+    <string name="kralji">Kings:</string>
+    <string name="napovedani_kralji">Announced kings:</string>
+    <string name="pagat_ultimo">Pagat Ultimo:</string>
+    <string name="napovedan_pagat_ultimo">Announced Pagat Ultimo:</string>
+    <string name="kralj_ultimo">King Ultimo:</string>
+    <string name="napovedan_kralj_ultimo">Announced King Ultimo:</string>
+    <string name="vrednost_radlca">Radelc value:</string>
+
+</resources>
