@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="avtomatski_nacin">Автоматски начин</string>
+    <string name="ena">Еден:</string>
+    <string name="dva">Два:</string>
+    <string name="tri">Три:</string>
+    <string name="shrani">Зачувај</string>
+    <string name="solo_ena">Соло еден:</string>
+    <string name="solo_dve">Соло два:</string>
+    <string name="solo_tri">Solo tri:</string>
+    <string name="solo_brez">Соло три:</string>
+    <string name="berac_pikolo">Берач/Пиколо:</string>
+    <string name="valat">Валат:</string>
+    <string name="napovedani_valat">Предвиден Валат:</string>
+    <string name="napovedani_barvni_valat">Предвиден Валат за боја:</string>
+    <string name="mond_fang">Монд фанг:</string>
+    <string name="renons">Ренонс:</string>
+    <string name="trula">Трула:</string>
+    <string name="napovedana_trula">Предивдена Трула:</string>
+    <string name="kralji">Кралеви:</string>
+    <string name="napovedani_kralji">Предвидени кралеви:</string>
+    <string name="pagat_ultimo">Пагат Ултимо:</string>
+    <string name="napovedan_pagat_ultimo">Предвиден Пагат Ултимо:</string>
+    <string name="kralj_ultimo">Крал Ултимо:</string>
+    <string name="napovedan_kralj_ultimo">Предвиден Крал Ултимо:</string>
+    <string name="vrednost_radlca">Vrednost radelca:</string>
+
+</resources>
