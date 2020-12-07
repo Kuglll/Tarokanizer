@@ -1,5 +1,29 @@
 <resources>
     <string name="app_name">Tarokanizer</string>
+    <string name="avtomatski_nacin">Avtomatski način</string>
+    <string name="ena">Ena:</string>
+    <string name="dva">Dva:</string>
+    <string name="tri">Tri:</string>
+    <string name="shrani">SHRANI</string>
+    <string name="solo_ena">Solo ena:</string>
+    <string name="solo_dve">Solo dve:</string>
+    <string name="solo_tri">Solo tri:</string>
+    <string name="solo_brez">Solo brez:</string>
+    <string name="berac_pikolo">Berač/Pikolo:</string>
+    <string name="valat">Valat:</string>
+    <string name="napovedani_valat">Napovedani Valat:</string>
+    <string name="napovedani_barvni_valat">Napovedani barvni valat:</string>
+    <string name="mond_fang">Mond fang:</string>
+    <string name="renons">Renons:</string>
+    <string name="trula">Trula:</string>
+    <string name="napovedana_trula">Napovedana trula:</string>
+    <string name="kralji">Kralji:</string>
+    <string name="napovedani_kralji">Napovedani kralji:</string>
+    <string name="pagat_ultimo">Pagat Ultimo:</string>
+    <string name="napovedan_pagat_ultimo">Napovedan Pagat Ultimo:</string>
+    <string name="kralj_ultimo">Kralj Ultimo:</string>
+    <string name="napovedan_kralj_ultimo">Napovedan Kralj Ultimo:</string>
+    <string name="vrednost_radlca">Vrednost radelca:</string>
     <string-array name="peopleNumber">
         <item>2</item>
         <item>3</item>
