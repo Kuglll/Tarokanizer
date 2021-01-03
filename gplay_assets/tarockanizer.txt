@@ -1,0 +1,13 @@
+Title:
+Tarockanizer
+
+Short desc:
+Aplikacija za pisanje scoreboarda pri Taroku.
+
+Full desc:
+Aplikacija z lahkoto nadomesti svinčnik in papir za pisanje točk med igranjem Taroka. "Download it and try it for yourself!"
+
+Če imate kakršne koli predloge, pošljite sporočilo na kusaprojects@gmail.com.
+
+
+
