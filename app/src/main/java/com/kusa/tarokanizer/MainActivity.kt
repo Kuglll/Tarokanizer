@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,8 +14,6 @@ import com.google.gson.Gson
 import com.kusa.tarokanizer.data_classes.CardView
 import com.kusa.tarokanizer.data_classes.Player
 import com.kusa.tarokanizer.data_classes.Settings
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.toolbar.*
 
 const val SHARED_PREFERENCES = "SHARED_PREFERENCES"
 
@@ -40,7 +39,7 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
         preferences = getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
 
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(findViewById(R.id.toolbar))
 
         mCardViewList = ArrayList()
 
@@ -54,20 +53,19 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
     }
 
     fun initViews() {
-        addButton.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View) {
-                //creates a dialog that runs in another thread (class Dialog)
-                val dialog = Dialog(this@MainActivity)
-                dialog.show(supportFragmentManager, "dialog")
-            }
-        })
-        settingsButton.setOnClickListener(object : View.OnClickListener {
+
+        findViewById<Button>(R.id.addButton).setOnClickListener {
+            //creates a dialog that runs in another thread (class Dialog)
+            val dialog = Dialog(this@MainActivity)
+            dialog.show(supportFragmentManager, "dialog")
+        }
+        findViewById<Button>(R.id.settingsButton).setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
                 startActivity(SettingsActivity.startSettingsActivity(this@MainActivity))
             }
         })
-        backButton.visibility = View.GONE
-        finishButton.visibility = View.GONE
+        findViewById<Button>(R.id.backButton).visibility = View.GONE
+        findViewById<Button>(R.id.finishButton).visibility = View.GONE
     }
 
     fun loadCardViewList() {
@@ -113,6 +111,7 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
     }
 
     fun BuildRecyclerView() {
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
 
         recyclerView.setHasFixedSize(true) //increases performance
         mLayoutManager = LinearLayoutManager(this)

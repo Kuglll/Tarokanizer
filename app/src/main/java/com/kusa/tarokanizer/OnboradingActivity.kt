@@ -3,7 +3,9 @@ package com.kusa.tarokanizer
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.ViewPager
 import com.kusa.tarokanizer.onboarding_fragments.OnboardingAutomaticFragment
 import com.kusa.tarokanizer.onboarding_fragments.OnboardingManualFragment
 import com.kusa.tarokanizer.onboarding_fragments.OnboardingModesFragment
@@ -11,16 +13,21 @@ import com.kusa.tarokanizer.onboarding_fragments.OnboardingRoundFragment
 import com.kusa.tarokanizer.onboarding_fragments.OnboardingSettingsFragment
 import com.kusa.tarokanizer.onboarding_fragments.OnboardingWelcomeFragment
 import com.kusa.tarokanizer.utils.OnboardingViewPagerAdapter
-import kotlinx.android.synthetic.main.onboarding_activity.*
 
 class OnboradingActivity : AppCompatActivity() {
 
     lateinit var preferences: SharedPreferences
+    lateinit var viewPager: ViewPager
+    lateinit var skipButton: Button
+    lateinit var nextButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.onboarding_activity)
         preferences = getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
+
+        skipButton = findViewById(R.id.skipButton)
+        nextButton = findViewById(R.id.nextButton)
 
         when {
             !firstStart() -> navigateToMainActivity()
@@ -46,7 +53,8 @@ class OnboradingActivity : AppCompatActivity() {
     }
 
     fun initViewPager() {
-        onboardingViewPager.adapter = OnboardingViewPagerAdapter(supportFragmentManager).apply {
+        viewPager = findViewById(R.id.onboardingViewPager)
+        viewPager.adapter = OnboardingViewPagerAdapter(supportFragmentManager).apply {
             addFragment(OnboardingWelcomeFragment())
             addFragment(OnboardingModesFragment())
             addFragment(OnboardingAutomaticFragment())
@@ -61,11 +69,11 @@ class OnboradingActivity : AppCompatActivity() {
             navigateToMainActivity()
         }
         nextButton.setOnClickListener {
-            onboardingViewPager.adapter?.count?.let { length ->
-                if (onboardingViewPager.currentItem == length - 1) {
+            viewPager.adapter?.count?.let { length ->
+                if (viewPager.currentItem == length - 1) {
                     navigateToMainActivity()
                 } else {
-                    onboardingViewPager.currentItem++
+                    viewPager.currentItem++
                 }
             }
         }

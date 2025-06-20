@@ -4,10 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import com.kusa.tarokanizer.R
-import kotlinx.android.synthetic.main.fragment_onboarding_general.*
 
 class OnboardingSettingsFragment : Fragment() {
 
@@ -18,9 +19,9 @@ class OnboardingSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        headerTextView.text = HtmlCompat.fromHtml("<b>Nastavitve:</b>", HtmlCompat.FROM_HTML_MODE_LEGACY)
-        headerTextView2.text = "Če točkovanje ne ustreza tvojim pravilom ga lahko prirediš v nastavitvah."
-        image.background = resources.getDrawable(R.drawable.onboarding_image3, null)
+        view.findViewById<TextView>(R.id.headerTextView).text = HtmlCompat.fromHtml("<b>Nastavitve:</b>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+        view.findViewById<TextView>(R.id.headerTextView2).text = "Če točkovanje ne ustreza tvojim pravilom ga lahko prirediš v nastavitvah."
+        view.findViewById<ImageView>(R.id.image).background = resources.getDrawable(R.drawable.onboarding_image3, null)
 
     }
 

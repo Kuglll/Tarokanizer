@@ -4,10 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import com.kusa.tarokanizer.R
-import kotlinx.android.synthetic.main.fragment_onboarding_general.*
 
 class OnboardingManualFragment : Fragment() {
 
@@ -22,10 +23,10 @@ class OnboardingManualFragment : Fragment() {
             "- S klikom na ime igralca dodaš radlce.<br><br>" +
             "Pri tem načinu gre le za zamenjavo svinčnika in papirja."
 
-        headerTextView.text = HtmlCompat.fromHtml("<b>Ročni način:</b>", HtmlCompat.FROM_HTML_MODE_LEGACY)
-        headerTextView2.text = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY)
+        view.findViewById<TextView>(R.id.headerTextView).text = HtmlCompat.fromHtml("<b>Ročni način:</b>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+        view.findViewById<TextView>(R.id.headerTextView2).text = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY)
 
-        image.background = resources.getDrawable(R.drawable.onboarding_image4, null)
+        view.findViewById<ImageView>(R.id.image).background = resources.getDrawable(R.drawable.onboarding_image4, null)
 
     }
 
