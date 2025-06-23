@@ -113,7 +113,6 @@ class MainActivity : AppCompatActivity(), Dialog.DialogListener{
     fun BuildRecyclerView() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
 
-        recyclerView.setHasFixedSize(true) //increases performance
         mLayoutManager = LinearLayoutManager(this)
         mAdapter = Adapter(this, mCardViewList)
 
